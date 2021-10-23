@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin.app')
 @section('content-main')
 <div class="content-header">
     <h2 class="content-title"> Thông tin sản phẩm</h2>
     <div>
-            <a href="{{ route('edit-product',  ['id'=>$id, 'page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Sửa</a>
+            <a href="{{ route('product.edit',  ['id'=>$id, 'page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Sửa</a>
         </div>
 </div>
 

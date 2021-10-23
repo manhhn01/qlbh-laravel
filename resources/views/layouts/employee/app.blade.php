@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>@yield('title') LifeWear Admin</title>
+    <title>@yield('title') LifeWear Employee</title>
     <link href="{{ asset('images/favicon.ico') }}" rel="shortcut icon" type="image/x-icon" />
     <link href="{{ asset('css/bootstrap.css?v=1.1') }}" rel="stylesheet" type="text/css" />
     <!-- custom style -->
@@ -14,7 +14,6 @@
 </head>
 
 <body>
-    @auth
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
             <a href="{{ route('dashboard') }}" class="brand-wrap">
@@ -31,31 +30,9 @@
             <ul class="menu-aside">
                 <li class="menu-item {{request()->routeIs('dashboard') ? "active" : ""}}">
                     <a class="menu-link" href="{{ route('dashboard') }}"">
-            <i class=" icon material-icons md-home"></i>
+                        <i class=" icon material-icons md-home"></i>
                         <span class="text">Tổng quan</span>
                     </a>
-                </li>
-
-                <li class="menu-item has-submenu {{request()->is('product/*') ? "active" : ""}}">
-                    <a class="menu-link" href="#">
-                        <i class="icon material-icons md-shopping_bag"></i>
-                        <span class="text">Sản phẩm</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{{ route('list-product') }}">Danh sách sản phẩm</a>
-                        <a href="{{ route('create-product') }}">Thêm sản phẩm</a>
-                    </div>
-                </li>
-
-                <li class="menu-item has-submenu {{request()->is('category/*') ? "active" : ""}}">
-                    <a class="menu-link" href="#">
-                        <i class="icon material-icons md-local_offer"></i>
-                        <span class="text">Danh mục</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="{{ route('list-category') }}">Danh sách danh mục</a>
-                        <a href="{{ route('create-category') }}">Thêm danh mục</a>
-                    </div>
                 </li>
 
                 <li class="menu-item has-submenu">
@@ -120,14 +97,7 @@
             @if (session('info'))
             <div class="alert alert-info">{{ session('info') }}</div>
             @endif
-            {{--
-            @error('message')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror --}}
-            {{--
-            @error('message')
-            <div class="mb-3 alert alert-danger">{{ $message }}</div>
-            @enderror --}}
+
             @if($errors->any())
             {!!
             implode('', $errors->all('<div class="alert alert-danger">:message</div>'))
@@ -137,23 +107,6 @@
             @yield('content-main')
         </section>
     </main>
-    @endauth
-
-    @guest
-    <main>
-        <header class="main-header navbar">
-            <div class="col-brand">
-                <a href="page-index-1.html" class="brand-wrap">
-                    <img src="{{asset('images/logo.png')}}" height="46" class="logo" alt="">
-                </a>
-            </div>
-        </header>
-        <section class="content-main">
-            @yield('auth-form')
-        </section>
-    </main>
-    @endguest
-
 
     <script src="{{asset('js/jquery-3.5.0.min.js')}}"></script>
     <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>

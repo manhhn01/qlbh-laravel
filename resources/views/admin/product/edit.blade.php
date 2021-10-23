@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.admin.app')
 @section('content-main')
-<form action="{{ route('update-product', ['id' => $id, 'page' => request()->page]) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('product.update', ['id' => $id, 'page' => request()->page]) }}" method="post" enctype="multipart/form-data">
     @csrf()
     <div class="content-header">
         <h2 class="content-title"> Sửa sản phẩm</h2>

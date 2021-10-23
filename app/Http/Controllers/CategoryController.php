@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'admin']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -110,7 +115,7 @@ class CategoryController extends Controller
             'name' => $data['name'],
             'description' => $data['description']
         ]);
-        return redirect(route('list-category', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
+        return redirect(route('category.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
 
     }
 

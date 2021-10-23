@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'admin']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -206,7 +210,7 @@ class ProductController extends Controller
             $product->images()->createMany($data['images']);
         }
 
-        return redirect(route('list-product', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
+        return redirect(route('product.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
     }
 
     /**

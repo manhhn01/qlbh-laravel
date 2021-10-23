@@ -13,7 +13,7 @@ class ProductCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        if (auth()->user()->type === 0)
+        if (auth()->user()->role === 0)
             return true;
         return false;
     }

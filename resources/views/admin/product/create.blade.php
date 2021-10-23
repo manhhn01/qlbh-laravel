@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.admin.app')
 @section('content-main')
-<form action="{{ route('create-product') }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('product.create') }}" method="post" enctype="multipart/form-data">
     @csrf()
     <div class="content-header">
         <h2 class="content-title"> Thêm sản phẩm</h2>

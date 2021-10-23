@@ -41,6 +41,6 @@ class LoginController extends Controller
     if ($result === false) {
       return back()->withErrors(['message' => 'Email hoặc mật khẩu không đúng']);
     }
-    return redirect()->route('dashboard')->with(['message' => 'Đăng nhập thành công']);
+    return redirect()->route('dashboard');
   }
 }

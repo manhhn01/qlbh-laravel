@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->char('phone_number', 15)->unique();
             $table->string('address')->nullable();
             $table->string('avatar_image')->nullable();
-            $table->smallInteger('type'); // 0: manager, 1: employee, 2: customer
+            $table->smallInteger('role'); // 0: manager, 1: employee, 2: customer
             $table->rememberToken();
 
             $table->timestamps();

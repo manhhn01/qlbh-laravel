@@ -17,7 +17,15 @@ class DashboardController extends Controller
   {
     // dd(Auth::user()->);
     // $avatar = Auth::user()->avatar_image ?? 'default.png';
-
-    return view('admin.dashboard');
+    switch (Auth::user()->role) {
+        case 0:
+            return view('admin.dashboard');
+            break;
+        case 1:
+            return view('employee.dashboard');
+        default:
+            die('Unauthorized');
+            break;
+    }
   }
 }

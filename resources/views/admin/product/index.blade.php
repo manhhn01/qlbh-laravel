@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.admin.app')
 @section('content-main')
 <div class="content-header">
 <h2 class="content-title"> Danh sách sản phẩm</h2>
 <div>
-    <a href="{{ route('create-product',  ['page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Thêm sản phẩm</a>
+    <a href="{{ route('product.create',  ['page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Thêm sản phẩm</a>
 </div>
 </div>
 
@@ -19,7 +19,7 @@
                     </select>
                 </div>
                 <div class="col-md-4 col-6">
-                    <form action="{{ route('list-product') }}" method="get">
+                    <form action="{{ route('product.list') }}" method="get">
                         <div class="input-group">
                             <input type="text" class="form-control" name="search" placeholder="Tìm sản phẩm" value="{{ request()->search }}">
                             <button class="btn btn-light bg" type="submit">
@@ -47,7 +47,7 @@
             <article class="itemlist">
                 <div class="row align-items-center">
                     <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
-                        <a class="itemside" href="{{ route('show-product', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
+                        <a class="itemside" href="{{ route('product.show', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
                             <div class="left">
                                 @if ($product->images->first()->image_path == '')
                                 <img src="{{ asset('images/logo.png') }}" class="img-sm img-thumbnail" alt="Item">
@@ -71,9 +71,9 @@
                         <div class="dropdown float-end">
                             <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('show-product', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Xem chi tiết</a>
-                                <a class="dropdown-item" href="{{ route('edit-product', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Sửa</a>
-                                <form class="delete-product" data-id="{{ $product->id }}" data-name={{ $product->name }} action="{{ route('destroy-product', ['id'=>$product->id]) }}" method="POST">
+                                <a class="dropdown-item" href="{{ route('product.show', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Xem chi tiết</a>
+                                <a class="dropdown-item" href="{{ route('product.edit', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Sửa</a>
+                                <form class="delete-product" data-id="{{ $product->id }}" data-name={{ $product->name }} action="{{ route('product.destroy', ['id'=>$product->id]) }}" method="POST">
                                     @csrf
                                     <button class="dropdown-item text-danger" style="outline:none">Xóa</button>
                                 </form>

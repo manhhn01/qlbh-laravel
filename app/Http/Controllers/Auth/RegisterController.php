@@ -59,12 +59,12 @@ class RegisterController extends Controller
           'first_name' => $req->first_name,
           'phone_number' => $req->country_code . $req->phone_number,
           'password' => Hash::make($req->password),
-          'type' => 0
+          'role' => 0
           // 'type'=>2
         ]);
       }
     } catch (\Illuminate\Database\QueryException $exception) {
-      // dd($exception); //todo
+    //   dd($exception); //todo
       return back()->withErrors(['message' => 'Có lỗi xảy ra'])->withInput();
     }
     return redirect()->route('login')->with(['info' => 'Đăng ký thành công']);

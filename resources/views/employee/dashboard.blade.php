@@ -1,12 +1,9 @@
-@extends('layouts.admin.app')
+@extends('layouts.employee.app')
 @section('content-main')
 <div class="content-header">
     <h2 class="content-title"> Hi, {{ Auth::user()->first_name }} </h2>
-    <div>
-        <a href="#" class="btn btn-primary">Tạo báo cáo</a>
-    </div>
 </div>
-<div class="row">
+{{-- <div class="row">
     <div class="col-lg-4">
         <div class="card card-body mb-4">
             <article class="icontext">
@@ -133,5 +130,7 @@
         },
         options: {},
     });
-</script>
+</script> --}}
+
+<div class="">Thống kê tiền lương, ngày nghỉ của nhân viên blabla</div>
 @endsection()
