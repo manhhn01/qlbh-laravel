@@ -1,13 +1,30 @@
 @extends('layouts.app')
 @section('content-main')
-<div class="content-header">
-<h2 class="content-title"> Danh sách sản phẩm</h2>
-<div>
-    <a href="{{ route('create-product',  ['page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Thêm sản phẩm</a>
-</div>
-</div>
+    <div class="content-header">
+        <h2 class="content-title"> Thông tin danh mục</h2>
+        <div>
+            <a href="{{ route('edit-category',  ['id'=>$id, 'page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Sửa</a>
+        </div>
+    </div>
 
-<section class="content-main">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5 for="name">Tên danh mục</h5>
+                        <div>{{ $category->name }}</div>
+                    </div>
+                    <div class="mb-4">
+                        <h5 for="name">Mô tả</h5>
+                        <div>{{ $category->description }}</div>
+                    </div>
+                </div>
+            </div> <!-- card end// -->
+        </div> <!-- card end// -->
+        </aside> <!-- col end// -->
+    </div> <!-- row end// -->
+
     <div class="card mb-4">
         <header class="card-header">
             <div class="row align-items-center">
@@ -16,13 +33,9 @@
                         <input class="form-check-input" type="checkbox" value="">
                     </div>
                 </div>
-                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                    <select class="form-select">
-                        <option>Tất cả danh mục</option>
-                        <option>Quần</option>
-                        <option>Áo</option>
-                    </select>
-                </div>
+                <h5 class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                    Danh sách sản phẩm
+                </h5>
                 <div class="col-md-4 col-6">
                     <form action="{{ route('list-product') }}" method="get">
                         <div class="input-group">
@@ -120,13 +133,11 @@
             </nav>
 
         </div> <!-- card-body end// -->
-    </div> <!-- card end// -->
+    </div>
 
-</section>
 @endsection
 
-@section('javascript')
 
+@push('js')
 <script src="{{ asset('js/product/script.js') }}"></script>
-
-@endsection
+@endpush

@@ -140,7 +140,11 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $suppliers = Supplier::all();
-        $product = Product::where('id', $id)->first();
+        try{
+            $product = Product::findOrFail($id);
+        } catch (ModelNotFoundException $e){
+            return back()->withErrors(['message' => 'Không tìm thấy sản phẩm']);
+        }
         return view('admin.product.edit', [
             'id' => $id,
             'product' => $product,

@@ -41,7 +41,7 @@
     </form>
 
 
-    <p class="text-center mb-4">Chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký</a></p>
+    {{-- <p class="text-center mb-4">Chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký</a></p> --}}
 
   </div> <!-- card-body // -->
 </div>

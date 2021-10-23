@@ -49,29 +49,39 @@
 
                 <li class="menu-item has-submenu {{request()->is('category/*') ? "active" : ""}}">
                     <a class="menu-link" href="#">
-                        <i class="icon material-icons md-shopping_bag"></i>
+                        <i class="icon material-icons md-local_offer"></i>
                         <span class="text">Danh mục</span>
                     </a>
                     <div class="submenu">
-                        {{-- <a href="{{ route('') }}">Danh sách danh mục</a> --}}
-                        {{-- <a href="{{ route('') }}">Danh sách sản phẩm</a> --}}
+                        <a href="{{ route('list-category') }}">Danh sách danh mục</a>
+                        <a href="{{ route('create-category') }}">Thêm danh mục</a>
                     </div>
                 </li>
 
                 <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-products-list.html">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Đơn hàng</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="#">...</a>
+                        <a href="#">...</a>
+                    </div>
+                </li>
+
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#">
                         <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">new menu</span>
                     </a>
                     <div class="submenu">
-                        <a href="page-new menu-list.html">Product list view</a>
-                        <a href="page-new menu-table.html">Product table view</a>
+                        <a href="#">Product list view</a>
+                        <a href="page-new menu-table.html">...</a>
                         <a href="page-new menu-grid.html">Product grid</a>
                         <a href="page-new menu-grid-2.html">Product grid 2</a>
                         <a href="page-categories.html">Categories</a>
                     </div>
                 </li>
-
 
             </ul>
         </nav>

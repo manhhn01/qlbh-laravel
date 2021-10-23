@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <div class="mb-4">
                         <label for="name" class="form-label">Product name</label>
-                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="name" id="name">
+                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="name" id="name" value="{{ old('name') }}">
                     </div>
                     <div class="mb-4">
                         <label for="product_brand" class="form-label">Brand</label>
@@ -38,7 +38,7 @@
                 <div class="card-body">
                     <div>
                         <label class="form-label">Mô tả</label>
-                        <textarea placeholder="Nhập ở đây..." class="form-control" name="description" rows="4"></textarea>
+                        <textarea placeholder="Nhập ở đây..." class="form-control" name="description" rows="4">{{ old('description') }}</textarea>
                     </div>
                 </div>
             </div> <!-- card end// -->

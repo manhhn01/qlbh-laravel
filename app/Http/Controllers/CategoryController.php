@@ -1,0 +1,132 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\CategoryCreateRequest;
+use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+
+class CategoryController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $search_param = request()->search;
+        $data = [];
+        if (!empty($search_param)) {
+            $categories = Category::where('name', 'like', '%' . $search_param . '%')->orderBy('name');
+            $data['categories'] = $categories->paginate(10);
+        } else {
+            $data['categories'] = Category::paginate(10);
+        }
+
+        return view(
+            'admin.category.index',
+            $data
+        );
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $categories = Category::all();
+        return view('admin.category.create', [
+            'categories' => $categories
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(CategoryCreateRequest $request)
+    {
+        $data = $request->only(['name', 'description']);
+
+
+        $Category = Category::create([
+            'name' => $data['name'],
+            'description' => $data['description'],
+        ]);
+        return back()->with('info', 'Tạo thành công');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        try {
+            $category = Category::findOrFail($id);
+            $products = Product::where('category_id', $id)->paginate(10);
+        } catch (ModelNotFoundException $e) {
+            return back()->withErrors(['message' => 'Không tìm thấy danh mục']);
+        }
+        return view('admin.category.show', [
+            'id' => $id,
+            'category' => $category,
+            'products' => $products
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        try {
+            $category = Category::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return back()->withErrors(['message' => 'Không tìm thấy danh mục']);
+        }
+        return view('admin.category.edit', [
+            'id' => $id,
+            'category' => $category,
+        ]);
+    }
+
+    public function update(CategoryCreateRequest $request, $id)
+    {
+        $data = $request->only(['name', 'description']);
+        Category::updateOrCreate(['id' => $id], [
+            'name' => $data['name'],
+            'description' => $data['description']
+        ]);
+        return redirect(route('list-category', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        try {
+            Category::findOrFail($id)->delete();
+        } catch (ModelNotFoundException $e) {
+            return back()->withErrors(['message' => 'Không tìm thấy danh mục để xóa']);
+        }
+        return back()->with('info', 'Xóa danh mục thành công');
+    }
+}
