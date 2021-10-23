@@ -11,11 +11,6 @@
     <div class="card mb-4">
         <header class="card-header">
             <div class="row align-items-center">
-                <div class="col col-check flex-grow-0">
-                    <div class="form-check ms-2">
-                        <input class="form-check-input" type="checkbox" value="">
-                    </div>
-                </div>
                 <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
                     <select class="form-select">
                         <option>Tất cả danh mục</option>
@@ -51,11 +46,6 @@
             @foreach ($products as $product)
             <article class="itemlist">
                 <div class="row align-items-center">
-                    <div class="col col-check flex-grow-0">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox">
-                        </div>
-                    </div>
                     <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
                         <a class="itemside" href="{{ route('show-product', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
                             <div class="left">
@@ -70,7 +60,7 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>{{ $product->price }} đ</span> </div>
+                    <div class="col-lg-2 col-sm-2 col-4 col-price"> <span>{{ number_format($product->price, 0, ",", ".") }} đ</span> </div>
                     <div class="col-lg-2 col-sm-2 col-4 col-status">
                         <span class="badge rounded-pill {{ $product->status==1 ? 'alert-success' :  'alert-warning'}}">{{ $product->status==1 ? 'Đang bán' :  'Dừng bán'}}</span>
                     </div>

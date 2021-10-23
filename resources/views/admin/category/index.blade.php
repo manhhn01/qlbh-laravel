@@ -32,11 +32,6 @@
             @foreach ($categories as $category)
             <article class="itemlist">
                 <div class="row align-items-center">
-                    <div class="col col-check flex-grow-0">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox">
-                        </div>
-                    </div>
                     <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
                         <a class="itemside" href="{{ route('show-category', ['id'=>$category->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
                             <div class="info">
