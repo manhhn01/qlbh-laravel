@@ -7,6 +7,10 @@ INCLUDE STYLES AND COMPONENTS
 
 /* ================== HELPERS =================== */
 
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;//ghi de font bootstrap
+}
+
 .table thead th {
     color: #adb5bd;
     font-weight: 400;

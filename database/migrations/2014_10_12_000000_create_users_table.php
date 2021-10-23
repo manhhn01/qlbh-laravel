@@ -22,9 +22,12 @@ class CreateUsersTable extends Migration
             $table->string('first_name', 50);
             $table->string('last_name', 50);
             $table->string('password', 70);
-            $table->char('phone_number', 15);
+            $table->char('phone_number', 15)->unique();
+            $table->string('address')->nullable();
             $table->string('avatar_image')->nullable();
+            $table->smallInteger('type'); // 0: manager, 1: employee, 2: customer
             $table->rememberToken();
+
             $table->timestamps();
         });
     }

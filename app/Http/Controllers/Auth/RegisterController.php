@@ -53,18 +53,20 @@ class RegisterController extends Controller
       if (User::where('email', '=', $req->email)->count() > 0) {
         return back()->withErrors(['email' => 'Email đã được sử dụng'])->withInput();
       } else {
-        User::Create([
+        User::create([
           'email' => $req->email,
           'last_name' => $req->last_name,
           'first_name' => $req->first_name,
           'phone_number' => $req->country_code . $req->phone_number,
-          'password' => Hash::make($req->password)
+          'password' => Hash::make($req->password),
+          'type' => 0
+          // 'type'=>2
         ]);
       }
     } catch (\Illuminate\Database\QueryException $exception) {
-//      dd($exception);
-      return back()->withErrors(['info' => 'Có lỗi xảy ra'])->withInput();
+      // dd($exception); //todo
+      return back()->withErrors(['message' => 'Có lỗi xảy ra'])->withInput();
     }
-    return redirect()->route('login');
+    return redirect()->route('login')->with(['info' => 'Đăng ký thành công']);
   }
 }

@@ -8,11 +8,16 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function __construct(){
-        $this->middleware(['auth']);
-    }
-    public function index(){
-        // dd(Auth::user());
-        return view('admin.dashboard');
-    }
+  public function __construct()
+  {
+    $this->middleware(['auth']);
+  }
+
+  public function index()
+  {
+    // dd(Auth::user()->);
+    // $avatar = Auth::user()->avatar_image ?? 'default.png';
+
+    return view('admin.dashboard');
+  }
 }

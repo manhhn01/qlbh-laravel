@@ -9,7 +9,7 @@
       <form action="{{ route('register') }}" method="post">
         @csrf
 
-        @error('info')
+        @error('message')
         <div class="mb-3 alert alert-danger">{{ $message }}</div>
         @enderror
         <div class="mb-3">
