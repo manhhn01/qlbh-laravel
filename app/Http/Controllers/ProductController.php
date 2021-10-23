@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\ProductCreateRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
-use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Storage;
 
@@ -101,9 +99,9 @@ class ProductController extends Controller
             'category_id' => $data['category'],
         ]);
 
-        if(!empty($data['images'])){
+        if (!empty($data['images'])) {
             $product->images()->createMany($data['images']);
-        }else{
+        } else {
             $product->images()->create([
                 'image_path' => ''
             ]);
@@ -144,9 +142,9 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $suppliers = Supplier::all();
-        try{
+        try {
             $product = Product::findOrFail($id);
-        } catch (ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy sản phẩm']);
         }
         return view('admin.product.edit', [
@@ -184,14 +182,6 @@ class ProductController extends Controller
             $data['category'] = $category->id;
         }
 
-        //todo validate file max size
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $name = time() . '_' . $file->getClientOriginalName();
-                $file->storeAs('images/product', $name);
-                $data['images'][] = ['image_path' => $name];
-            }
-        }
         $product = Product::updateOrCreate(
             ['id' => $id],
             [
@@ -203,10 +193,17 @@ class ProductController extends Controller
                 'quantity' => $data['quantity'],
                 'category_id' => $data['category'],
             ]
-            );
+        );
 
-        if(!empty($data['images'])){
+        //todo validate file max size
+        if ($request->hasFile('images')) { //neu nhu co anh upload => thay the anh cu = anh moi
+            Storage::delete($product->images->map(fn ($item) => 'images/product/'.$item->image_path)->toArray()); // xoa  anh trong storage
             $product->images()->delete();
+            foreach ($request->file('images') as $file) {
+                $name = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('images/product', $name);
+                $data['images'][] = ['image_path' => $name];
+            }
             $product->images()->createMany($data['images']);
         }
 

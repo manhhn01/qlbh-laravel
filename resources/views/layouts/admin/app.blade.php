@@ -75,7 +75,7 @@
                     </a>
                     <div class="submenu">
                         <a href="#">Product list view</a>
-                        <a href="page-new menu-table.html">...</a>
+                        <a href="page-new menu-table.html">Log</a>
                         <a href="page-new menu-grid.html">Product grid</a>
                         <a href="page-new menu-grid-2.html">Product grid 2</a>
                         <a href="page-categories.html">Categories</a>
