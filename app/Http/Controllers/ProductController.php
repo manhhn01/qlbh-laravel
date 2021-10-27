@@ -7,7 +7,9 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
@@ -15,10 +17,10 @@ class ProductController extends Controller
     {
         $this->middleware(['auth', 'admin']);
     }
+
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function index()
     {
@@ -40,7 +42,7 @@ class ProductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function create()
     {
@@ -59,8 +61,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function store(ProductCreateRequest $request)
     {
@@ -112,8 +113,8 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return View | RedirectResponse
      */
     public function show($id)
     {
@@ -135,8 +136,8 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return View | RedirectResponse
      */
     public function edit($id)
     {
@@ -158,9 +159,9 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param ProductCreateRequest $request
+     * @param int $id
+     * @return RedirectResponse
      */
     public function update(ProductCreateRequest $request, $id)
     {
@@ -197,7 +198,9 @@ class ProductController extends Controller
 
         //todo validate file max size
         if ($request->hasFile('images')) { //neu nhu co anh upload => thay the anh cu = anh moi
-            Storage::delete($product->images->map(fn ($item) => 'images/product/'.$item->image_path)->toArray()); // xoa  anh trong storage
+            Storage::delete($product->images->map(function ($item) {
+                return 'images/product/' . $item->image_path;
+            })->toArray()); // xoa  anh trong storage
             $product->images()->delete();
             foreach ($request->file('images') as $file) {
                 $name = time() . '_' . $file->getClientOriginalName();
@@ -213,8 +216,8 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
      */
     public function destroy($id)
     {
