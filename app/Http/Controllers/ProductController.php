@@ -118,8 +118,6 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $categories = Category::all();
-        $suppliers = Supplier::all();
         try {
             $product = Product::findOrFail($id);
         } catch (ModelNotFoundException $e) {
@@ -128,8 +126,6 @@ class ProductController extends Controller
         return view('admin.product.show', [
             'id' => $id,
             'product' => $product,
-            'categories' => $categories,
-            'suppliers' => $suppliers
         ]);
     }
 
