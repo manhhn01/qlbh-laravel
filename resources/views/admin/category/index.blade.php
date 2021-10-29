@@ -27,7 +27,7 @@
 
         <div class="card-body">
               @if ($categories->isEmpty())
-                <div>Chưa có danh mục nào</div>
+                <div>Không có danh mục nào</div>
             @endif
             @foreach ($categories as $category)
             <article class="itemlist">
@@ -62,7 +62,7 @@
             <nav class="float-end mt-4" aria-label="Page navigation">
                 <ul class="pagination">
                     @if ($categories->onFirstPage())
-                        <li class="page-item disable">
+                        <li class="page-item disabled">
                             <a class="page-link" href="#">Trước</a>
                         </li>
                     @else
@@ -70,14 +70,14 @@
                             <a class="page-link active" href="{{ $categories->withQueryString()->previousPageUrl() }}" rel="prev">← Trước</a>
                         </li>
                     @endif
-                    <li class="page-item disable"><a class="page-link" href="#">{{ $categories->currentPage() }}</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#">{{ $categories->currentPage() }}</a></li>
 
                     @if ($categories->hasMorePages())
                         <li class="page-item">
                             <a class="page-link" href="{{ $categories->withQueryString()->nextPageUrl() }}">Sau →</a>
                         </li>
                     @else
-                        <li class="page-item disable">
+                        <li class="page-item disabled">
                             <a class="page-link active" href="#" rel="next">Sau</a>
                         </li>
                     @endif
