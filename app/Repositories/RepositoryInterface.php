@@ -45,10 +45,10 @@ interface RepositoryInterface
     function delete($id);
 
     /**
-     * Return paginate
+     * Return paginate with filter
      * @param $amount
-     * @param null $search_keyword
+     * @param null $filter
      * @return mixed
      */
-    function page($amount, $search_keyword);
+    function page($amount, $filter);
 }

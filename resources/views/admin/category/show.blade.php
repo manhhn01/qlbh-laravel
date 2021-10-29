@@ -28,16 +28,11 @@
     <div class="card mb-4">
         <header class="card-header">
             <div class="row align-items-center">
-                <div class="col col-check flex-grow-0">
-                    <div class="form-check ms-2">
-                        <input class="form-check-input" type="checkbox" value="">
-                    </div>
-                </div>
-                <h5 class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                <h5 class="col-md-3 col-12 me-auto mb-md-0">
                     Danh sách sản phẩm
                 </h5>
                 <div class="col-md-4 col-6">
-                    <form action="{{ route('product.list') }}" method="get">
+                    <form action="{{ route('category.show', ["id"=>$id]) }}" method="get">
                         <div class="input-group">
                             <input type="text" class="form-control" name="search" placeholder="Tìm sản phẩm" value="{{ request()->search }}">
                             <button class="btn btn-light bg" type="submit">
@@ -47,11 +42,13 @@
                     </form>
                 </div>
                 <div class="col-md-2 col-6">
-                    <select class="form-select">
-                        <option>Trạng thái</option>
-                        <option>Công khai</option>
-                        <option>Không công khai</option>
-                    </select>
+                    <form class="status-form" action="{{route('category.show', ["id"=>$id])}}" method="get">
+                        <select class="form-select status-select" name="status">
+                            <option>Tất cả</option>
+                            <option value="1">Đang bán</option>
+                            <option value="0" {{ request()->query('status')==0 ? 'selected' : '' }}>Dừng bán</option>
+                        </select>
+                    </form>
                 </div>
             </div>
         </header> <!-- card-header end// -->
@@ -64,11 +61,6 @@
             @foreach ($products as $product)
             <article class="itemlist">
                 <div class="row align-items-center">
-                    <div class="col col-check flex-grow-0">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox">
-                        </div>
-                    </div>
                     <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
                         <a class="itemside" href="{{ route('product.show', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
                             <div class="left">
@@ -110,7 +102,7 @@
             <nav class="float-end mt-4" aria-label="Page navigation">
                 <ul class="pagination">
                     @if ($products->onFirstPage())
-                    <li class="page-item disable">
+                    <li class="page-item disabled">
                         <a class="page-link" href="#">Trước</a>
                     </li>
                     @else
@@ -118,14 +110,14 @@
                         <a class="page-link active" href="{{ $products->withQueryString()->previousPageUrl() }}" rel="prev">← Trước</a>
                     </li>
                     @endif
-                    <li class="page-item disable"><a class="page-link" href="#">{{ $products->currentPage() }}</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#">{{ $products->currentPage() }}</a></li>
 
                     @if ($products->hasMorePages())
                     <li class="page-item">
                         <a class="page-link" href="{{ $products->withQueryString()->nextPageUrl() }}">Sau →</a>
                     </li>
                     @else
-                    <li class="page-item disable">
+                    <li class="page-item disabled">
                         <a class="page-link active" href="#" rel="next">Sau</a>
                     </li>
                     @endif

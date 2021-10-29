@@ -2,24 +2,15 @@
 
 namespace App\Repositories\Product;
 
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\Supplier;
 use App\Repositories\BaseRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Supplier\SupplierRepositoryInterface;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
-    protected $categoryRepo;
-    protected $supplierRepo;
-
-    function __construct(CategoryRepositoryInterface $categoryRepo,
-                         SupplierRepositoryInterface $supplierRepo)
-    {
-        Parent::__construct();
-        $this->categoryRepo = $categoryRepo;
-        $this->supplierRepo = $supplierRepo;
-    }
-
     public function getModel()
     {
         return Product::class;
@@ -28,7 +19,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     function create($attributes)
     {
         if ($attributes['supplier'] == 'add') {
-            $supplier = $this->supplierRepo->create([
+            $supplier = Supplier::create([
                 'name' => $attributes['new_supplier'],
                 'description' => 'Danh mục ' . $attributes['new_supplier']
             ]);
@@ -36,7 +27,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
 
         if ($attributes['category'] == 'add') {
-            $category = $this->categoryRepo->create([
+            $category = Category::create([
                 'name' => $attributes['new_category'],
                 'description' => 'Danh mục ' . $attributes['new_category']
             ]);
@@ -60,7 +51,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product = $this->model->findOrFail($id);
 
         if ($attributes['supplier'] == 'add') {
-            $supplier = $this->supplierRepo->create([
+            $supplier = Supplier::create([
                 'name' => $attributes['new_supplier'],
                 'description' => 'Danh mục ' . $attributes['new_supplier']
             ]);
@@ -68,7 +59,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
 
         if ($attributes['category'] == 'add') {
-            $category = $this->categoryRepo->create([
+            $category = Category::create([
                 'name' => $attributes['new_category'],
                 'description' => 'Danh mục ' . $attributes['new_category']
             ]);

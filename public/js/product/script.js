@@ -33,4 +33,8 @@ $(() => {
         console.log("not saved to the database.");
         return false;
     });
+
+    $(".status-select").on("change", function (){
+        $(".status-form").submit();
+    })
 });

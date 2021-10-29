@@ -10,9 +10,7 @@
     <div class="card mb-4">
         <header class="card-header">
             <div class="row align-items-center">
-                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                </div>
-                <div class="col-md-4 col-6">
+                <div class="col-md-4 col-6 ms-auto">
                     <form action="{{ route('category.list') }}" method="get">
                         <div class="input-group">
                             <input type="text" class="form-control" name="search" placeholder="Tìm Danh sách" value="{{ request()->search }}">

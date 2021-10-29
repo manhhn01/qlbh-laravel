@@ -7,7 +7,6 @@ use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Supplier\SupplierRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -24,7 +23,6 @@ class ProductController extends Controller
                                 SupplierRepositoryInterface $supplier)
     {
         $this->middleware(['auth', 'admin']);
-
         $this->productRepo = $product;
         $this->categoryRepo = $category;
         $this->supplierRepo = $supplier;
@@ -36,8 +34,9 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $search_keyword = $request->search;
-        $products = $this->productRepo->page(10, $search_keyword);
+        $filter["name"] = $request->search;
+        $filter["status"] = $request->status;
+        $products = $this->productRepo->page(10, $filter);
         return view(
             'admin.product.index',
             ["products" => $products]
@@ -81,11 +80,7 @@ class ProductController extends Controller
                 $attributes['images'][] = ['image_path' => $name];
             }
         }
-        try {
-            $this->productRepo->create($attributes);
-        } catch (QueryException $e) {
-            return back()->withErrors(["message" => "Lỗi truy vấn cơ sở dữ liệu"]);
-        }
+        $this->productRepo->create($attributes);
         return back()->with('info', 'Tạo thành công');
 
     }

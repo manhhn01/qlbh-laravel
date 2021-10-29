@@ -17,7 +17,14 @@
             <div class="row product-gallery mx-1">
 
                 <div class="col-12 mb-4">
-                    <img src="{{ asset('images/product/'.$product->images->first()->image_path) }}" class="img-fluid z-depth-1">
+                    @if ($product->images->first()->image_path == '')
+                        <img src="{{ asset('images/logo.png') }}" class="img-fluid img-max"
+                             alt="Item">
+                    @else
+                        <img
+                            src="{{ asset('images/product/'.$product->images->first()->image_path) }}"
+                            class="img-fluid img-max" alt="Item">
+                    @endif
                 </div>
                 <div class="col-12">
                     <div class="row">

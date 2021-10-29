@@ -110,6 +110,10 @@ body{
     height: 196px;
 }
 
+.img-max{
+    width: 100%;
+}
+
 .center-xy {
     top: 50%;
     left: 50%;

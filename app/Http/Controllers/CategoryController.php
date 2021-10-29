@@ -29,12 +29,12 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $search_keyword = $request->search;
+        $filter["name"] = $request->search;
 
-        $categories = $this->categoryRepo->page(10, $search_keyword);
+        $categories = $this->categoryRepo->page(10, $filter);
         return view(
             'admin.category.index',
-            ['categories' =>$categories]
+            ['categories' => $categories]
         );
     }
 
@@ -45,41 +45,43 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        return view('admin.category.create', [
-            'categories' => $categories
-        ]);
+        return view('admin.category.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  CategoryCreateRequest $request
+     * @param CategoryCreateRequest $request
      * @return RedirectResponse
      */
     public function store(CategoryCreateRequest $request)
     {
         $data = $request->only(['name', 'description']);
 
-
-        $Category = Category::create([
+        $this->categoryRepo->create([
             'name' => $data['name'],
             'description' => $data['description'],
         ]);
+
         return back()->with('info', 'Tạo thành công');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     * @param Request $request
      * @return View | RedirectResponse
      */
-    public function show($id)
+    public function show(int $id, Request $request)
     {
+        //filter products
+        $filter["name"] = $request->search;
+        $filter["status"] = $request->status;
+
         try {
-            $category = Category::findOrFail($id);
-            $products = Product::where('category_id', $id)->paginate(10);
+            $category = $this->categoryRepo->find($id);
+            $products = $this->categoryRepo->getProductsPage(10, $id, $filter);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy danh mục']);
         }
@@ -93,13 +95,13 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return View
+     * @param int $id
+     * @return View | RedirectResponse
      */
     public function edit($id)
     {
         try {
-            $category = Category::findOrFail($id);
+            $category = $this->categoryRepo->find($id);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy danh mục']);
         }
@@ -111,11 +113,18 @@ class CategoryController extends Controller
 
     public function update(CategoryCreateRequest $request, $id)
     {
-        $data = $request->only(['name', 'description']);
-        Category::updateOrCreate(['id' => $id], [
-            'name' => $data['name'],
-            'description' => $data['description']
+        $attributes = $request->only(['name', 'description']);
+
+        try{
+
+        $this->categoryRepo->update($id, [
+            'name' => $attributes['name'],
+            'description' => $attributes['description']
         ]);
+
+        } catch (ModelNotFoundException $e){
+            return back()->withErrors(['message' => 'Không tìm thấy sản phẩm']);
+        }
         return redirect(route('category.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
 
     }
@@ -123,13 +132,13 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function destroy($id)
     {
         try {
-            Category::findOrFail($id)->delete();
+            $this->categoryRepo->delete($id);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy danh mục để xóa']);
         }
