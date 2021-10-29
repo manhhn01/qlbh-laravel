@@ -47,10 +47,10 @@ abstract class BaseRepository implements RepositoryInterface
         $result->delete();
     }
 
-    function page($amount, $search_keyword = null)
+    function page($amount, $filter = null)
     {
-        if (isset($search_keyword)) {
-            return $this->model->where('name', 'like', "%$search_keyword%")->orderBy('name')->paginate($amount);
+        if (isset($filter)) {
+            return $this->model->ofType($filter)->orderBy('name')->paginate($amount);
         } else {
             return $this->model->latest()->paginate($amount);
         }

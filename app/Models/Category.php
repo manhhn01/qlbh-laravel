@@ -5,25 +5,37 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method ofType($filter)
+ */
 class Category extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var string[]
-   */
-  protected $fillable = [
-    'name',
-    'description',
-    'price',
-    'quantity',
-    'status',
-  ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'name',
+        'description',
+        'price',
+        'quantity',
+        'status',
+    ];
 
-  public function products()
-  {
-    return $this->hasMany(Product::class, 'category_id');
-  }
+    public function scopeOfType($query, $filter)
+    {
+        if (isset($filter['name'])) {
+            $query->where('name', 'LIKE', '%' . $filter['name'] . '%');
+        }
+
+        return $query;
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category_id');
+    }
 }
