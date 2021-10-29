@@ -3,7 +3,7 @@
     <div class="content-header">
         <h2 class="content-title"> Thông tin danh mục</h2>
         <div>
-            <a href="{{ route('category.edit',  ['id'=>$id, 'page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Sửa</a>
+            <a href="{{ route('category.edit',  ['id'=>$id]) }}" type="submit" class="btn btn-primary">Sửa</a>
         </div>
     </div>
 
@@ -12,11 +12,11 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="mb-4">
-                        <h5 for="name">Tên danh mục</h5>
+                        <h5>Tên danh mục</h5>
                         <div>{{ $category->name }}</div>
                     </div>
                     <div class="mb-4">
-                        <h5 for="name">Mô tả</h5>
+                        <h5>Mô tả</h5>
                         <div>{{ $category->description }}</div>
                     </div>
                 </div>
