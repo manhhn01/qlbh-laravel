@@ -3,39 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductCreateRequest;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Supplier;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\Supplier\SupplierRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function __construct()
+    protected $productRepo;
+    protected $categoryRepo;
+    protected $supplierRepo;
+
+    public function __construct(ProductRepositoryInterface  $product,
+                                CategoryRepositoryInterface $category,
+                                SupplierRepositoryInterface $supplier)
     {
         $this->middleware(['auth', 'admin']);
+
+        $this->productRepo = $product;
+        $this->categoryRepo = $category;
+        $this->supplierRepo = $supplier;
     }
 
     /**
      * Display a listing of the resource.
      * @return View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $search_param = request()->search;
-        $data = [];
-        if (!empty($search_param)) {
-            $product = Product::where('name', 'like', '%' . $search_param . '%')->orderBy('name');
-            $data['products'] = $product->paginate(10);
-        } else {
-            $data['products'] = Product::paginate(10);
-        }
-
+        $search_keyword = $request->search;
+        $products = $this->productRepo->page(10, $search_keyword);
         return view(
             'admin.product.index',
-            $data
+            ["products" => $products]
         );
     }
 
@@ -46,8 +51,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        $suppliers = Supplier::all();
+        $categories = $this->categoryRepo->getAll();
+        $suppliers = $this->supplierRepo->getAll();
 
         return view(
             'admin.product.create',
@@ -65,49 +70,24 @@ class ProductController extends Controller
      */
     public function store(ProductCreateRequest $request)
     {
-        $data = $request->only(['name', 'description', 'supplier', 'new_supplier', 'price', 'status', 'category', 'new_category', 'quantity']);
-        if ($data['supplier'] == 'add') {
-            $supplier = Supplier::create([
-                'name' => $data['new_supplier'],
-                'description' => 'Danh mục ' . $data['new_supplier']
-            ]);
-            $data['supplier'] = $supplier->id;
-        }
+        $attributes = $request->only(['name', 'description', 'supplier', 'new_supplier', 'price', 'status', 'category', 'new_category', 'quantity']);
 
-        if ($data['category'] == 'add') {
-            $category = Category::create([
-                'name' => $data['new_category'],
-                'description' => 'Danh mục ' . $data['new_category']
-            ]);
-            $data['category'] = $category->id;
-        }
+        //upload file len storage
         //todo validate file max size
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
                 $name = time() . '_' . $file->getClientOriginalName();
                 $file->storeAs('images/product', $name);
-                $data['images'][] = ['image_path' => $name];
+                $attributes['images'][] = ['image_path' => $name];
             }
         }
-
-        $product = Product::create([
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'supplier_id' => $data['supplier'],
-            'price' => $data['price'],
-            'status' => $data['status'],
-            'quantity' => $data['quantity'],
-            'category_id' => $data['category'],
-        ]);
-
-        if (!empty($data['images'])) {
-            $product->images()->createMany($data['images']);
-        } else {
-            $product->images()->create([
-                'image_path' => ''
-            ]);
+        try {
+            $this->productRepo->create($attributes);
+        } catch (QueryException $e) {
+            return back()->withErrors(["message" => "Lỗi truy vấn cơ sở dữ liệu"]);
         }
         return back()->with('info', 'Tạo thành công');
+
     }
 
     /**
@@ -116,15 +96,17 @@ class ProductController extends Controller
      * @param int $id
      * @return View | RedirectResponse
      */
-    public function show($id)
+    public function show(int $id)
     {
-        $categories = Category::all();
-        $suppliers = Supplier::all();
+        $categories = $this->categoryRepo->getAll();
+        $suppliers = $this->supplierRepo->getAll();
+
         try {
-            $product = Product::findOrFail($id);
+            $product = $this->productRepo->find($id);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy sản phẩm']);
         }
+
         return view('admin.product.show', [
             'id' => $id,
             'product' => $product,
@@ -139,15 +121,17 @@ class ProductController extends Controller
      * @param int $id
      * @return View | RedirectResponse
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-        $categories = Category::all();
-        $suppliers = Supplier::all();
+        $categories = $this->categoryRepo->getAll();
+        $suppliers = $this->supplierRepo->getAll();
+
         try {
-            $product = Product::findOrFail($id);
+            $product = $this->productRepo->find($id);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy sản phẩm']);
         }
+
         return view('admin.product.edit', [
             'id' => $id,
             'product' => $product,
@@ -163,51 +147,32 @@ class ProductController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function update(ProductCreateRequest $request, $id)
+    public function update(ProductCreateRequest $request, int $id)
     {
-        $data = $request->only(['name', 'description', 'supplier', 'new_supplier', 'price', 'status', 'category', 'new_category', 'quantity']);
-
-        if ($data['supplier'] == 'add') {
-            $supplier = Supplier::create([
-                'name' => $data['new_supplier'],
-                'description' => 'Danh mục ' . $data['new_supplier']
-            ]);
-            $data['supplier'] = $supplier->id;
-        }
-
-        if ($data['category'] == 'add') {
-            $category = Category::create([
-                'name' => $data['new_category'],
-                'description' => 'Danh mục ' . $data['new_category']
-            ]);
-            $data['category'] = $category->id;
-        }
-
-        $product = Product::updateOrCreate(
-            ['id' => $id],
-            [
-                'name' => $data['name'],
-                'description' => $data['description'],
-                'supplier_id' => $data['supplier'],
-                'price' => $data['price'],
-                'status' => $data['status'],
-                'quantity' => $data['quantity'],
-                'category_id' => $data['category'],
-            ]
-        );
+        $attributes = $request->only(['name', 'description', 'supplier', 'new_supplier', 'price', 'status', 'category', 'new_category', 'quantity']);
 
         //todo validate file max size
         if ($request->hasFile('images')) { //neu nhu co anh upload => thay the anh cu = anh moi
-            Storage::delete($product->images->map(function ($item) {
-                return 'images/product/' . $item->image_path;
-            })->toArray()); // xoa  anh trong storage
-            $product->images()->delete();
-            foreach ($request->file('images') as $file) {
+            Storage::delete(    // xoa  anh cu trong storage
+                $this->productRepo
+                    ->getImages($id)
+                    ->map(function ($item) {
+                        return 'images/product/' . $item->image_path;
+                    })
+                    ->toArray()
+            );
+
+            foreach ($request->file('images') as $file) { //luu file moi
                 $name = time() . '_' . $file->getClientOriginalName();
                 $file->storeAs('images/product', $name);
-                $data['images'][] = ['image_path' => $name];
+                $attributes['images'][] = ['image_path' => $name];
             }
-            $product->images()->createMany($data['images']);
+        }
+
+        try {
+            $this->productRepo->update($id, $attributes);
+        } catch (ModelNotFoundException $e) {
+            return back()->withErrors(['message' => 'Không tìm thấy sản phẩm']);
         }
 
         return redirect(route('product.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
@@ -219,13 +184,14 @@ class ProductController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         try {
-            Product::findOrFail($id)->delete();
+            $this->productRepo->delete($id);
         } catch (ModelNotFoundException $e) {
-            return back()->withErrors(['message' => 'Không tìm thấy sản phẩm để xóa']);
+            return back()->withErrors(['message' => 'Không tìm thấy sản phẩm']);
         }
+
         return back()->with('info', 'Xóa sản phẩm thành công');
     }
 }

@@ -1,11 +1,4 @@
 @charset "UTF-8";
-/* ==== CUSTOM UI ELEMENTS AND STYLES ====*/
-
-/* ========================
-INCLUDE STYLES AND COMPONENTS
-===================== */
-
-/* ================== HELPERS =================== */
 
 body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;//ghi de font bootstrap
@@ -792,7 +785,7 @@ ul.row-sm {
     display: inline-block;
     padding: 3px 7px;
     background: #f2f2f2;
-    border: 1px xolid #eee;
+    border: 1px solid #eee;
     border-radius: 3px;
     margin-top: 4px;
     margin-right: 2px;
@@ -1006,150 +999,4 @@ ul.row-sm {
     font-size: 1.2rem;
     line-height: 0.7;
     vertical-align: bottom;
-}
-
-/* ================== PAGES =================== */
-
-/* ================== DARK =================== */
-
-body.dark {
-    background-color: #141432;
-    color: #fff;
-}
-
-body.dark .bg-light {
-    background-color: #1D1D42 !important;
-}
-
-body.dark .brand-wrap .logo {
-    filter: brightness(2);
-}
-
-body.dark .navbar-aside {
-    background-color: #1D1D42;
-    border-right: 1px solid #29335d;
-}
-
-body.dark .menu-aside .menu-item .icon {
-    color: rgba(173, 181, 189, 0.7);
-}
-
-body.dark .menu-aside .menu-item.active .icon {
-    color: #fff;
-}
-
-body.dark .menu-aside .menu-item.active .menu-link {
-    background-color: #29335d;
-}
-
-body.dark .menu-aside .menu-link {
-    color: #f8f9fa;
-}
-
-body.dark .menu-aside .menu-link:hover {
-    background-color: #29335d;
-    color: #f8f9fa;
-}
-
-body.dark .menu-aside .submenu {
-    background-color: #1D1D42;
-    border-color: #141432;
-}
-
-body.dark .menu-aside .submenu a {
-    color: #cfdbe6;
-}
-
-body.dark .menu-aside .submenu a:hover {
-    color: #fff;
-}
-
-body.dark .main-header {
-    background-color: #1D1D42;
-    border-bottom: 1px solid #1D1D42;
-}
-
-body.dark .main-header .nav-item>a {
-    color: #fff;
-}
-
-body.dark .main-header .nav-link:hover,
-body.dark .main-header .nav-link.active {
-    background-color: #29335d;
-    color: #fff;
-}
-
-body.dark .card,
-body.dark .card-header {
-    background-color: #1D1D42;
-}
-
-body.dark .card {
-    border: 1px solid #29335d;
-}
-
-body.dark .card-header {
-    border-color: #29335d;
-}
-
-body.dark .box {
-    background: #1D1D42;
-}
-
-body.dark .table {
-    --bs-table-hover-bg: black;
-    --bs-table-hover-color: #fff;
-    color: #fff;
-    border-color: #29335d;
-}
-
-body.dark .form-control,
-body.dark .form-select {
-    background-color: #141432;
-    border-color: #29335d;
-    color: #fff;
-}
-
-body.dark .btn {
-    color: white;
-}
-
-body.dark .btn-light {
-    background-color: #29335d;
-    border-color: #29335d;
-    color: #fff;
-}
-
-body.dark .btn-light i {
-    color: #e9ecef;
-}
-
-body.dark .btn-light:hover {
-    background-color: #1D1D42;
-    border-color: #313d6f;
-}
-
-body.dark .itemside {
-    color: #fff;
-}
-
-body.dark a.itemside {
-    color: #fff;
-}
-
-body.dark .nav-pills .nav-link {
-    color: #fff;
-}
-
-body.dark .nav-pills .nav-link:hover {
-    color: #fff;
-}
-
-body.dark .nav-pills .nav-link.active {
-    color: #fff;
-    background-color: #29335d;
-}
-
-body.dark .card-product-grid .title {
-    color: #fff;
 }

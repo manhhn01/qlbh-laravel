@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryCreateRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,30 +13,28 @@ use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    public function __construct()
+    protected $categoryRepo;
+
+    public function __construct(CategoryRepositoryInterface $categoryRepo)
     {
         $this->middleware(['auth', 'admin']);
+
+        $this->categoryRepo = $categoryRepo;
     }
 
     /**
      * Display a listing of the resource.
-     *
+     * @param Request $request
      * @return View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $search_param = request()->search;
-        $data = [];
-        if (!empty($search_param)) {
-            $categories = Category::where('name', 'like', '%' . $search_param . '%')->orderBy('name');
-            $data['categories'] = $categories->paginate(10);
-        } else {
-            $data['categories'] = Category::paginate(10);
-        }
+        $search_keyword = $request->search;
 
+        $categories = $this->categoryRepo->page(10, $search_keyword);
         return view(
             'admin.category.index',
-            $data
+            ['categories' =>$categories]
         );
     }
 
