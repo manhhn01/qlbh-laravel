@@ -40,7 +40,7 @@
 
         <div class="card-body">
             @if ($products->isEmpty())
-            <div>Chưa có sản phẩm nào</div>
+            <div>Không có sản phẩm nào</div>
             @endif
 
             @foreach ($products as $product)
@@ -87,7 +87,7 @@
             <nav class="float-end mt-4" aria-label="Page navigation">
                 <ul class="pagination">
                     @if ($products->onFirstPage())
-                    <li class="page-item disable">
+                    <li class="page-item disabled">
                         <a class="page-link" href="#">Trước</a>
                     </li>
                     @else
@@ -95,14 +95,14 @@
                         <a class="page-link active" href="{{ $products->withQueryString()->previousPageUrl() }}" rel="prev">← Trước</a>
                     </li>
                     @endif
-                    <li class="page-item disable"><a class="page-link" href="#">{{ $products->currentPage() }}</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#">{{ $products->currentPage() }}</a></li>
 
                     @if ($products->hasMorePages())
                     <li class="page-item">
                         <a class="page-link" href="{{ $products->withQueryString()->nextPageUrl() }}">Sau →</a>
                     </li>
                     @else
-                    <li class="page-item disable">
+                    <li class="page-item disabled">
                         <a class="page-link active" href="#" rel="next">Sau</a>
                     </li>
                     @endif

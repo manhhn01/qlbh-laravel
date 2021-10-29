@@ -59,7 +59,6 @@
                         <td class="pl-0 mb-4 w-25">Số lượng</td>
                         <td class="pb-0">{{ $product->quantity }}</td>
                     </tr>
-                    </tr>
                     <tr>
 
                         <td class="pl-0 mb-4 w-25">Trạng thái</td>
