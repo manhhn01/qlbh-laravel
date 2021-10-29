@@ -100,28 +100,9 @@
             @endforeach
 
             <nav class="float-end mt-4" aria-label="Page navigation">
-                <ul class="pagination">
-                    @if ($products->onFirstPage())
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#">Trước</a>
-                    </li>
-                    @else
-                    <li class="page-item">
-                        <a class="page-link active" href="{{ $products->withQueryString()->previousPageUrl() }}" rel="prev">← Trước</a>
-                    </li>
-                    @endif
-                    <li class="page-item disabled"><a class="page-link" href="#">{{ $products->currentPage() }}</a></li>
-
-                    @if ($products->hasMorePages())
-                    <li class="page-item">
-                        <a class="page-link" href="{{ $products->withQueryString()->nextPageUrl() }}">Sau →</a>
-                    </li>
-                    @else
-                    <li class="page-item disabled">
-                        <a class="page-link active" href="#" rel="next">Sau</a>
-                    </li>
-                    @endif
-                </ul>
+                <nav class="float-end mt-4" aria-label="Page navigation">
+                    {!! $products->links() !!}
+                </nav>
             </nav>
 
         </div> <!-- card-body end// -->

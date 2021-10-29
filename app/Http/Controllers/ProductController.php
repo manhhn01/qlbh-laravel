@@ -36,7 +36,7 @@ class ProductController extends Controller
     {
         $filter["name"] = $request->search;
         $filter["status"] = $request->status;
-        $products = $this->productRepo->page(10, $filter);
+        $products = $this->productRepo->page(2, $filter);
         return view(
             'admin.product.index',
             ["products" => $products]

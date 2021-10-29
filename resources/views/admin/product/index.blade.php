@@ -28,7 +28,8 @@
                             <select class="form-select status-select" name="status">
                                 <option value="">Tất cả</option>
                                 <option value="1">Đang bán</option>
-                                <option value="0" {{ request()->query('status')==0 ? 'selected' : '' }}>Dừng bán</option>
+                                <option value="0" {{ request()->query('status')==0 ? 'selected' : '' }}>Dừng bán
+                                </option>
                             </select>
                         </form>
                     </div>
@@ -75,11 +76,8 @@
                                     <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
                                             class="material-icons md-more_horiz"></i> </a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item"
-                                           href="{{ route('product.show', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Xem
-                                            chi tiết</a>
-                                        <a class="dropdown-item"
-                                           href="{{ route('product.edit', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Sửa</a>
+                                        <a class="dropdown-item" href="{{ route('product.show', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Xem chi tiết</a>
+                                        <a class="dropdown-item" href="{{ route('product.edit', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Sửa</a>
                                         <form class="delete-product" data-id="{{ $product->id }}"
                                               data-name={{ $product->name }} action="{{ route('product.destroy', ['id'=>$product->id]) }}"
                                               method="POST">
@@ -94,30 +92,7 @@
                 @endforeach
 
                 <nav class="float-end mt-4" aria-label="Page navigation">
-                    <ul class="pagination">
-                        @if ($products->onFirstPage())
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#">Trước</a>
-                            </li>
-                        @else
-                            <li class="page-item">
-                                <a class="page-link active" href="{{ $products->withQueryString()->previousPageUrl() }}"
-                                   rel="prev">← Trước</a>
-                            </li>
-                        @endif
-                        <li class="page-item disabled"><a class="page-link" href="#">{{ $products->currentPage() }}</a>
-                        </li>
-
-                        @if ($products->hasMorePages())
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $products->withQueryString()->nextPageUrl() }}">Sau →</a>
-                            </li>
-                        @else
-                            <li class="page-item disabled">
-                                <a class="page-link active" href="#" rel="next">Sau</a>
-                            </li>
-                        @endif
-                    </ul>
+                    {!! $products->links() !!}
                 </nav>
 
             </div> <!-- card-body end// -->
