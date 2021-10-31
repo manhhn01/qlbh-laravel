@@ -29,7 +29,7 @@
         <nav>
             <ul class="menu-aside">
                 <li class="menu-item {{request()->routeIs('dashboard') ? "active" : ""}}">
-                    <a class="menu-link" href="{{ route('dashboard') }}"">
+                    <a class="menu-link" href="{{ route('dashboard') }}">
                         <i class=" icon material-icons md-home"></i>
                         <span class="text">Tổng quan</span>
                     </a>
@@ -77,6 +77,7 @@
                 </form>
             </div>
             <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="md-28 material-icons md-menu"></i> </button>
                 <ul class="nav">
                     <li class="dropdown nav-item">
                         <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#">

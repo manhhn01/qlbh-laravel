@@ -17,7 +17,7 @@
     <main>
         <header class="main-header navbar">
             <div class="col-brand">
-                <a href="route('dashboard')" class="brand-wrap">
+                <a href="{{route('dashboard')}}" class="brand-wrap">
                     <img src="{{asset('images/logo.png')}}" height="46" class="logo" alt="">
                 </a>
             </div>
