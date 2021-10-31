@@ -35,7 +35,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
 
 
-        parent::create([
+        $product = parent::create([
             'name' => $attributes['name'],
             'description' => $attributes['description'],
             'supplier_id' => $attributes['supplier'],
@@ -43,7 +43,9 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             'status' => $attributes['status'],
             'quantity' => $attributes['quantity'],
             'category_id' => $attributes['category'],
-        ])->images()->createMany($attributes['images']);
+        ]);
+
+        if (isset($attributes['images'])) $product->images()->createMany($attributes['images']);
     }
 
     public function update($id, $attributes)
@@ -84,7 +86,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
     }
 
-    public function getImages($id){
+    public function getImages($id)
+    {
         return $this->find($id)->images;
     }
 }
