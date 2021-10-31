@@ -17,7 +17,7 @@
             <div class="row product-gallery mx-1">
 
                 <div class="col-12 mb-4">
-                    @if ($product->images->first()->image_path == '')
+                    @if($product->images->count() == 0 || $product->images->first()->image_path == null)
                         <img src="{{ asset('images/logo.png') }}" class="img-fluid img-max"
                              alt="Item">
                     @else

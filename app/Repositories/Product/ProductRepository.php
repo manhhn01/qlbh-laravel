@@ -45,7 +45,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             'category_id' => $attributes['category'],
         ]);
 
-        if (isset($attributes['images'])) $product->images()->createMany($attributes['images']);
+        if (isset($attributes['images'])) {
+            $attributes['images'] = null;
+        }
+        $product->images()->createMany($attributes['images']);
     }
 
     public function update($id, $attributes)
