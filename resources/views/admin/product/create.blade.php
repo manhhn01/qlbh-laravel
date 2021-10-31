@@ -14,7 +14,7 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="mb-4">
-                        <label for="name" class="form-label">Product name</label>
+                        <label for="name" class="form-label">Tên sản phẩm</label>
                         <input type="text" placeholder="Nhập ở đây..." class="form-control" name="name" id="name" value="{{ old('name') }}">
                     </div>
                     <div class="mb-4">

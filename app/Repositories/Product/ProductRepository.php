@@ -46,9 +46,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         ]);
 
         if (isset($attributes['images'])) {
-            $attributes['images'] = null;
+            $product->images()->createMany($attributes['images']);
         }
-        $product->images()->createMany($attributes['images']);
     }
 
     public function update($id, $attributes)
