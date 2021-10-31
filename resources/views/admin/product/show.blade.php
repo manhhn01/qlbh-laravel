@@ -60,7 +60,7 @@
                     <tr>
                     <tr>
 
-                        <td class="pl-0 mb-4 w-25">Nhãn hiệu</td>
+                        <td class="pl-0 mb-4 w-25"></td>
                         <td class="pb-0">{{ $product->supplier->name }}</td>
                     <tr>
                         <td class="pl-0 mb-4 w-25">Số lượng</td>

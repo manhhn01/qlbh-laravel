@@ -1,12 +1,12 @@
-// new category & new brand
+// new category & new supplier
 $(() => {
     console.log("ready");
-    $("#brandSelect").on("change", function () {
+    $("#supplierSelect").on("change", function () {
         console.log(this.value);
         if (this.value == "add") {
-            $("#brandNew").show();
+            $("#supplierNew").show();
         } else {
-            $("#brandNew").hide();
+            $("#supplierNew").hide();
         }
     });
     $("#categorySelect").on("change", function () {

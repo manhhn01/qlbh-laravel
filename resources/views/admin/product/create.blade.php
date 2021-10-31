@@ -18,9 +18,9 @@
                         <input type="text" placeholder="Nhập ở đây..." class="form-control" name="name" id="name" value="{{ old('name') }}">
                     </div>
                     <div class="mb-4">
-                        <label for="product_brand" class="form-label">Brand</label>
-                        <select name="supplier" class="form-select" id="brandSelect">
-                            <option selected disabled>Chọn brand</option>
+                        <label for="product_supplier" class="form-label">Nhà cung cấp</label>
+                        <select name="supplier" class="form-select" id="supplierSelect">
+                            <option selected disabled>Chọn nhà cung cấp</option>
                             <option value="add">--Thêm mới--</option>
                             @foreach ($suppliers as $supplier)
                                 <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
@@ -28,9 +28,9 @@
                         </select>
                     </div>
 
-                    <div id="brandNew" style="display:none">
-                        <label for="new_brand" class="form-label">Nhãn hiệu mới</label>
-                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="new_supplier" id="new_brand">
+                    <div id="supplierNew" style="display:none">
+                        <label for="new_supplier" class="form-label">Nhà cung cấp mới</label>
+                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="new_supplier" id="new_supplier">
                     </div>
                 </div>
             </div> <!-- card end// -->

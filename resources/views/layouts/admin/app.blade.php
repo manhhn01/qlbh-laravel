@@ -60,6 +60,17 @@
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="#">
                         <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Nhà cung cấp / Brand</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="{{ route('supplier.list') }}">Danh sách nhà cung cấp</a>
+                        <a href="{{ route('supplier.create') }}">Thêm nhà cung cấp</a>
+                    </div>
+                </li>
+
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Đơn hàng</span>
                     </a>
                     <div class="submenu">

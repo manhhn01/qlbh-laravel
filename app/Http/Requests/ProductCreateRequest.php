@@ -43,7 +43,7 @@ class ProductCreateRequest extends FormRequest
         return [
             'name.required' => 'Tên sản phẩm không được để trống',
             'description.required' => 'Mô tả không được để trống',
-            'supplier.required' => 'Tên nhãn hiệu không được để trống',
+            'supplier.required' => 'Tên nhà cung cấp không được để trống',
             'images.required' => 'Hình ảnh không được để trống',
             'category.required' => 'Danh mục không được để trống',
             'price.required' => 'Giá sản phẩm không được để trống',

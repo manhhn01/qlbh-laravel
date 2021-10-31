@@ -50,3 +50,13 @@ Route::name('category.')->prefix('category')->group(function(){
     Route::post('update/{id}', [CategoryController::class, 'update'])->name('update');
     Route::post('delete/{id}', [CategoryController::class, 'destroy'])->name('destroy');
 });
+
+Route::name('supplier.')->prefix('supplier')->group(function(){
+    Route::get('index', [CategoryController::class, 'index'])->name('list');
+    Route::get('id/{id}', [CategoryController::class, 'show'])->name('show');
+    Route::get('create', [CategoryController::class, 'create'])->name('create');
+    Route::post('create', [CategoryController::class, 'store']);
+    Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+    Route::post('update/{id}', [CategoryController::class, 'update'])->name('update');
+    Route::post('delete/{id}', [CategoryController::class, 'destroy'])->name('destroy');
+});
