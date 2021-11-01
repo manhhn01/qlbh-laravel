@@ -11,9 +11,9 @@
     <section class="content-main">
         <div class="card mb-4">
             <header class="card-header">
-                <div class="row align-items-center">
-                    <div class="col-md-4 col-6 ms-auto">
-                        <form action="{{ route('product.list') }}" method="get">
+                <form class="form-filter" action="{{ route('product.list') }}" method="get">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 col-6 ms-auto">
                             <div class="input-group">
                                 <input type="text" class="form-control" name="search" placeholder="Tìm sản phẩm"
                                        value="{{ request()->search }}">
@@ -21,19 +21,18 @@
                                     <i class="material-icons md-search"></i>
                                 </button>
                             </div>
-                        </form>
-                    </div>
-                    <div class="col-md-2 col-6">
-                        <form class="status-form" action="{{route('product.list')}}" method="get">
+                        </div>
+                        <div class="col-md-2 col-6">
                             <select class="form-select status-select" name="status">
                                 <option value="" {{ request()->query('status')=="" ? 'selected' : '' }}>Tất cả</option>
-                                <option value="1" {{ request()->query('status')==="1" ? 'selected' : '' }}>Đang bán</option>
+                                <option value="1" {{ request()->query('status')==="1" ? 'selected' : '' }}>Đang bán
+                                </option>
                                 <option value="0" {{ request()->query('status')==="0" ? 'selected' : '' }}>Dừng bán
                                 </option>
                             </select>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </header> <!-- card-header end// -->
 
             <div class="card-body">

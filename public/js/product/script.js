@@ -35,6 +35,6 @@ $(() => {
     });
 
     $(".status-select").on("change", function (){
-        $(".status-form").submit();
+        $(".form-filter").submit();
     })
 });
