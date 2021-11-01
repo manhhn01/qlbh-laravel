@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 interface RepositoryInterface
 {
     /**
-     * Get all products order
+     * Get all order by created_at
      * @return mixed
      */
     function getAll();

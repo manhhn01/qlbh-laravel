@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{{--TODO fix menu mobile--}}
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -57,9 +56,9 @@
                     </div>
                 </li>
 
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu {{request()->is('supplier/*') ? "active" : ""}}">
                     <a class="menu-link" href="#">
-                        <i class="icon material-icons md-shopping_bag"></i>
+                        <i class="icon material-icons md-watch"></i>
                         <span class="text">Nhà cung cấp / Brand</span>
                     </a>
                     <div class="submenu">
@@ -70,7 +69,7 @@
 
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="#">
-                        <i class="icon material-icons md-shopping_bag"></i>
+                        <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Đơn hàng</span>
                     </a>
                     <div class="submenu">
@@ -100,7 +99,7 @@
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
-                <form class="searchform">
+                <form class="search-form">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search term" />
                         <button class="btn btn-light bg" type="button">
@@ -131,14 +130,7 @@
             @if (session('info'))
             <div class="alert alert-info">{{ session('info') }}</div>
             @endif
-            {{--
-            @error('message')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror --}}
-            {{--
-            @error('message')
-            <div class="mb-3 alert alert-danger">{{ $message }}</div>
-            @enderror --}}
+
             @if($errors->any())
             {!!
             implode('', $errors->all('<div class="alert alert-danger">:message</div>'))

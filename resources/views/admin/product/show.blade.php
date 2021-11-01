@@ -1,58 +1,68 @@
 @extends('layouts.admin.app')
 @section('content-main')
-<div class="content-header">
-    <h2 class="content-title"> Thông tin sản phẩm</h2>
-    <div>
-            <a href="{{ route('product.edit',  ['id'=>$id, 'page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Sửa</a>
+    <div class="content-header">
+        <h2 class="content-title"> Thông tin sản phẩm</h2>
+        <div>
+            <a href="{{ route('product.edit',  ['id'=>$id, 'page'=>request()->page, 'search'=>request()->search]) }}"
+               type="submit" class="btn btn-primary">Sửa</a>
         </div>
-</div>
+    </div>
 
-<div class="row">
-    <div class="col-md-6 mb-4 mb-md-0">
+    <div class="row">
+        <div class="col-md-6 mb-4 mb-md-0">
 
-        <div id="mdb-lightbox-ui"></div>
+            <div id="mdb-lightbox-ui"></div>
 
-        <div class="mdb-lightbox">
+            <div class="mdb-lightbox">
 
-            <div class="row product-gallery mx-1">
+                <div class="row product-gallery mx-1">
 
-                <div class="col-12 mb-4">
-                    @if($product->images->count() == 0)
-                        <img src="{{ asset('images/logo.png') }}" class="img-fluid img-max"
-                             alt="Item">
-                    @else
-                        <img
-                            src="{{ asset('images/product/'.$product->images->first()->image_path) }}"
-                            class="img-fluid img-max" alt="Item">
-                    @endif
-                </div>
-                <div class="col-12">
-                    <div class="row">
-                        {{-- @foreach ($product->images as $image)
-                        <div class="col-3">
-                            <div class="rounded gallery-item">
-                                <img src="{{ $image->image_path }}" class="img-fluid">
+                    <div class="col-12 mb-4">
+                        <div id="productSlide" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @if($product->images->count() == 0)
+                                    <img src="{{ asset('images/logo.png') }}" class="img-fluid img-max"
+                                         alt="Item">
+                                @else
+                                    @foreach($product->images as $image)
+                                        <div class="carousel-item {{ $loop->index ==0 ? "active" :"" }}">
+                                            <img class="img-fluid img-max" src="{{ asset('images/product/'.$image->image_path) }}" alt="">
+                                            <div class="carousel-caption d-none d-md-block text-dark">
+                                                Ảnh {{$loop->index + 1}}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
+                            <a class="carousel-control-prev" onclick="$('#productSlide').carousel('prev');">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </a>
+                            <a class="carousel-control-next" onclick="$('#productSlide').carousel('next');">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </a>
                         </div>
-                        @endforeach --}}
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+{{--                            row de anh mini ?--}}
+                        </div>
                     </div>
                 </div>
+
             </div>
 
         </div>
+        <div class="col-md-6">
 
-    </div>
-    <div class="col-md-6">
+            <h5>{{ $product->name }}</h5>
+            <p class="mb-2 text-muted text-uppercase small">{{ $product->category->name }}</p>
+            <p><span class="mr-1"><strong>{{ $product->price }} VND</strong></span></p>
+            <p class="pt-1">{{ $product->description }}</p>
 
-        <h5>{{ $product->name }}</h5>
-        <p class="mb-2 text-muted text-uppercase small">{{ $product->category->name }}</p>
-        <p><span class="mr-1"><strong>{{ $product->price }} VND</strong></span></p>
-        <p class="pt-1">{{ $product->description }}</p>
-
-        <hr>
-        <div class="table-responsive mb-2">
-            <table class="table table-sm table-borderless">
-                <tbody>
+            <hr>
+            <div class="table-responsive mb-2">
+                <table class="table table-sm table-borderless">
+                    <tbody>
                     <tr>
 
                         <td class="pl-0 mb-4 w-25">Mã sản phẩm</td>
@@ -60,7 +70,7 @@
                     <tr>
                     <tr>
 
-                        <td class="pl-0 mb-4 w-25"></td>
+                        <td class="pl-0 mb-4 w-25">Nhà cung cấp</td>
                         <td class="pb-0">{{ $product->supplier->name }}</td>
                     <tr>
                         <td class="pl-0 mb-4 w-25">Số lượng</td>
@@ -71,15 +81,15 @@
                         <td class="pl-0 mb-4 w-25">Trạng thái</td>
                         <td class="pb-0 badge rounded-pill alert-success">{{ $product->status == 1 ? 'Đang bán' : 'Dừng bán' }}</td>
                     </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
 @endsection
 
 
 @push('js')
-<script src="{{ asset('js/product/script.js') }}"></script>
+    <script src="{{ asset('js/product/script.js') }}"></script>
 @endpush

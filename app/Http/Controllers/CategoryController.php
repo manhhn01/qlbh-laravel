@@ -29,9 +29,10 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $filter["name"] = $request->search;
-
-        $categories = $this->categoryRepo->page(2, $filter);
+        if ($request->has(["search"])) {
+            $filter["name"] = $request->search;
+        }
+        $categories = $this->categoryRepo->page(2, $filter ?? null);
         return view(
             'admin.category.index',
             ['categories' => $categories]
@@ -56,12 +57,9 @@ class CategoryController extends Controller
      */
     public function store(CategoryCreateRequest $request)
     {
-        $data = $request->only(['name', 'description']);
+        $attributes = $request->only(['name', 'description']);
 
-        $this->categoryRepo->create([
-            'name' => $data['name'],
-            'description' => $data['description'],
-        ]);
+        $this->categoryRepo->create($attributes);
 
         return back()->with('info', 'Tạo thành công');
     }

@@ -34,9 +34,11 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $filter["name"] = $request->search;
-        $filter["status"] = $request->status;
-        $products = $this->productRepo->page(2, $filter);
+        if ($request->hasAny(["search", "status"])) {
+            $filter["name"] = $request->search;
+            $filter["status"] = $request->status;
+        }
+        $products = $this->productRepo->page(2, $filter ?? null);
         return view(
             'admin.product.index',
             ["products" => $products]

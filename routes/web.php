@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
-use App\Models\Product;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -52,11 +52,11 @@ Route::name('category.')->prefix('category')->group(function(){
 });
 
 Route::name('supplier.')->prefix('supplier')->group(function(){
-    Route::get('index', [CategoryController::class, 'index'])->name('list');
-    Route::get('id/{id}', [CategoryController::class, 'show'])->name('show');
-    Route::get('create', [CategoryController::class, 'create'])->name('create');
-    Route::post('create', [CategoryController::class, 'store']);
-    Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
-    Route::post('update/{id}', [CategoryController::class, 'update'])->name('update');
-    Route::post('delete/{id}', [CategoryController::class, 'destroy'])->name('destroy');
+    Route::get('index', [SupplierController::class, 'index'])->name('list');
+    Route::get('id/{id}', [SupplierController::class, 'show'])->name('show');
+    Route::get('create', [SupplierController::class, 'create'])->name('create');
+    Route::post('create', [SupplierController::class, 'store']);
+    Route::get('edit/{id}', [SupplierController::class, 'edit'])->name('edit');
+    Route::post('update/{id}', [SupplierController::class, 'update'])->name('update');
+    Route::post('delete/{id}', [SupplierController::class, 'destroy'])->name('destroy');
 });
