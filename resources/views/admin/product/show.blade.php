@@ -20,7 +20,7 @@
                     <div class="col-12 mb-4">
                         <div id="productSlide" class="carousel slide" data-ride="carousel" data-interval="false">
                             <div class="carousel-inner">
-                                @if($product->images->count() == 0)
+                                @if($product->images->isEmpty())
                                     <div class="carousel-item active">
                                         <img src="{{ asset('images/logo.png') }}" class="img-fluid img-max"
                                              alt="">

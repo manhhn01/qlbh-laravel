@@ -9,7 +9,7 @@
                 <a class="itemside"
                    href="{{ route('product.show', ['id'=>$product->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
                     <div class="left">
-                        @if($product->images->count() == 0)
+                        @if($product->images->isEmpty())
                             <img src="{{ asset('images/logo.png') }}" class="img-sm img-thumbnail"
                                  alt="Item">
                         @else

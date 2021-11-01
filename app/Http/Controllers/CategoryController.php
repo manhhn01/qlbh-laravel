@@ -121,10 +121,9 @@ class CategoryController extends Controller
         ]);
 
         } catch (ModelNotFoundException $e){
-            return back()->withErrors(['message' => 'Không tìm thấy sản phẩm']);
+            return back()->withErrors(['message' => 'Không tìm thấy danh mục']);
         }
         return redirect(route('category.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
-
     }
 
     /**

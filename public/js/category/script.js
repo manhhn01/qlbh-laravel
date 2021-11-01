@@ -1,4 +1,3 @@
-// new category & new brand
 $(() => {
     //confirm delete
     $(".delete-category").submit(function () {
@@ -17,7 +16,4 @@ $(() => {
         console.log("not saved to the database.");
         return false;
     });
-    // $(this).on('click', function(){
-    // alert("Bạn có chác chắn muốn xóa sản phẩm", this.data.id);
-    // });
 });

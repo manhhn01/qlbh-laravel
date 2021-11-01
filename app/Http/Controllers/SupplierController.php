@@ -106,21 +106,37 @@ class SupplierController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-        //
+        $attributes = $request->only(['name', 'description']);
+
+        try{
+            $this->supplierRepo->update($id, [
+                'name' => $attributes['name'],
+                'description' => $attributes['description']
+            ]);
+
+        } catch (ModelNotFoundException $e){
+            return back()->withErrors(['message' => 'Không tìm thấy nhà cung cấp']);
+        }
+        return redirect(route('category.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function destroy($id)
     {
-        //
+        try {
+            $this->supplierRepo->delete($id);
+        } catch (ModelNotFoundException $e) {
+            return back()->withErrors(['message' => 'Không tìm thấy nhà cung cấp để xóa']);
+        }
+        return back()->with('info', 'Xóa nhà cung cấp thành công');
     }
 }
