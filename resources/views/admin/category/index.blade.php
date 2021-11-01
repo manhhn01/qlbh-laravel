@@ -69,6 +69,6 @@
 </section>
 @endsection
 
-@push('javascript')
+@push('js')
 <script src="{{ asset('js/category/script.js') }}"></script>
 @endpush

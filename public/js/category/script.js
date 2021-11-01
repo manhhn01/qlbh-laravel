@@ -6,7 +6,7 @@ $(() => {
             confirm(
                 "Bạn có chác chắn muốn xóa danh mục " +
                     this.dataset.name +
-                    ":" +
+                    "có id " +
                     this.dataset.id +
                     '? Xóa danh mục này sẽ xóa toàn bộ sản phẩm trong danh mục'
             )
