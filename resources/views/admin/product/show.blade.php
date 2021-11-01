@@ -18,17 +18,23 @@
                 <div class="row product-gallery mx-1">
 
                     <div class="col-12 mb-4">
-                        <div id="productSlide" class="carousel slide" data-ride="carousel">
+                        <div id="productSlide" class="carousel slide" data-ride="carousel" data-interval="false">
                             <div class="carousel-inner">
                                 @if($product->images->count() == 0)
-                                    <img src="{{ asset('images/logo.png') }}" class="img-fluid img-max"
-                                         alt="Item">
+                                    <div class="carousel-item active">
+                                        <img src="{{ asset('images/logo.png') }}" class="img-fluid img-max"
+                                             alt="">
+                                        <div class="carousel-caption d-none d-md-block text-dark">
+                                            Ảnh 1 / 1
+                                        </div>
+                                    </div>
                                 @else
                                     @foreach($product->images as $image)
                                         <div class="carousel-item {{ $loop->index ==0 ? "active" :"" }}">
-                                            <img class="img-fluid img-max" src="{{ asset('images/product/'.$image->image_path) }}" alt="">
+                                            <img class="img-fluid img-max"
+                                                 src="{{ asset('images/product/'.$image->image_path) }}" alt="">
                                             <div class="carousel-caption d-none d-md-block text-dark">
-                                                Ảnh {{$loop->index + 1}}
+                                                Ảnh {{$loop->index + 1}} / {{$loop->count}}
                                             </div>
                                         </div>
                                     @endforeach
@@ -44,7 +50,7 @@
                     </div>
                     <div class="col-12">
                         <div class="row">
-{{--                            row de anh mini ?--}}
+                            {{--                            row de anh mini ?--}}
                         </div>
                     </div>
                 </div>
