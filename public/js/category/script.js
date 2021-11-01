@@ -1,6 +1,5 @@
 // new category & new brand
 $(() => {
-    console.log("ready");
     //confirm delete
     $(".delete-category").submit(function () {
         if (
