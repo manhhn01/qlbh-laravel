@@ -1,4 +1,4 @@
-@extends('layouts.guest.app')
+@extends('layouts.guest')
 
 @section('title', 'Đăng ký')
 

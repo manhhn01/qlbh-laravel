@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,7 @@ Route::name('product.')->prefix('product')->group(function () {
     Route::get('edit/{id}', [ProductController::class, 'edit'])->name('edit');
     Route::post('update/{id}', [ProductController::class, 'update'])->name('update');
     Route::post('delete/{id}', [ProductController::class, 'destroy'])->name('destroy');
+    Route::post('ajax', [ProductController::class, 'ajax'])->name('ajax');
 });
 
 Route::name('category.')->prefix('category')->group(function(){
@@ -59,4 +61,14 @@ Route::name('supplier.')->prefix('supplier')->group(function(){
     Route::get('edit/{id}', [SupplierController::class, 'edit'])->name('edit');
     Route::post('update/{id}', [SupplierController::class, 'update'])->name('update');
     Route::post('delete/{id}', [SupplierController::class, 'destroy'])->name('destroy');
+});
+
+Route::name('order.')->prefix('order')->group(function(){
+    Route::get('index', [OrderController::class, 'index'])->name('list');
+    Route::get('id/{id}', [OrderController::class, 'show'])->name('show');
+    Route::get('create', [OrderController::class, 'create'])->name('create');
+    Route::post('create', [OrderController::class, 'store']);
+    Route::get('edit/{id}', [OrderController::class, 'edit'])->name('edit');
+    Route::post('update/{id}', [OrderController::class, 'update'])->name('update');
+    Route::post('delete/{id}', [OrderController::class, 'destroy'])->name('destroy');
 });

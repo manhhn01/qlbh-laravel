@@ -11,14 +11,14 @@ class AdminChecker
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param Request $request
+     * @param  Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
         $role = Auth::user()->role;
-        if($role !== '0') // not admin
+        if($role !== 0) // not admin
         {
             return redirect()->route('dashboard');
         }

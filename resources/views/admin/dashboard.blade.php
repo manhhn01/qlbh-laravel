@@ -10,7 +10,7 @@
     <div class="col-lg-4">
         <div class="card card-body mb-4">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-primary" style="--bs-bg-opacity: 0.2"><i class="text-primary material-icons md-monetization_on"></i></span>
+                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                 <div class="text">
                     <h6 class="mb-1">Tổng lợi nhuận</h6> <span>$0</span>
                 </div>
@@ -20,7 +20,7 @@
     <div class="col-lg-4">
         <div class="card card-body mb-4">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-success" style="--bs-bg-opacity: 0.2"><i class="text-success material-icons md-local_shipping"></i></span>
+                <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
                 <div class="text">
                     <h6 class="mb-1">Tổng đơn hàng</h6> <span>0</span>
                 </div>
@@ -30,7 +30,7 @@
     <div class="col-lg-4">
         <div class="card card-body mb-4">
             <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-warning" style="--bs-bg-opacity: 0.2"><i class="text-warning material-icons md-shopping_basket"></i></span>
+                <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-shopping_basket"></i></span>
                 <div class="text">
                     <h6 class="mb-1">Tổng sản phẩm</h6> <span>0</span>
                 </div>

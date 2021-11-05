@@ -1,3 +1,10 @@
+//===== ajax setup csrf
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 //===== jquery code for sidebar menu
 $('.menu-item.has-submenu .menu-link').on('click', function (e) {
     e.preventDefault();
@@ -44,11 +51,11 @@ $('.btn-aside-minimize').on('click', function () {
 });
 
 //load sidebar status from localStorage
-$(() => {
-    const status = localStorage.getItem("aside-minimize");
-    if (window.innerWidth >= 768) {
-        if (status == "1") {
-            $('body').addClass('aside-mini');
-        }
-    }
-})
+// $(() => {
+//     const status = localStorage.getItem("aside-minimize");
+//     if (window.innerWidth >= 768) {
+//         if (status === "1") {
+//             $('body').addClass('aside-mini');
+//         }
+//     }
+// })

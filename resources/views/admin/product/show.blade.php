@@ -70,9 +70,12 @@
                 <table class="table table-sm table-borderless">
                     <tbody>
                     <tr>
-
                         <td class="pl-0 mb-4 w-25">Mã sản phẩm</td>
                         <td class="pb-0">{{ $product->id }}</td>
+                    <tr>
+                    <tr>
+                        <td class="pl-0 mb-4 w-25">SKU</td>
+                        <td class="pb-0">{{ $product->sku }}</td>
                     <tr>
                     <tr>
 
@@ -85,7 +88,7 @@
                     <tr>
 
                         <td class="pl-0 mb-4 w-25">Trạng thái</td>
-                        <td class="pb-0 badge rounded-pill alert-success">{{ $product->status == 1 ? 'Đang bán' : 'Dừng bán' }}</td>
+                        <td class="pb-0 badge rounded-pill {{ $product->status===1 ? 'alert-success' :  'alert-warning'}}">{{ $product->status === 1 ? 'Đang bán' : 'Dừng bán' }}</td>
                     </tr>
                     </tbody>
                 </table>

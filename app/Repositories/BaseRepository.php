@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-
 abstract class BaseRepository implements RepositoryInterface
 {
     protected $model;
@@ -50,7 +48,7 @@ abstract class BaseRepository implements RepositoryInterface
     function page($amount, $filter = null)
     {
         if (isset($filter)) {
-            return $this->model->ofType($filter)->orderBy('name')->paginate($amount);
+            return $this->model->ofType($filter)->paginate($amount);
         } else {
             return $this->model->latest()->paginate($amount);
         }

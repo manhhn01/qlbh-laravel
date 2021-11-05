@@ -22,6 +22,7 @@ class Product extends Model
         'supplier_id',
         'name',
         'description',
+        'sku',
         'price',
         'quantity',
         'status'
@@ -34,7 +35,7 @@ class Product extends Model
             $query->where('name', 'LIKE', '%' . $filter['name'] . '%');
         }
 
-        if (isset($filter['status'])) {
+        if (isset($filter['status']) && $filter['status'] !== "all") {
             $query->where('status', $filter['status']);
         }
 

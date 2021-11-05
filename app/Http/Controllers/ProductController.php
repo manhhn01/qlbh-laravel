@@ -6,7 +6,10 @@ use App\Http\Requests\ProductCreateRequest;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Supplier\SupplierRepositoryInterface;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -18,10 +21,11 @@ class ProductController extends Controller
     protected $categoryRepo;
     protected $supplierRepo;
 
-    public function __construct(ProductRepositoryInterface  $product,
-                                CategoryRepositoryInterface $category,
-                                SupplierRepositoryInterface $supplier)
-    {
+    public function __construct(
+        ProductRepositoryInterface  $product,
+        CategoryRepositoryInterface $category,
+        SupplierRepositoryInterface $supplier
+    ) {
         $this->middleware(['auth', 'admin']);
         $this->productRepo = $product;
         $this->categoryRepo = $category;
@@ -71,8 +75,7 @@ class ProductController extends Controller
      */
     public function store(ProductCreateRequest $request)
     {
-        $attributes = $request->only(['name', 'description', 'supplier', 'new_supplier', 'price', 'status', 'category', 'new_category', 'quantity']);
-
+        $attributes = $request->only(['name', 'description', 'supplier', 'new_supplier', 'price', 'status', 'sku', 'category', 'new_category', 'quantity']);
         //upload file len storage
         //todo validate file max size
         if ($request->hasFile('images')) {
@@ -82,9 +85,10 @@ class ProductController extends Controller
                 $attributes['images'][] = ['image_path' => $name];
             }
         }
+
+        // dd($attributes);
         $this->productRepo->create($attributes);
         return back()->with('info', 'Tạo thành công');
-
     }
 
     /**
@@ -144,7 +148,7 @@ class ProductController extends Controller
      */
     public function update(ProductCreateRequest $request, int $id)
     {
-        $attributes = $request->only(['name', 'description', 'supplier', 'new_supplier', 'price', 'status', 'category', 'new_category', 'quantity']);
+        $attributes = $request->only(['name', 'description', 'supplier', 'new_supplier', 'price', 'status', 'sku', 'category', 'new_category', 'quantity']);
 
         //todo validate file max size
         if ($request->hasFile('images')) { //neu nhu co anh upload => thay the anh cu = anh moi
@@ -188,5 +192,55 @@ class ProductController extends Controller
         }
 
         return back()->with('info', 'Xóa sản phẩm thành công');
+    }
+
+    /**
+     * Xử lý ajax lấy sản phẩm
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+
+    function ajax(Request $request)
+    {
+        $id_sku = $request->id_sku;
+        try {
+            $product = $this->productRepo->findByIdOrSku($id_sku);
+            if (!isset($product)) {
+                throw new ModelNotFoundException;
+            } else
+                return response()->json([
+                    "data" => [
+                        "product_name" => $product->name,
+                        "product_id" => $product->id,
+                        "sku" => $product->sku,
+                        "price" => number_format($product->price, 0, ",", "."),
+                        "quantity" => $product->quantity,
+                        "status" => $product->status,
+                        "image_path" => $product->images->first(),
+                    ]
+                ]);
+        } catch (QueryException $e) {
+            return response()->json([
+                "error" => [
+                    "code" => $e->getCode(),
+                    "message" => "Lỗi truy vấn cơ sở dữ liệu",
+                ]
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                "error" => [
+                    "code" => 404,
+                    "message" => "Không tìm thấy sản phẩm",
+                ]
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "error" => [
+                    "code" => $e->getCode(),
+                    "message" => "Lỗi hệ thống",
+                ]
+            ]);
+        }
     }
 }

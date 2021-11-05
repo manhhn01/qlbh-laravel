@@ -16,7 +16,7 @@ class SupplierRepository extends BaseRepository implements SupplierRepositoryInt
     function getProductsPage($amount, $supplier_id, $filter = null)
     {
         if(isset($filter))
-        return Product::where('supplier_id', $supplier_id)->ofType($filter)->paginate($amount);
+            return Product::where('supplier_id', $supplier_id)->ofType($filter)->paginate($amount);
         else{
             return Product::orderByDesc('created_at')->paginate($amount);
         }

@@ -1,5 +1,5 @@
-// new category & new supplier
 $(() => {
+    // new category & new supplier
     $("#supplierSelect").on("change", function () {
         console.log(this.value);
         if (this.value == "add") {
@@ -33,8 +33,14 @@ $(() => {
         return false;
     });
 
+    //status submit
     $(".status-select").on("change", function () {
         $(".form-filter").submit();
+    })
+
+    $('.form-filter').on('submit', function (e){
+        $(this).find(':input').filter(function(){ return !this.value; }).attr("disabled", "disabled");
+        return true;
     })
 
     //Carousel

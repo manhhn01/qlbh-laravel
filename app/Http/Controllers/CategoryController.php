@@ -109,7 +109,14 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function update(CategoryCreateRequest $request, $id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param CategoryCreateRequest $request
+     * @param int $id
+     * @return RedirectResponse
+     */
+    public function update(CategoryCreateRequest $request, int $id)
     {
         $attributes = $request->only(['name', 'description']);
 

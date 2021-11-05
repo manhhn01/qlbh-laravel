@@ -23,7 +23,7 @@
                             <option selected disabled>Chọn nhà cung cấp</option>
                             <option value="add">--Thêm mới--</option>
                             @foreach ($suppliers as $supplier)
-                                <option {{ $supplier->id==$product->supplier_id ? 'selected':'' }} value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                <option {{ $supplier->id===$product->supplier_id ? 'selected':'' }} value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -65,8 +65,8 @@
                     <div class="mb-4">
                         <label class="form-label">Trạng thái</label>
                         <select class="form-select" name="status">
-                            <option {{ $product->status==1?'selected':'' }} value="1">Đang bán</option>
-                            <option {{ $product->status==0?'selected':'' }} value="0">Dừng bán</option>
+                            <option {{ $product->status===1?'selected':'' }} value="1">Đang bán</option>
+                            <option {{ $product->status===0?'selected':'' }} value="0">Dừng bán</option>
                         </select>
                     </div>
 
@@ -78,7 +78,7 @@
                             <option selected disabled>Chọn danh mục</option>
                             <option value="add">--Thêm mới--</option>
                             @foreach ($categories as $category)
-                                <option {{ $category->id==$product->category_id ? 'selected':'' }} value="{{ $category->id }}">{{ $category->name }}</option>
+                                <option {{ $category->id===$product->category_id ? 'selected':'' }} value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>

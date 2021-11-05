@@ -16,4 +16,10 @@ $(() => {
         console.log("not saved to the database.");
         return false;
     });
+
+    //disable blank search input
+    $('.form-filter').on('submit', function (e){
+        $(this).find(':input').filter(function(){ return !this.value; }).attr("disabled", "disabled");
+        return true;
+    })
 });

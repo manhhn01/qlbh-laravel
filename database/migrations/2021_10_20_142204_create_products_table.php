@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('supplier_id');
             $table->string('name', 50);
+            $table->string('sku', 50)->unique();
             $table->string('description');
             $table->smallInteger('quantity'); //so luong trong kho
             $table->integer('price');

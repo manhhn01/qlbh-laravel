@@ -8,24 +8,22 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-  public function __construct()
-  {
-    $this->middleware(['auth']);
-  }
-
-  public function index()
-  {
-    // dd(Auth::user()->);
-    // $avatar = Auth::user()->avatar_image ?? 'default.png';
-    switch (Auth::user()->role) {
-        case 0:
-            return view('admin.dashboard');
-            break;
-        case 1:
-            return view('employee.dashboard');
-        default:
-            die('Unauthorized');
-            break;
+    public function __construct()
+    {
+        $this->middleware(['auth']);
     }
-  }
+
+    public function index()
+    {
+        switch (Auth::user()->role) {
+            case 0:
+                return view('admin.dashboard');
+                break;
+            case 1:
+                return view('employee.dashboard');
+            default:
+                die('Unauthorized');
+                break;
+        }
+    }
 }

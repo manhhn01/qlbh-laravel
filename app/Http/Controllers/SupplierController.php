@@ -94,21 +94,29 @@ class SupplierController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse | View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-        //
+        try {
+            $supplier = $this->supplierRepo->find($id);
+        } catch (ModelNotFoundException $e) {
+            return back()->withErrors(['message' => 'Không tìm thấy nhà cung cấp']);
+        }
+        return view('admin.supplier.edit', [
+            'id' => $id,
+            'supplier' => $supplier,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param SupplierCreateRequest $request
+     * @param int $id
      * @return RedirectResponse
      */
-    public function update(Request $request, int $id)
+    public function update(SupplierCreateRequest $request, int $id)
     {
         $attributes = $request->only(['name', 'description']);
 
@@ -121,7 +129,7 @@ class SupplierController extends Controller
         } catch (ModelNotFoundException $e){
             return back()->withErrors(['message' => 'Không tìm thấy nhà cung cấp']);
         }
-        return redirect(route('category.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
+        return redirect(route('supplier.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
     }
 
     /**

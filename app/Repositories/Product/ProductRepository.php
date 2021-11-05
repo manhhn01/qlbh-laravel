@@ -6,8 +6,6 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use App\Repositories\BaseRepository;
-use App\Repositories\Category\CategoryRepositoryInterface;
-use App\Repositories\Supplier\SupplierRepositoryInterface;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
@@ -41,6 +39,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             'supplier_id' => $attributes['supplier'],
             'price' => $attributes['price'],
             'status' => $attributes['status'],
+            'sku' => $attributes['sku'],
             'quantity' => $attributes['quantity'],
             'category_id' => $attributes['category'],
         ]);
@@ -77,6 +76,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 'supplier_id' => $attributes['supplier'],
                 'price' => $attributes['price'],
                 'status' => $attributes['status'],
+                'sku' => $attributes['sku'],
                 'quantity' => $attributes['quantity'],
                 'category_id' => $attributes['category'],
             ]
@@ -91,5 +91,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function getImages($id)
     {
         return $this->find($id)->images;
+    }
+
+    public function findByIdOrSku($id_sku)
+    {
+        return $this->model->where('id' ,'=' , $id_sku)->orWhere('sku', '=', $id_sku)->first();
     }
 }

@@ -1,9 +1,9 @@
 @extends('layouts.admin.app')
 @section('content-main')
-<form action="{{ route('category.update', ['id' => $id, 'page' => request()->page]) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('supplier.update', ['id' => $id, 'page' => request()->page]) }}" method="POST">
     @csrf()
     <div class="content-header">
-        <h2 class="content-title"> Sửa danh mục</h2>
+        <h2 class="content-title"> Sửa nhà cung cấp</h2>
         <div>
             <button type="submit" class="btn btn-primary">Lưu</button>
         </div>
@@ -14,12 +14,12 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="mb-4">
-                        <label for="name" class="form-label">Tên danh mục</label>
-                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="name" id="name" value="{{ $category->name }}">
+                        <label for="name" class="form-label">Tên nhà cung cấp</label>
+                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="name" id="name" value="{{ $supplier->name }}">
                     </div>
                     <div class="mb-4">
-                        <label for="name" class="form-label">Mô tả danh mục</label>
-                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="description" id="description" value="{{ $category->description }}">
+                        <label for="name" class="form-label">Mô tả nhà cung cấp</label>
+                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="description" id="description" value="{{ $supplier->description }}">
                     </div>
                 </div>
             </div> <!-- card end// -->
@@ -29,7 +29,6 @@
 </form>
 
 @endsection
-
 
 @push('js')
 @endpush

@@ -24,7 +24,7 @@
                         </div>
                         <div class="col-md-2 col-6">
                             <select class="form-select status-select" name="status">
-                                <option value="" {{ request()->query('status')=="" ? 'selected' : '' }}>Tất cả</option>
+                                <option value="all" {{ request()->query('status')=="" ? 'selected' : '' }}>Tất cả</option>
                                 <option value="1" {{ request()->query('status')==="1" ? 'selected' : '' }}>Đang bán
                                 </option>
                                 <option value="0" {{ request()->query('status')==="0" ? 'selected' : '' }}>Dừng bán

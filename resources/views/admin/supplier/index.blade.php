@@ -11,7 +11,7 @@
         <header class="card-header">
             <div class="row align-items-center">
                 <div class="col-md-4 col-6 ms-auto">
-                    <form action="{{ route('supplier.list') }}" method="get">
+                    <form  class="form-filter" action="{{ route('supplier.list') }}" method="get">
                         <div class="input-group">
                             <input type="text" class="form-control" name="search" placeholder="Tìm Danh sách" value="{{ request()->search }}">
                             <button class="btn btn-light bg" type="submit">
@@ -30,17 +30,17 @@
             @foreach ($suppliers as $supplier)
             <article class="itemlist">
                 <div class="row align-items-center">
-                    <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+                    <div class="col-8 flex-grow-1 col-name">
                         <a class="itemside" href="{{ route('supplier.show', ['id'=>$supplier->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
                             <div class="info">
                                 <h6 class="mb-0">{{ $supplier->name }}</h6>
                             </div>
                         </a>
                     </div>
-                    <div class="col-lg-2 col-sm-2 col-4 col-date">
+                    <div class="col-2 col-date">
                         <span>{{ $supplier->created_at }}</span>
                     </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-action">
+                    <div class="col-2 col-action">
                         <div class="dropdown float-end">
                             <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
                             <div class="dropdown-menu">

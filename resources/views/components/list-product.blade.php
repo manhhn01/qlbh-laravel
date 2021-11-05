@@ -23,11 +23,12 @@
                     </div>
                 </a>
             </div>
-            <div class="col-lg-2 col-sm-2 col-4 col-price"><span>{{ number_format($product->price, 0, ",", ".") }} đ</span>
+            <div class="col-lg-2 col-sm-2 col-4 col-price">
+                <span>{{ number_format($product->price, 0, ",", ".") }} đ</span>
             </div>
             <div class="col-lg-2 col-sm-2 col-4 col-status">
-                                <span
-                                    class="badge rounded-pill {{ $product->status==1 ? 'alert-success' :  'alert-warning'}}">{{ $product->status==1 ? 'Đang bán' :  'Dừng bán'}}</span>
+                <span
+                    class="badge rounded-pill {{ $product->status===1 ? 'alert-success' :  'alert-warning'}}">{{ $product->status===1 ? 'Đang bán' :  'Dừng bán'}}</span>
             </div>
             <div class="col-lg-2 col-sm-2 col-4 col-date">
                 <span>{{ $product->created_at }}</span>

@@ -13,4 +13,11 @@ interface ProductRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     function getImages($id);
+
+    /**
+     * find product by id or sku
+     * @param $id_sku
+     * @return mixed
+     */
+    function findByIdOrSku($id_sku);
 }
