@@ -1,7 +1,7 @@
 <div class="row mb-4">
     <div class="mb-3">Danh sách sản phẩm</div>
     <div class="col-lg-6">
-        <table class="table table-hover">
+        <table class="table table-hover" id="orderProducts">
             <thead>
             <tr>
                 <th scope="col">Sản phẩm</th>
@@ -16,7 +16,7 @@
             @isset($orderProducts)
             @foreach($orderProducts as $product)
                 <tr>
-                    <input type="hidden" name="product[0][name]" value="{{$product->name}}">
+                    <input type="hidden" name="product[0][id]" value="{{$product->id}}">
                     <input type="hidden" name="product[0][sku]" value="{{$product->sku}}">
 
                     <th scope="row">
@@ -26,7 +26,7 @@
                         SKU21312345
                     </td>
                     <td>
-                        <input type="number" min="{{$product->min_qty}}" max="{{$product->max_qty}}" name="product[0][qty]" value="{{$product->qty}}"> {{-- qty của sản phẩm trong order, khác vs quantity trong kho --}}
+                        <input class="form-control" type="number" min="{{$product->min_qty}}" max="{{$product->max_qty}}" name="product[0][qty]" value="{{$product->qty}}"> {{-- qty của sản phẩm trong order, khác vs quantity trong kho --}}
                     </td>
                     <td>
                         100.000 đ
@@ -42,15 +42,14 @@
     </div>
     <div class="col-lg-6 mb-3">
         <label class="form-label">Thêm sản phẩm</label>
-        <div class="alert alert-danger" role="alert">
-            Không tìm thấy sản phẩm
+        <div class="alert alert-danger" id="addAlert" role="alert" style="display: none">
         </div>
         <div class="row">
             <div class="col-md-8 mb-3">
                 <input type="text" class="form-control product-search-input" placeholder="Mã SP hoặc SKU">
             </div>
             <div class="col-md-4 mb-3 d-grid">
-                <button type="button" class="btn btn-primary add-order-product">Thêm</button>
+                <button type="button" class="btn btn-primary add-order-product-btn">Thêm</button>
             </div>
         </div>
         <div id="productLoad" class="d-none">

@@ -64,6 +64,7 @@ class RegisterController extends Controller
         ]);
       }
     } catch (\Illuminate\Database\QueryException $exception) {
+      // dd($exception);
       return back()->withErrors(['message' => 'Có lỗi xảy ra'])->withInput();
     }
     return redirect()->route('login')->with(['info' => 'Đăng ký thành công']);

@@ -27,7 +27,6 @@ $(() => {
 const bindEvents = () => {
     // input coupon event
     $(".coupon-input").on("input", function () {
-        console.log("input");
         // todo ajax
         let cloneCard = `
             <div class="card">
@@ -48,6 +47,7 @@ const bindEvents = () => {
     //button add product event
     $(".add-order-product-btn").on("click", function () {
         const idSku = $(".product-search-input").val();
+        addProduct(idSku);
     });
 };
 
@@ -84,32 +84,79 @@ const getProduct = (idSku) => {
             }
         },
     });
-
 };
 
 const addProduct = (idSku) => {
-    //todo ajax kiểm tra số lượng sản phẩm trong kho
-    //todo thêm vào bảng
-    const productRow = `
-        <tr>
-            <input type="hidden" name="product[0][name]" value="{product-name}">
-            <input type="hidden" name="product[0][sku]" value="{product-sku}">
-            <input type="hidden" name="product[0][qty]" value="{qty}">
-            <th scope="row">
-                Mark
-            </th>
-            <td>
-                SKU21312345
-            </td>
-            <td>
-                @mdo
-            </td>
-            <td>@mdo</td>
-            <td>
-                <button type="button" class="btn btn-danger delete-order-product-btn-">Xóa</button>
-            </td>
-        </tr>
-    `
+    $.ajax({
+        method: "post",
+        url: "/product/ajax",
+        data: {
+            id_sku: idSku,
+        },
+        success: (result) => {
+            const data = result.data;
+            const error = result.error;
+            if (data) {
+                if (data.quantity > 0) {
+                    if(!duplicateProduct(data.product_id)){
+                        $("#orderProducts > tbody").append(`
+                        <tr data-id=${data.product_id}>
+                        <input type="hidden" name="product[0][id]" value="${data.product_id}">
+                        <input type="hidden" name="product[0][sku]" value="${data.sku}">
+
+                        <th scope="row">
+                        ${data.product_name}
+                        </th>
+                        <td>
+                        ${data.sku}
+                        </td>
+                        <td>
+                        <input class="form-control" type="number" min="1" max="${data.quantity}" name="product[0][qty]" value="1">
+                        </td>
+                        <td>
+                        ${data.price} đ
+                        </td>
+                        <td>
+                        <button type="button" class="btn btn-danger delete-order-product-btn-">Xóa</button>
+                        </td>
+                        </tr>
+                        `);
+                    }
+                    else{
+                        alertMsg('Sản phẩm đã có trong hóa đơn');
+                    }
+                } else {
+                    alertMsg('Sản phẩm đã hết hàng');
+                }
+            }
+            else if (error) {
+                console.log(error.code, error.message);
+                if (error.code === "404") {
+                    alertMsg('Không tìm thấy sản phẩm');
+                }
+            }
+        },
+    });
 
     //todo bind event vào button xóa
 };
+
+const alertMsg = (msg) => {
+    $('#addAlert').text(msg);
+    $('#addAlert').show();
+    setTimeout(function () {
+        $('#addAlert').fadeOut('fast');
+    }, 2500);
+}
+
+const duplicateProduct = (id)=>{
+    let check = false;
+    $('#orderProducts > tbody >tr').each(function(i){
+        console.log($(this).data('id'),'vs',id );
+        if($(this).data('id') == id){
+            check = true;
+            return false;
+        }
+    })
+    return check;
+}
