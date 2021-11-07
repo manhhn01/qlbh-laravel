@@ -63,6 +63,10 @@
                         <input type="text" placeholder="Nhập ở đây..." name="price" class="form-control" value="{{ $product->price }}">
                     </div>
                     <div class="mb-4">
+                        <label class="form-label">SKU</label>
+                        <input type="text" placeholder="Nhập ở đây..." name="sku" class="form-control" value="{{ $product->sku }}">
+                    </div>
+                    <div class="mb-4">
                         <label class="form-label">Trạng thái</label>
                         <select class="form-select" name="status">
                             <option {{ $product->status===1?'selected':'' }} value="1">Đang bán</option>
