@@ -24,6 +24,7 @@ $(() => {
 });
 /* end ready */
 
+//bind event for template
 const bindEvents = () => {
     // input coupon event
     $(".coupon-input").on("input", function () {
@@ -40,9 +41,12 @@ const bindEvents = () => {
     });
 
     //input product id event
-    $(".product-search-input").on("input", function () {
-        getProduct($(this).val());
-    });
+    $(".product-search-input").on(
+        "input",
+        debounce(function(){
+            getProduct($(this).val());
+        }, 500)
+    );
 
     //button add product event
     $(".add-order-product-btn").on("click", function () {
@@ -59,17 +63,21 @@ const getProduct = (idSku) => {
             id_sku: idSku,
         },
         beforeSend: function () {
-            $("#product-preview").empty();
-            $("#productLoad").removeClass("d-none").addClass("d-flex justify-content-center");
+            $("#productPreview").empty();
+            $("#productLoad")
+                .removeClass("d-none")
+                .addClass("d-flex justify-content-center");
         },
         complete: function () {
-            $("#productLoad").addClass("d-none").removeClass("d-flex justify-content-center");
+            $("#productLoad")
+                .addClass("d-none")
+                .removeClass("d-flex justify-content-center");
         },
         success: (result) => {
             const data = result.data;
             const error = result.error;
             if (data) {
-                $("#product-preview").html(`
+                $("#productPreview").html(`
                     <div class="card">
                     <div class="card-body">
                     <p class="card-text">Id: ${data.product_id}  SKU: ${data.sku}</p>
@@ -97,66 +105,73 @@ const addProduct = (idSku) => {
             const data = result.data;
             const error = result.error;
             if (data) {
-                if (data.quantity > 0) {
-                    if(!duplicateProduct(data.product_id)){
-                        $("#orderProducts > tbody").append(`
-                        <tr data-id=${data.product_id}>
-                        <input type="hidden" name="product[0][id]" value="${data.product_id}">
-                        <input type="hidden" name="product[0][sku]" value="${data.sku}">
-
-                        <th scope="row">
-                        ${data.product_name}
-                        </th>
-                        <td>
-                        ${data.sku}
-                        </td>
-                        <td>
-                        <input class="form-control" type="number" min="1" max="${data.quantity}" name="product[0][qty]" value="1">
-                        </td>
-                        <td>
-                        ${data.price} đ
-                        </td>
-                        <td>
-                        <button type="button" class="btn btn-danger delete-order-product-btn-">Xóa</button>
-                        </td>
-                        </tr>
-                        `);
-                    }
-                    else{
-                        alertMsg('Sản phẩm đã có trong hóa đơn');
-                    }
+                if (data.quantity <= 0) {
+                    alertMsg("Sản phẩm đã hết hàng");
+                } else if (
+                    $("#orderProducts>tbody").find(
+                        `[data-id=${data.product_id}]`
+                    ).length !== 0
+                ) {
+                    alertMsg("Sản phẩm đã có trong hóa đơn");
                 } else {
-                    alertMsg('Sản phẩm đã hết hàng');
+                    const productRow = `
+                                                <tr data-id=${data.product_id}>
+                                                <input type="hidden" name="product[0][id]" value="${data.product_id}">
+                                                <input type="hidden" name="product[0][sku]" value="${data.sku}">
+                                                <th scope="row">
+                                                    ${data.product_name}
+                                                </th>
+                                                <td>
+                                                    ${data.sku}
+                                                </td>
+                                                <td>
+                                                    <input class="form-control" type="number" min="1" max="${data.quantity}" name="product[0][qty]" value="1">
+                                                </td>
+                                                <td>
+                                                    ${data.price} đ
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger delete-order-product-btn" onclick="removeProduct(${data.product_id})">Xóa</button>
+                                                </td>
+                                                </tr>
+                                                `;
+                    $("#orderProducts > tbody").append(productRow);
                 }
             }
-            else if (error) {
+
+            if (error) {
                 console.log(error.code, error.message);
-                if (error.code === "404") {
-                    alertMsg('Không tìm thấy sản phẩm');
+                if (error.code === 404) {
+                    alertMsg("Không tìm thấy sản phẩm");
                 }
             }
         },
     });
-
-    //todo bind event vào button xóa
+};
+//add alert message
+const alertMsg = (msg) => {
+    const alert = $(
+        `<div class="alert alert-danger" id="orderListAlerts" role="alert">${msg}</div>`
+    );
+    $("#orderListAlerts").append(alert);
+    setTimeout(() => {
+        alert.remove();
+    }, 2000);
 };
 
-const alertMsg = (msg) => {
-    $('#addAlert').text(msg);
-    $('#addAlert').show();
-    setTimeout(function () {
-        $('#addAlert').fadeOut('fast');
-    }, 2500);
-}
+//remove product from list
+const removeProduct = (id) => {
+    $(`[data-id=${id}]`).remove();
+};
 
-const duplicateProduct = (id)=>{
-    let check = false;
-    $('#orderProducts > tbody >tr').each(function(i){
-        console.log($(this).data('id'),'vs',id );
-        if($(this).data('id') == id){
-            check = true;
-            return false;
-        }
-    })
-    return check;
-}
+//debounce for input
+const debounce = function(callback, wait) {
+    let timeout;
+    return function(...args) {
+        const context = this
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+            callback.apply(context, args);
+        }, wait);
+    };
+};
