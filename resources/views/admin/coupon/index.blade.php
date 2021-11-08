@@ -1,9 +1,9 @@
 @extends('layouts.admin.app')
 @section('content-main')
 <div class="content-header">
-    <h2 class="content-title"> Danh sách danh mục</h2>
+    <h2 class="content-title"> Danh sách mã giảm giá</h2>
     <div>
-        <a href="{{ route('category.create',  ['page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Thêm danh mục</a>
+        <a href="{{ route('coupon.create',  ['page'=>request()->page, 'search'=>request()->search]) }}" type="submit" class="btn btn-primary">Thêm mã giảm giá</a>
     </div>
 </div>
 <section class="content-main">
@@ -11,7 +11,7 @@
         <header class="card-header">
             <div class="row align-items-center">
                 <div class="col-md-4 col-6 ms-auto">
-                    <form class="form-filter" action="{{ route('category.list') }}" method="get">
+                    <form class="form-filter" action="{{ route('coupon.list') }}" method="get">
                         <div class="input-group">
                             <input type="text" class="form-control" name="search" placeholder="Tìm Danh sách" value="{{ request()->search }}">
                             <button class="btn btn-light bg" type="submit">
@@ -24,29 +24,38 @@
         </header> <!-- card-header end// -->
 
         <div class="card-body">
-              @if ($categories->isEmpty())
-                <div>Không có danh mục nào</div>
+            @if ($coupons->isEmpty())
+                <div>Không có mã giảm giá nào</div>
             @endif
-            @foreach ($categories as $category)
+            @foreach ($coupons as $coupon)
             <article class="itemlist">
                 <div class="row align-items-center">
-                    <div class="col-9 flex-grow-1 col-name">
-                        <a class="itemside" href="{{ route('category.show', ['id'=>$category->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
+                    <div class="col-1 col-id">
+                        <span>#{{ $coupon->id }}</span>
+                    </div>
+                    <div class="col-6 flex-grow-1 col-name">
+                        <a class="itemside" href="{{ route('coupon.show', ['id'=>$coupon->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
                             <div class="info">
-                                <h6 class="mb-0">{{ $category->name }}</h6>
+                                <h6 class="mb-0">{{ $coupon->name }}</h6>
                             </div>
                         </a>
                     </div>
+                    <div class="col-1 col-discount">
+                        <span class="w-100 badge rounded-pill alert-info">{{ $coupon->discount }} %</span>
+                    </div>
+                    <div class="col-1 col-remain">
+                        <span>{{ $coupon->remain }}</span>
+                    </div>
                     <div class="col-2 col-date">
-                        <span>{{ $category->created_at }}</span>
+                        <span>{{ $coupon->created_at }}</span>
                     </div>
                     <div class="col-1 col-action">
                         <div class="dropdown float-end">
                             <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('category.show', ['id'=>$category->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Xem chi tiết</a>
-                                <a class="dropdown-item" href="{{ route('category.edit', ['id'=>$category->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Sửa</a>
-                                <form class="delete-category" data-id="{{ $category->id }}" data-name={{ $category->name }} action="{{ route('category.destroy', ['id'=>$category->id]) }}" method="POST">
+                                <a class="dropdown-item" href="{{ route('coupon.show', ['id'=>$coupon->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Xem chi tiết</a>
+                                <a class="dropdown-item" href="{{ route('coupon.edit', ['id'=>$coupon->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Sửa</a>
+                                <form class="delete-coupon" data-id="{{ $coupon->id }}" data-name={{ $coupon->name }} action="{{ route('coupon.destroy', ['id'=>$coupon->id]) }}" method="POST">
                                     @csrf
                                     <button class="dropdown-item text-danger" style="outline:none">Xóa</button>
                                 </form>
@@ -59,7 +68,7 @@
 
             <nav class="float-end mt-4" aria-label="Page navigation">
                 <nav class="float-end mt-4" aria-label="Page navigation">
-                    {!! $categories->links() !!}
+                    {!! $coupons->links() !!}
                 </nav>
             </nav>
 
@@ -70,5 +79,5 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('js/category/script.js') }}"></script>
+<script src="{{ asset('js/coupon/script.js') }}"></script>
 @endpush

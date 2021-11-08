@@ -27,23 +27,14 @@ $(() => {
 //bind event for template
 const bindEvents = () => {
     // input coupon event
-    $(".coupon-input").on("input", function () {
-        // todo ajax
-        let cloneCard = `
-            <div class="card">
-            <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            </div>
-            </div>
-            `;
-        $(".coupon-card-container").html(cloneCard);
-    });
+    $(".coupon-input").on("input", debounce(function () {
+        getCoupon($(this).val());
+    }, 500));
 
     //input product id event
     $(".product-search-input").on(
         "input",
-        debounce(function(){
+        debounce(function () {
             getProduct($(this).val());
         }, 500)
     );
@@ -54,6 +45,59 @@ const bindEvents = () => {
         addProduct(idSku);
     });
 };
+
+const getCoupon = (idName) => {
+    $.ajax({
+        method: "post",
+        url: "/coupon/ajax",
+        data: {
+            id_name: idName,
+        },
+        beforeSend: ()=>{
+            $(".coupon-card-container").empty();
+            $("#couponLoad")
+                .removeClass("d-none")
+                .addClass("d-flex justify-content-center");
+        },
+        complete: function () {
+            $("#couponLoad")
+                .addClass("d-none")
+                .removeClass("d-flex justify-content-center");
+        },
+        success: (result) => {
+            const {
+                data,
+                error
+            } = result;
+            if (data) {
+                const couponCard = `
+                <div class="card">
+                <input type="hidden" name="coupon_id" value="${data.coupon_id}"">
+                <div class="card-header text-center">
+                    ${data.coupon_name}
+                </div>
+                <div class="card-body">
+                <h5 class="card-title">Giảm
+                    ${data.discount} %
+                </h5>
+                <p class="card-text">
+                    ${data.description}
+                </p>
+                <div class="card-footer text-muted text-center">
+                    Hết hạn vào: ${data.expired_at}
+                </div>
+                </div>
+                </div>
+                `;
+                $(".coupon-card-container").html(couponCard);
+            }
+
+            if (error) {
+                console.log(error.code, error.message);
+            }
+        },
+    });
+}
 
 const getProduct = (idSku) => {
     $.ajax({
@@ -102,8 +146,10 @@ const addProduct = (idSku) => {
             id_sku: idSku,
         },
         success: (result) => {
-            const data = result.data;
-            const error = result.error;
+            const {
+                data,
+                error
+            } = result;
             if (data) {
                 if (data.quantity <= 0) {
                     alertMsg("Sản phẩm đã hết hàng");
@@ -115,26 +161,29 @@ const addProduct = (idSku) => {
                     alertMsg("Sản phẩm đã có trong hóa đơn");
                 } else {
                     const productRow = `
-                                                <tr data-id=${data.product_id}>
-                                                <input type="hidden" name="product[0][id]" value="${data.product_id}">
-                                                <input type="hidden" name="product[0][sku]" value="${data.sku}">
-                                                <th scope="row">
-                                                    ${data.product_name}
-                                                </th>
-                                                <td>
-                                                    ${data.sku}
-                                                </td>
-                                                <td>
-                                                    <input class="form-control" type="number" min="1" max="${data.quantity}" name="product[0][qty]" value="1">
-                                                </td>
-                                                <td>
-                                                    ${data.price} đ
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-danger delete-order-product-btn" onclick="removeProduct(${data.product_id})">Xóa</button>
-                                                </td>
-                                                </tr>
-                                                `;
+                                    <tr data-id=${data.product_id}>
+                                    <input type="hidden" name="products[${data.product_id}][product_id]" value="${data.product_id}">
+                                    <input type="hidden" name="products[${data.product_id}][name]" value="${data.product_name}">
+                                    <input type="hidden" name="products[${data.product_id}][sku]" value="${data.sku}">
+                                    <input type="hidden" name="products[${data.product_id}][max_qty]" value="${data.quantity}">
+                                    <input type="hidden" name="products[${data.product_id}][price]" value="${data.price}">
+                                    <th scope="row">
+                                        ${data.product_name}
+                                    </th>
+                                    <td>
+                                        ${data.sku}
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="number" min="1" max="${data.quantity}" name="products[${data.product_id}][qty]" value="1">
+                                    </td>
+                                    <td>
+                                        ${data.price} đ
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger delete-order-product-btn" onclick="removeProduct(${data.product_id})">Xóa</button>
+                                    </td>
+                                    </tr>
+                                    `;
                     $("#orderProducts > tbody").append(productRow);
                 }
             }
@@ -165,9 +214,9 @@ const removeProduct = (id) => {
 };
 
 //debounce for input
-const debounce = function(callback, wait) {
+const debounce = function (callback, wait) {
     let timeout;
-    return function(...args) {
+    return function (...args) {
         const context = this
         clearTimeout(timeout);
         timeout = setTimeout(function () {

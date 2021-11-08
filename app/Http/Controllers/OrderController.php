@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderCreateRequest;
 use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,12 +13,14 @@ use Illuminate\View\View;
 class OrderController extends Controller
 {
     protected $orderRepo;
+    protected $productRepo;
 
-    public function __construct(OrderRepositoryInterface $orderRepo)
+    public function __construct(OrderRepositoryInterface $orderRepo, ProductRepositoryInterface $productRepo)
     {
         $this->middleware(['auth']); // Nhân viên và người quản lý có thể truy cập vào tính năng này
 
         $this->orderRepo = $orderRepo;
+        $this->productRepo = $productRepo;
     }
 
     /**
@@ -47,17 +50,31 @@ class OrderController extends Controller
         return view('admin.order.create');
     }
 
+    session()->_old_input
     /**
      * Store a newly created resource in storage.
      *
      * @param OrderCreateRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(OrderCreateRequest $request)
     {
+        $old = $request->only(["buy_place", "customer_email", "payment_method", "status", "deliver_to", "products","coupon", "note"]);
+
+        $old["products"] = collect($old["products"])->map(function($item){
+            $product = $this->productRepo->find($item["product_id"]);
+            $item["name"] = $product->name;
+            $item["sku"] = $product->sku;
+            $item["max_qty"] = $product->quantity;
+            return $item;
+        })->toArray();
+
+        return back()->withErrors(['messages' => "Du lieu sai"])
+                     ->withInput($old);
+
         $buy_place = $request->buy_place;
         if ($buy_place === "online") {
-            $attributes = $request->only(['customer_email','payment_method', 'status', 'deliver_to', 'product', 'coupon_id', 'note']);
+            $attributes = $request->only(['customer_email', 'payment_method', 'status', 'deliver_to', 'product', 'coupon_id', 'note']);
         } else if ($buy_place == "offline") {
             $attributes = $request->only(['payment_method', 'status', 'product']);
         } else return back()->withErrors("messages", "Vui lòng chọn nơi mua");
@@ -124,12 +141,7 @@ class OrderController extends Controller
         $attributes = $request->only(['name', 'description']);
 
         try {
-
-            $this->orderRepo->update($id, [
-                'name' => $attributes['name'],
-                'description' => $attributes['description']
-            ]);
-
+            $this->orderRepo->update($id, $attributes);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy đơn hàng']);
         }

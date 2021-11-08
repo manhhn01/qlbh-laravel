@@ -27,7 +27,7 @@
 
     <div class="card mb-4">
         <header class="card-header">
-            <form class="form-filter" action="{{ route('product.list') }}" method="get">
+            <form class="form-filter" action="{{ route('category.show', $id) }}" method="get">
                 <div class="row align-items-center">
                     <div class="col-md-4 col-6 ms-auto">
                         <div class="input-group">

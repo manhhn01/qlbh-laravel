@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
@@ -71,4 +72,15 @@ Route::name('order.')->prefix('order')->group(function(){
     Route::get('edit/{id}', [OrderController::class, 'edit'])->name('edit');
     Route::post('update/{id}', [OrderController::class, 'update'])->name('update');
     Route::post('delete/{id}', [OrderController::class, 'destroy'])->name('destroy');
+});
+
+Route::name('coupon.')->prefix('coupon')->group(function(){
+    Route::get('index', [CouponController::class, 'index'])->name('list');
+    Route::get('id/{id}', [CouponController::class, 'show'])->name('show');
+    Route::get('create', [CouponController::class, 'create'])->name('create');
+    Route::post('create', [CouponController::class, 'store']);
+    Route::get('edit/{id}', [CouponController::class, 'edit'])->name('edit');
+    Route::post('update/{id}', [CouponController::class, 'update'])->name('update');
+    Route::post('delete/{id}', [CouponController::class, 'destroy'])->name('destroy');
+    Route::post('ajax', [CouponController::class, 'ajax'])->name('ajax');
 });

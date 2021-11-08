@@ -122,10 +122,7 @@ class CategoryController extends Controller
 
         try{
 
-        $this->categoryRepo->update($id, [
-            'name' => $attributes['name'],
-            'description' => $attributes['description']
-        ]);
+        $this->categoryRepo->update($id, $attributes);
 
         } catch (ModelNotFoundException $e){
             return back()->withErrors(['message' => 'Không tìm thấy danh mục']);

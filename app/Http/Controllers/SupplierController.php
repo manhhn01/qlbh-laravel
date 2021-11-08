@@ -121,11 +121,7 @@ class SupplierController extends Controller
         $attributes = $request->only(['name', 'description']);
 
         try{
-            $this->supplierRepo->update($id, [
-                'name' => $attributes['name'],
-                'description' => $attributes['description']
-            ]);
-
+            $this->supplierRepo->update($id, $attributes);
         } catch (ModelNotFoundException $e){
             return back()->withErrors(['message' => 'Không tìm thấy nhà cung cấp']);
         }

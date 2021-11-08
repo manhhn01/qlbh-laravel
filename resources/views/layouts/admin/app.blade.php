@@ -80,6 +80,17 @@
                     </div>
                 </li>
 
+                <li class="menu-item has-submenu {{request()->is('coupon/*') ? "active" : ""}}">
+                    <a class="menu-link" href="#">
+                        <i class="icon material-icons md-card_giftcard"></i>
+                        <span class="text">Mã giảm giá</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="{{ route('coupon.list') }}">Danh sách mã giảm giá</a>
+                        <a href="{{ route('coupon.create') }}">Thêm mã giảm giá</a>
+                    </div>
+                </li>
+
                 <li class="menu-item has-submenu">
                     <a class="menu-link" href="#">
                         <i class="icon material-icons md-shopping_bag"></i>

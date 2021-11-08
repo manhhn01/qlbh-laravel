@@ -18,6 +18,7 @@ class CreateCouponsTable extends Migration
             $table->string('name', 50);
             $table->tinyInteger('discount'); // phần trăm giảm 1-99
             $table->unsignedInteger('remain')->nullable(); // số lần có thể sử dụng
+            $table->string('description')->nullable();
             $table->date('expired_at');
             $table->timestamps();
         });
