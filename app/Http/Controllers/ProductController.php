@@ -214,7 +214,7 @@ class ProductController extends Controller
                         "product_name" => $product->name,
                         "product_id" => $product->id,
                         "sku" => $product->sku,
-                        "price" => number_format($product->price, 0, ",", "."),
+                        "price" => $product->price,
                         "quantity" => $product->quantity,
                         "status" => $product->status,
                         "image_path" => $product->images->first(),

@@ -12,9 +12,9 @@ $(() => {
 
     $("#buy_place")
         .on("change", function () {
-            if (this.value === "online") {
+            if (this.value === "0") { //online
                 $(".order-info-container").html($("#onTemplate").html());
-            } else if (this.value === "offline") {
+            } else if (this.value === "1") { //offline
                 $(".order-info-container").html($("#offTemplate").html());
             }
 
@@ -44,6 +44,8 @@ const bindEvents = () => {
         const idSku = $(".product-search-input").val();
         addProduct(idSku);
     });
+
+    updatePrice();
 };
 
 const getCoupon = (idName) => {
@@ -53,7 +55,7 @@ const getCoupon = (idName) => {
         data: {
             id_name: idName,
         },
-        beforeSend: ()=>{
+        beforeSend: () => {
             $(".coupon-card-container").empty();
             $("#couponLoad")
                 .removeClass("d-none")
@@ -63,6 +65,7 @@ const getCoupon = (idName) => {
             $("#couponLoad")
                 .addClass("d-none")
                 .removeClass("d-flex justify-content-center");
+            updatePrice();
         },
         success: (result) => {
             const {
@@ -71,7 +74,7 @@ const getCoupon = (idName) => {
             } = result;
             if (data) {
                 const couponCard = `
-                <div class="card">
+                <div class="card" id="couponCard" data-discount="${data.discount}">
                 <input type="hidden" name="coupon_id" value="${data.coupon_id}"">
                 <div class="card-header text-center">
                     ${data.coupon_name}
@@ -122,11 +125,12 @@ const getProduct = (idSku) => {
             const error = result.error;
             if (data) {
                 $("#productPreview").html(`
-                    <div class="card">
+                    <div class="card product-preview-card">
                     <div class="card-body">
-                    <p class="card-text">Id: ${data.product_id}  SKU: ${data.sku}</p>
+                    <p class="card-text">Id: ${data.product_id}</p>
+                    <p class="card-text">SKU: ${data.sku}</p>
                     <h5 class="card-title">${data.product_name}</h5>
-                    <p class="card-text text-danger">${data.price} đ</p>
+                    <p class="card-text text-danger">${data.price.toLocaleString('vi-VN')} đ</p>
                     <p class="card-text">Số lượng: ${data.quantity}</p>
                     </div>
                     </div>
@@ -161,30 +165,27 @@ const addProduct = (idSku) => {
                     alertMsg("Sản phẩm đã có trong hóa đơn");
                 } else {
                     const productRow = `
-                                    <tr data-id=${data.product_id}>
-                                    <input type="hidden" name="products[${data.product_id}][product_id]" value="${data.product_id}">
-                                    <input type="hidden" name="products[${data.product_id}][name]" value="${data.product_name}">
-                                    <input type="hidden" name="products[${data.product_id}][sku]" value="${data.sku}">
-                                    <input type="hidden" name="products[${data.product_id}][max_qty]" value="${data.quantity}">
-                                    <input type="hidden" name="products[${data.product_id}][price]" value="${data.price}">
-                                    <th scope="row">
-                                        ${data.product_name}
-                                    </th>
-                                    <td>
-                                        ${data.sku}
-                                    </td>
-                                    <td>
-                                        <input class="form-control" type="number" min="1" max="${data.quantity}" name="products[${data.product_id}][qty]" value="1">
-                                    </td>
-                                    <td>
-                                        ${data.price} đ
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger delete-order-product-btn" onclick="removeProduct(${data.product_id})">Xóa</button>
-                                    </td>
-                                    </tr>
-                                    `;
-                    $("#orderProducts > tbody").append(productRow);
+                        <tr data-id=${data.product_id} data-price="${data.price}">
+                        <input type="hidden" name="products[${data.product_id}][product_id]" value="${data.product_id}">
+                        <th scope="row">
+                            ${data.product_name}
+                        </th>
+                        <td>
+                            ${data.sku}
+                        </td>
+                        <td>
+                            <input class="form-control" type="number" min="1" max="${data.quantity}" name="products[${data.product_id}][quantity]" value="1" oninput="updatePrice()">
+                        </td>
+                        <td>
+                            ${data.price.toLocaleString('vi-VN')} đ
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger delete-order-product-btn" onclick="removeProduct(${data.product_id})">Xóa</button>
+                        </td>
+                        </tr>
+                        `;
+                    $("#orderProducts>tbody>tr:nth-last-child(2)").before(productRow);
+                    updatePrice();
                 }
             }
 
@@ -211,7 +212,27 @@ const alertMsg = (msg) => {
 //remove product from list
 const removeProduct = (id) => {
     $(`[data-id=${id}]`).remove();
+    updatePrice();
 };
+
+//update price
+const updatePrice = () => {
+    const rows = $('#orderProducts tr:not(:last-child):not(:nth-last-child(2))');
+    let sum = 0;
+
+    rows.each(function (index, row) {
+        sum += $(row).data("price") * $(row).find('input[name*="quantity"]').val();
+    });
+
+    const discount = $("#couponCard").data("discount");
+    if (discount) {
+        const discountAmount = Math.round(sum * parseInt(discount) / 100);
+        $('#discountAmount').text(discountAmount.toLocaleString('vi-VN') + ' đ');
+        sum -= discountAmount;
+    }
+
+    $('#totalPrice').text(sum.toLocaleString('vi-VN') + " đ")
+}
 
 //debounce for input
 const debounce = function (callback, wait) {

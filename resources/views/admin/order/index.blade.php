@@ -10,19 +10,19 @@
     <section class="content-main">
         <div class="card mb-4">
             <header class="card-header">
-                <div class="row gx-3">
-                    <div class="col-lg-8 col-md-8 me-auto col-8">
-                        <input type="text" placeholder="Search..." class="form-control">
+                <form class="form-filter" action="{{ route('order.list') }}" method="get">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 col-6 ms-auto">
+                            <select class="form-select status-select" name="status">
+                                <option value="all" {{ request()->query('status')=="" ? 'selected' : '' }}>Tất cả</option>
+                                <option value="1" {{ request()->query('status')==="1" ? 'selected' : '' }}>Đang bán
+                                </option>
+                                <option value="0" {{ request()->query('status')==="0" ? 'selected' : '' }}>Dừng bán
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-lg-4 col-4 col-md-4">
-                        <select class="form-select">
-                            <option>Status</option>
-                            <option>Active</option>
-                            <option>Disabled</option>
-                            <option>Show all</option>
-                        </select>
-                    </div>
-                </div>
+                </form>
             </header>
 
             <div class="card-body">
@@ -36,15 +36,15 @@
                                 <a class="itemside"
                                    href="{{ route('order.show', ['id'=>$order->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
                                     <div class="left">
-                                        <span class="order-id">{{ $order->id }}</span>
+                                        <span class="order-id">#{{ $order->id }}</span>
                                     </div>
                                     <div class="info">
-                                        <h6 class="mb-0">{{ $order->customer->full_name }}</h6>
+                                        <h6 class="mb-0">{{ $order->customer_email }}</h6>
                                     </div>
                                 </a>
                             </div>
                             <div class="col-md-2 col-4 col-price">
-                                <span>100.000 D</span>
+                                <span>{{ number_format($order->totalPrice, 0, ",", ".") }} đ</span>
                             </div>
                             <div class="col-md-2 col-4 col-status">
                                 @switch($order->status)
@@ -79,7 +79,6 @@
                                         <a class="dropdown-item"
                                            href="{{ route('order.edit', ['id'=>$order->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Sửa</a>
                                         <form class="delete-order" data-id="{{ $order->id }}"
-                                              data-name={{ $order->customer->name }} action="{{ route('order.destroy', ['id'=>$order->id]) }}"
                                               method="POST">
                                             @csrf
                                             <button class="dropdown-item text-danger" style="outline:none">Xóa</button>

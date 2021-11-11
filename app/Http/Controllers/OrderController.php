@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\InvalidQuantityException;
 use App\Http\Requests\OrderCreateRequest;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -50,7 +52,6 @@ class OrderController extends Controller
         return view('admin.order.create');
     }
 
-    session()->_old_input
     /**
      * Store a newly created resource in storage.
      *
@@ -59,27 +60,15 @@ class OrderController extends Controller
      */
     public function store(OrderCreateRequest $request)
     {
-        $old = $request->only(["buy_place", "customer_email", "payment_method", "status", "deliver_to", "products","coupon", "note"]);
+        $attributes = $request->only(["buy_place", "customer_email", "payment_method", "status", "deliver_to", "products", "coupon_id", "note"]);
+        $attributes["employee_id"] = auth()->user()->id;
 
-        $old["products"] = collect($old["products"])->map(function($item){
-            $product = $this->productRepo->find($item["product_id"]);
-            $item["name"] = $product->name;
-            $item["sku"] = $product->sku;
-            $item["max_qty"] = $product->quantity;
-            return $item;
-        })->toArray();
-
-        return back()->withErrors(['messages' => "Du lieu sai"])
-                     ->withInput($old);
-
-        $buy_place = $request->buy_place;
-        if ($buy_place === "online") {
-            $attributes = $request->only(['customer_email', 'payment_method', 'status', 'deliver_to', 'product', 'coupon_id', 'note']);
-        } else if ($buy_place == "offline") {
-            $attributes = $request->only(['payment_method', 'status', 'product']);
-        } else return back()->withErrors("messages", "Vui lòng chọn nơi mua");
-
-        $this->orderRepo->create($attributes);
+        try {
+            $this->orderRepo->create($attributes);
+        } catch (ModelNotFoundException | InvalidQuantityException $e) {
+            return back()->withErrors(['messages' => $e->getMessage()])
+                ->withInput($attributes);
+        }
 
         return back()->with('info', 'Tạo thành công');
     }

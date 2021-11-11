@@ -9,12 +9,12 @@
         </div>
     </div>
 
-    {{-- <pre>
+     <pre>
         @php
             // print_r(old('products'));
             print_r(session()->all());
         @endphp
-    </pre> --}}
+    </pre>
 
     <div class="row">
         <div class="col">
@@ -24,9 +24,9 @@
                         <label class="form-label">Địa điểm mua hàng</label>
                         <select class="form-select" id="buy_place" name="buy_place">
                             <option value="" disabled selected>Chọn địa điểm</option>
-                            <option value="online" {{old('buy_place') === "online" ? 'selected' : ''}}>Online
+                            <option value="0" {{old('buy_place') === "0" ? 'selected' : ''}}>Online
                             </option>
-                            <option value="offline" {{old('buy_place') === "offline" ? 'selected' : ''}}>Tại cửa
+                            <option value="1" {{old('buy_place') === "1" ? 'selected' : ''}}>Tại cửa
                                 hàng
                             </option>
                         </select>
@@ -115,7 +115,7 @@
                                 </select>
                             </div>
                         </div>
-                        <x-order-products :products="old('products')/>
+                        <x-order-products :products="old('products')"/>
                         <div class="mb-4">
                             <label for="coupon_name" class="form-label">Mã giảm giá</label>
                             <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input"
@@ -124,10 +124,7 @@
                             <div id="couponLoad" class="d-none">
                                 <div class="d-flexjustify-content-center">
                                     <div class="lds-ring">
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
-                                        <div></div>
+                                        <div></div><div></div><div></div><div></div>
                                     </div>
                                 </div>
                             </div>

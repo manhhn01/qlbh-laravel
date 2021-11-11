@@ -16,7 +16,7 @@ class Order extends Model
      */
 
     protected $fillable = [
-        'customer_id',
+        'customer_email',
         'employee_id',
         'buy_place',
         'payment_method',
@@ -26,6 +26,17 @@ class Order extends Model
         'note'
     ];
 
+    protected $appends = [
+        'total_price'
+    ];
+
+    public function getTotalPriceAttribute()
+    {
+        if (isset($this->coupon)) {
+            return $this->orderProducts->sum('pivot.price') * (100 - $this->coupon->discount) / 100;
+        }
+        return $this->orderProducts->sum('pivot.price');
+    }
 
     public function customer()
     {
@@ -37,8 +48,14 @@ class Order extends Model
         return $this->belongsTo(User::class, 'employee_id');
     }
 
-    public function products()
+    public function orderProducts()
     {
-        return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('quantity', 'price');
+        return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('quantity', 'price')
+            ->withTimestamps();
+    }
+
+    public function coupon()
+    {
+        return $this->hasOne(Coupon::class, 'id', 'coupon_id');
     }
 }

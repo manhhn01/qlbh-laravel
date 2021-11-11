@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
       $table->collation = 'utf8mb4_unicode_ci';
 
       $table->id();
-      $table->unsignedBigInteger('customer_email')->nullable(); //null: khách hàng mua tại của hàng không cần đk tk như mua online
+      $table->string('customer_email')->nullable(); //null: khách hàng mua tại của hàng không cần đk tk như mua online
       $table->unsignedBigInteger('employee_id');
       $table->tinyInteger('buy_place'); //0: online, 1: offline
       $table->tinyInteger('status'); //0: đang chuẩn bị, 1: đang giao, 2: đã giao, 3: đã hủy

@@ -32,7 +32,6 @@
 
     <!-- Custom JS -->
     <script src="{{asset('js/script.js?v=1.0')}}" type="text/javascript"></script>
-    @yield('javascript')
     @stack('js')
 </body>
 
