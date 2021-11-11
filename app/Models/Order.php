@@ -32,10 +32,13 @@ class Order extends Model
 
     public function getTotalPriceAttribute()
     {
+        $total = $this->orderProducts->sum(function($item){
+            return $item->pivot->price * $item->pivot->quantity;
+        });
         if (isset($this->coupon)) {
-            return $this->orderProducts->sum('pivot.price') * (100 - $this->coupon->discount) / 100;
+            return $total * (100 - $this->coupon->discount) / 100;
         }
-        return $this->orderProducts->sum('pivot.price');
+        return $total;
     }
 
     public function customer()
