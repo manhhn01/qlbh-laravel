@@ -44,7 +44,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             'category_id' => $attributes['category'],
         ]);
 
-        if (isset($attributes['images'])) {
+        if (!empty($attributes['images'])) {
             $product->images()->createMany($attributes['images']);
         }
     }
@@ -82,7 +82,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ]
         );
 
-        if (isset($attributes['images'])) {
+        if (!empty($attributes['images'])) {
             $product->images()->delete();
             $product->images()->createMany($attributes['images']);
         }

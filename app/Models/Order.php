@@ -27,23 +27,43 @@ class Order extends Model
     ];
 
     protected $appends = [
-        'total_price'
+        'total_price',
+        'discount_amount'
     ];
 
     public function getTotalPriceAttribute()
     {
-        $total = $this->orderProducts->sum(function($item){
-            return $item->pivot->price * $item->pivot->quantity;
-        });
-        if (isset($this->coupon)) {
+        $total = $this->sumPrice();
+        if (!empty($this->coupon)) {
             return $total * (100 - $this->coupon->discount) / 100;
         }
         return $total;
     }
 
+    public function getDiscountAmountAttribute(){
+        if (!empty($this->coupon)) {
+            return $this->sumPrice() * $this->coupon->discount / 100;
+        }
+        else return 0;
+    }
+
+    public function sumPrice(){
+        return $this->products->sum(function($item){
+            return $item->pivot->price * $item->pivot->quantity;
+        });
+    }
+
+    public function scopeOfType($query, $filter){
+        if (!empty($filter['status']) && $filter['status'] !== "all") {
+            $query->where('status', $filter['status']);
+        }
+
+        return $query;
+    }
+
     public function customer()
     {
-        return $this->belongsTo(User::class, 'customer_id');
+        return $this->belongsTo(User::class, 'customer_email', 'email');
     }
 
     public function employee()
@@ -51,10 +71,9 @@ class Order extends Model
         return $this->belongsTo(User::class, 'employee_id');
     }
 
-    public function orderProducts()
+    public function products()
     {
-        return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('quantity', 'price')
-            ->withTimestamps();
+        return $this->belongsToMany(Product::class, 'order_product', 'order_id', 'product_id')->withPivot('quantity', 'price')->withTimestamps();
     }
 
     public function coupon()

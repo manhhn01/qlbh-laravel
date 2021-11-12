@@ -31,11 +31,11 @@ class Product extends Model
 
     public function scopeOfType($query, $filter)
     {
-        if (isset($filter['name'])) {
+        if (!empty($filter['name'])) {
             $query->where('name', 'LIKE', '%' . $filter['name'] . '%');
         }
 
-        if (isset($filter['status']) && $filter['status'] !== "all") {
+        if (!empty($filter['status']) && $filter['status'] !== "all") {
             $query->where('status', $filter['status']);
         }
 

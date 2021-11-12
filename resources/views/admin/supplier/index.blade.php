@@ -30,7 +30,7 @@
             @foreach ($suppliers as $supplier)
             <article class="itemlist">
                 <div class="row align-items-center">
-                    <div class="col-9 flex-grow-1 col-name">
+                    <div class="col-8 flex-grow-1 col-name">
                         <a class="itemside" href="{{ route('supplier.show', ['id'=>$supplier->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
                             <div class="info">
                                 <h6 class="mb-0">{{ $supplier->name }}</h6>

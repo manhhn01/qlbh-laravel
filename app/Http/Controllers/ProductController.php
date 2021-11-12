@@ -206,7 +206,7 @@ class ProductController extends Controller
         $id_sku = $request->id_sku;
         try {
             $product = $this->productRepo->findByIdOrSku($id_sku);
-            if (!isset($product)) {
+            if (empty($product)) {
                 throw new ModelNotFoundException;
             } else
                 return response()->json([

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ExpiredCouponException;
 use App\Exceptions\InvalidQuantityException;
 use App\Http\Requests\OrderCreateRequest;
 use App\Repositories\Order\OrderRepositoryInterface;
@@ -32,8 +33,8 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has(["search"])) {
-            $filter["name"] = $request->search;
+        if ($request->has(["status"])) {
+            $filter["status"] = $request->status;
         }
         $orders = $this->orderRepo->page(2, $filter ?? null);
         return view(
@@ -65,7 +66,7 @@ class OrderController extends Controller
 
         try {
             $this->orderRepo->create($attributes);
-        } catch (ModelNotFoundException | InvalidQuantityException $e) {
+        } catch (ModelNotFoundException | InvalidQuantityException | ExpiredCouponException $e) {
             return back()->withErrors(['messages' => $e->getMessage()])
                 ->withInput($attributes);
         }
@@ -82,20 +83,14 @@ class OrderController extends Controller
      */
     public function show(int $id, Request $request)
     {
-        //filter products
-        $filter["name"] = $request->search;
-        $filter["status"] = $request->status;
-
         try {
             $order = $this->orderRepo->find($id);
-            $products = $this->orderRepo->getProductsPage(2, $id, $filter);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy đơn hàng']);
         }
         return view('admin.order.show', [
             'id' => $id,
-            'order' => $order,
-            'products' => $products
+            'order' => $order
         ]);
     }
 
@@ -114,7 +109,7 @@ class OrderController extends Controller
         }
         return view('admin.order.edit', [
             'id' => $id,
-            'order' => $order,
+            'order' => $order
         ]);
     }
 
@@ -127,7 +122,7 @@ class OrderController extends Controller
      */
     public function update(OrderCreateRequest $request, int $id)
     {
-        $attributes = $request->only(['name', 'description']);
+        $attributes = $request->only(["buy_place", "customer_email", "payment_method", "status", "deliver_to", "products", "coupon_id", "note"]);
 
         try {
             $this->orderRepo->update($id, $attributes);
@@ -141,15 +136,9 @@ class OrderController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return RedirectResponse
      */
     public function destroy(int $id)
     {
-        try {
-            $this->orderRepo->delete($id);
-        } catch (ModelNotFoundException $e) {
-            return back()->withErrors(['message' => 'Không tìm thấy đơn hàng để xóa']);
-        }
-        return back()->with('info', 'Xóa đơn hàng thành công');
+        //
     }
 }

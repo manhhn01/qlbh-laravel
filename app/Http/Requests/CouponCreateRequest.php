@@ -29,7 +29,7 @@ class CouponCreateRequest extends FormRequest
             'name' => ['required'],
             'discount' => ['required'],
             'remain' => ['required'],
-            'expired_at' => ['required'],
+            'expire_at' => ['required'],
             'description' => ['required']
         ];
     }

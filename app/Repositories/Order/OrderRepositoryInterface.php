@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Order;
 
+use App\Exceptions\ExpiredCouponException;
 use App\Exceptions\InvalidQuantityException;
 use App\Repositories\RepositoryInterface;
 use Exception;
@@ -21,8 +22,16 @@ interface OrderRepositoryInterface extends RepositoryInterface
     /**
      * create order with products
      * @param $attributes
-     * @throws ModelNotFoundException | InvalidQuantityException
+     * @throws ModelNotFoundException | InvalidQuantityException | ExpiredCouponException
+     * @return mixed
      */
     function create($attributes);
 
+    /**
+     * @param $id
+     * @param $attributes
+     * @throws ModelNotFoundException
+     * @return mixed
+     */
+    function update($id, $attributes);
 }

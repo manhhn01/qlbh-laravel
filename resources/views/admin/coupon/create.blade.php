@@ -31,8 +31,8 @@
                             </div>
                             <div class="mb-4 col-md-4">
                                 <label for="name" class="form-label">Hạn sử dụng</label>
-                                <input type="date" placeholder="Nhập ở đây..." class="form-control" name="expired_at" id="name"
-                                value="{{ old('expired_at') }}">
+                                <input type="date" placeholder="Nhập ở đây..." class="form-control" name="expire_at" id="name"
+                                value="{{ old('expire_at') }}">
                             </div>
                         </div>
                         <div class="mb-4">

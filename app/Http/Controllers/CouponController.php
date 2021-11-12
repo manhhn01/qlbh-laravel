@@ -4,8 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CouponCreateRequest;
 use App\Repositories\Coupon\CouponRepositoryInterface;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CouponController extends Controller
 {
@@ -53,7 +58,7 @@ class CouponController extends Controller
      */
     public function store(CouponCreateRequest $request)
     {
-        $attributes = $request->only(['name', 'discount', 'remain', 'expired_at', 'description']);
+        $attributes = $request->only(['name', 'discount', 'remain', 'expire_at', 'description']);
 
         $this->couponRepo->create($attributes);
 
@@ -108,12 +113,12 @@ class CouponController extends Controller
      */
     public function update(CouponCreateRequest $request, int $id)
     {
-        $attributes = $request->only(['name', 'discount', 'remain', 'expired_at', 'description']);
+        $attributes = $request->only(['name', 'discount', 'remain', 'expire_at', 'description']);
 
-        try{
+        try {
             $this->couponRepo->update($id, $attributes);
 
-        } catch (ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy mã giảm giá']);
         }
         return redirect(route('coupon.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
@@ -123,16 +128,10 @@ class CouponController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return RedirectResponse
      */
     public function destroy($id)
     {
-        try {
-            $this->couponRepo->delete($id);
-        } catch (ModelNotFoundException $e) {
-            return back()->withErrors(['message' => 'Không tìm thấy mã giảm giá để xóa']);
-        }
-        return back()->with('info', 'Xóa mã giảm giá thành công');
+//
     }
 
     /**
@@ -147,7 +146,7 @@ class CouponController extends Controller
         $id_name = $request->id_name;
         try {
             $coupon = $this->couponRepo->findByIdOrName($id_name);
-            if (!isset($coupon)) {
+            if (empty($coupon) || !$coupon->isUsable) {
                 throw new ModelNotFoundException;
             } else
                 return response()->json([
@@ -157,7 +156,7 @@ class CouponController extends Controller
                         "discount" => $coupon->discount,
                         "remain" => $coupon->remain,
                         "description" => $coupon->description,
-                        "expired_at" => $coupon->expired_at,
+                        "expire_at" => $coupon->expire_at,
                     ]
                 ]);
         } catch (QueryException $e) {
@@ -171,7 +170,7 @@ class CouponController extends Controller
             return response()->json([
                 "error" => [
                     "code" => 404,
-                    "message" => "Không tìm thấy mã giảm giá",
+                    "message" => "Không tìm thấy mã giảm giá hoặc mã đã hết hạn",
                 ]
             ]);
         } catch (Exception $e) {

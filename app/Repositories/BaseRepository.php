@@ -37,6 +37,7 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $result = $this->model->findOrFail($id);
         $result->update($attributes);
+        return $result;
     }
 
     function delete($id)
@@ -47,7 +48,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     function page($amount, $filter = null)
     {
-        if (isset($filter)) {
+        if (!empty($filter)) {
             return $this->model->ofType($filter)->paginate($amount);
         } else {
             return $this->model->latest()->paginate($amount);

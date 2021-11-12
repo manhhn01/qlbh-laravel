@@ -7,7 +7,7 @@
                 <th scope="col" style="width: 30%">Sản phẩm</th>
                 <th scope="col" style="width: 20%">SKU</th>
                 <th scope="col" style="width: 20%">SL</th>
-                <th scope="col" style="width: 20%">Giá</th>
+                <th scope="col" style="width: 20%">Đơn giá</th>
                 <th scope="col" style="width: 10%"></th>
             </tr>
             </thead>
@@ -15,8 +15,8 @@
             {{-- Danh sách sản phẩm đc trả về nếu như post form gặp lỗi --}}
             @isset($products)
                 @foreach($products as $product)
-                    <tr data-id={{$product['product_id']}} data-price={{ $product['product_id'] }}>
-                        <input type="hidden" name="products[{{$product['product_id']}}][product_id]" value="{{$product['product_id']}}">
+                    <tr data-id={{$product['product_id'] ?? $product->id }} data-price={{ $product->pivot->price ?? $product['price']}}>
+                        <input type="hidden" name="products[{{$product['product_id'] ?? $product->id }}][product_id]" value="{{$product['product_id'] ?? $product->id}}">
                         <th scope="row">
                             {{ $product['name'] }}
                         </th>
@@ -25,24 +25,32 @@
                         </td>
                         <td>
                             <input class="form-control" type="number" min="1"
-                                   max="{{$product['max_qty']}}" name="products[{{$product['product_id']}}][quantity]"
-                                   value="{{$product['quantity']}}">
+                                   max="{{$product['max_qty'] ?? $product->quantity}}" name="products[{{$product['product_id'] ?? $product->id}}][quantity]"
+                                   value="{{$product->pivot->quantity ?? $product['quantity']}}">
                         </td>
                         <td>
                             {{ number_format($product['price'], 0, ",", ".")}} đ
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger delete-order-product-btn" onclick="removeProduct{{$product['product_id']}}">Xóa</button>
+                            <button type="button" class="btn btn-danger delete-order-product-btn" onclick="removeProduct({{$product['product_id'] ?? $product->id}})">Xóa</button>
                         </td>
                     </tr>
                 @endforeach
             @endisset
 
             <tr>
-                <td colspan="5" class="text-end fs-5">Giảm giá: <span id="discountAmount">0 đ</span></td>
-            </tr>
-            <tr>
-                <td colspan="5" class="text-end fs-5">Tổng số tiền: <span class="text-danger fs-4 fw-bolder" id="totalPrice">0 đ</span></td>
+                <td colspan="5" class="text-end fs-5">
+                    <article class="float-end">
+                        <dl class="dlist">
+                            <dt>Giảm giá:</dt>
+                            <dd id="discountAmount">0 đ</dd>
+                        </dl>
+                        <dl class="dlist">
+                            <dt>Tổng tiền:</dt>
+                            <dd><b class="h5 text-danger" id="totalPrice">0 đ</b></dd>
+                        </dl>
+                    </article>
+                </td>
             </tr>
             </tbody>
         </table>

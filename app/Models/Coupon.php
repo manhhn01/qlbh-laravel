@@ -14,7 +14,15 @@ class Coupon extends Model
         'name',
         'discount',
         'remain',
-        'expired_at',
+        'expire_at',
         'description',
     ];
+
+    protected $appends = [
+        'is_usable'
+    ];
+
+    public function getIsUsableAttribute(){
+        return strtotime($this->expire_at) >= strtotime(date("Y-m-d"));
+    }
 }

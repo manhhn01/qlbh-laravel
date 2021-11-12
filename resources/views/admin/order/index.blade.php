@@ -15,10 +15,10 @@
                         <div class="col-md-2 col-6 ms-auto">
                             <select class="form-select status-select" name="status">
                                 <option value="all" {{ request()->query('status')=="" ? 'selected' : '' }}>Tất cả</option>
-                                <option value="1" {{ request()->query('status')==="1" ? 'selected' : '' }}>Đang bán
-                                </option>
-                                <option value="0" {{ request()->query('status')==="0" ? 'selected' : '' }}>Dừng bán
-                                </option>
+                                <option value="0" {{ request()->query('status')==="0" ? 'selected' : '' }}>Đang chuẩn bị</option>
+                                <option value="1" {{ request()->query('status')==="1" ? 'selected' : '' }}>Đang giao</option>
+                                <option value="2" {{ request()->query('status')==="2" ? 'selected' : '' }}>Đã giao</option>
+                                <option value="3" {{ request()->query('status')==="3" ? 'selected' : '' }}>Đã hủy</option>
                             </select>
                         </div>
                     </div>
@@ -78,11 +78,6 @@
                                             chi tiết</a>
                                         <a class="dropdown-item"
                                            href="{{ route('order.edit', ['id'=>$order->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Sửa</a>
-                                        <form class="delete-order" data-id="{{ $order->id }}"
-                                              method="POST">
-                                            @csrf
-                                            <button class="dropdown-item text-danger" style="outline:none">Xóa</button>
-                                        </form>
                                     </div>
                                 </div> <!-- dropdown // -->
                             </div>

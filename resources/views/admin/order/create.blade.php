@@ -9,12 +9,12 @@
         </div>
     </div>
 
-     <pre>
-        @php
-            // print_r(old('products'));
-            print_r(session()->all());
-        @endphp
-    </pre>
+{{--     <pre>--}}
+{{--        @php--}}
+{{--            // print_r(old('products'));--}}
+{{--            print_r(session()->all());--}}
+{{--        @endphp--}}
+{{--    </pre>--}}
 
     <div class="row">
         <div class="col">
@@ -26,8 +26,7 @@
                             <option value="" disabled selected>Chọn địa điểm</option>
                             <option value="0" {{old('buy_place') === "0" ? 'selected' : ''}}>Online
                             </option>
-                            <option value="1" {{old('buy_place') === "1" ? 'selected' : ''}}>Tại cửa
-                                hàng
+                            <option value="1" {{old('buy_place') === "1" ? 'selected' : ''}}>Tại cửa hàng
                             </option>
                         </select>
                     </div>
@@ -99,7 +98,7 @@
                                     <option value="0" {{old('status') === "0" ? 'selected' : ''}}>Chuyển khoản ngân
                                         hàng
                                     </option>
-                                    <option value="1" {{old('status') === "1" ? 'selected' : ''}}>Thanh toán tiền
+                                    <option value="1" {{old('status') === "2" ? 'selected' : ''}}>Thanh toán tiền
                                         mặt
                                     </option>
                                 </select>

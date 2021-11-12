@@ -30,7 +30,7 @@
             @foreach ($categories as $category)
             <article class="itemlist">
                 <div class="row align-items-center">
-                    <div class="col-9 flex-grow-1 col-name">
+                    <div class="col-8 flex-grow-1 col-name">
                         <a class="itemside" href="{{ route('category.show', ['id'=>$category->id, 'page'=>request()->page, 'search'=>request()->search]) }}">
                             <div class="info">
                                 <h6 class="mb-0">{{ $category->name }}</h6>
@@ -40,7 +40,7 @@
                     <div class="col-2 col-date">
                         <span>{{ $category->created_at }}</span>
                     </div>
-                    <div class="col-1 col-action">
+                    <div class="col-2 col-action">
                         <div class="dropdown float-end">
                             <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i class="material-icons md-more_horiz"></i> </a>
                             <div class="dropdown-menu">

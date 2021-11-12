@@ -30,7 +30,7 @@
                         </div>
                         <div class="mb-4 col-md-4">
                             <h5>Hạn sử dụng</h5>
-                            <div>{{ $coupon->expired_at }}</div>
+                            <div>{{ $coupon->expire_at }}</div>
                         </div>
                     </div>
                     <div class="mb-4">

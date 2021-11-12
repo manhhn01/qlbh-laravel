@@ -40,8 +40,7 @@ class OrderCreateRequest extends FormRequest
             'buy_place' => ['required'],
             'status' => ['required'],
             'payment_method' => ['required'],
-            'products[*][id]' => ['required'],
-            'products[*][quantity]' => ['required'],
+            'products' => ['required', 'min:1'],
             'customer_email' => ['email', 'required_if:buy_place, "0"'],
             'deliver_to' => ['required_if:buy_place,"0"']
         ];
@@ -55,22 +54,27 @@ class OrderCreateRequest extends FormRequest
     public function prepareForValidation()
     {
         $attributes = $this->all();
-        $updated_products = collect($attributes["products"])
-            ->map(function ($item) {
-                $product = Product::find($item["product_id"]);
-                if (isset($product)) {
-                    $item["name"] = $product->name;
-                    $item["sku"] = $product->sku;
-                    $item["max_qty"] = $product->quantity;
-                    $item["price"] = $product->price;
-                    return $item;
-                } else {
-                    return [];
-                }
-            })->reject(function ($item) { //https://laravel.com/docs/8.x/collections#method-reject
-                return empty($item);
-            })->toArray();
-        $this->merge(["products" => $updated_products]);
+        if(empty($attributes["coupon_id"])){
+            $this->merge(["coupon_id" => null]);
+        }
+        if(!empty($attributes["products"])){
+            $updated_products = collect($attributes["products"])
+                ->map(function ($item) {
+                    $product = Product::find($item["product_id"]);
+                    if (!empty($product)) {
+                        $item["name"] = $product->name;
+                        $item["sku"] = $product->sku;
+                        $item["max_qty"] = $product->quantity; // lay so luong moi tren db
+                        $item["price"] = $product->price;
+                        return $item;
+                    } else {
+                        return [];
+                    }
+                })->reject(function ($item) { //https://laravel.com/docs/8.x/collections#method-reject xoa co dieu kien
+                    return empty($item);
+                })->toArray();
+            $this->merge(["products" => $updated_products]);
+        }
     }
 
     public function failedValidation(Validator $validator)

@@ -21,7 +21,7 @@ class Supplier extends Model
 
     public function scopeOfType($query, $filter)
     {
-        if (isset($filter['name'])) {
+        if (!empty($filter['name'])) {
             $query->where('name', 'LIKE', '%' . $filter['name'] . '%');
         }
 
