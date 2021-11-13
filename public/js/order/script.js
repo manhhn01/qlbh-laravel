@@ -33,11 +33,20 @@ $(() => {
 //bind event for template
 const bindEvents = () => {
     // input coupon event
-    $(".coupon-input")
+    $(".coupon-input.no-check")
         .on(
             "input",
             debounce(function () {
-                getCoupon($(this).val());
+                getCoupon($(this).val(), false);
+            }, 500)
+        )
+        .trigger("input");
+
+    $(".coupon-input.check")
+        .on(
+            "input",
+            debounce(function () {
+                getCoupon($(this).val(), true);
             }, 500)
         )
         .trigger("input");
@@ -59,29 +68,31 @@ const bindEvents = () => {
     updatePrice();
 };
 
-const getCoupon = (idName) => {
-    $.ajax({
-        method: "post",
-        url: "/coupon/ajax",
-        data: {
-            id_name: idName,
-        },
-        beforeSend: () => {
-            $(".coupon-card-container").empty();
-            $("#couponLoad")
-                .removeClass("d-none")
-                .addClass("d-flex justify-content-center");
-        },
-        complete: function () {
-            $("#couponLoad")
-                .addClass("d-none")
-                .removeClass("d-flex justify-content-center");
-            updatePrice();
-        },
-        success: (result) => {
-            const { data, error } = result;
-            if (data) {
-                const couponCard = `
+const getCoupon = (idName, check) => {
+    if(idName) {
+        $.ajax({
+            method: "post",
+            url: "/coupon/ajax",
+            data: {
+                id_name: idName,
+                check: check
+            },
+            beforeSend: () => {
+                $(".coupon-card-container").empty();
+                $("#couponLoad")
+                    .removeClass("d-none")
+                    .addClass("d-flex justify-content-center");
+            },
+            complete: function () {
+                $("#couponLoad")
+                    .addClass("d-none")
+                    .removeClass("d-flex justify-content-center");
+                updatePrice();
+            },
+            success: (result) => {
+                const {data, error} = result;
+                if (data) {
+                    const couponCard = `
                 <div class="card" id="couponCard" data-discount="${data.discount}">
                 <input type="hidden" name="coupon_id" value="${data.coupon_id}"">
                 <div class="card-header text-center">
@@ -100,39 +111,44 @@ const getCoupon = (idName) => {
                 </div>
                 </div>
                 `;
-                $(".coupon-card-container").html(couponCard);
-            }
+                    $(".coupon-card-container").html(couponCard);
+                }
 
-            if (error) {
-                console.log(error.code, error.message);
-            }
-        },
-    });
+                if (error) {
+                    console.log(error.code, error.message);
+                }
+            },
+        });
+    }
+    else{
+        $(".coupon-card-container").empty();
+    }
 };
 
 const getProduct = (idSku) => {
-    $.ajax({
-        method: "post",
-        url: "/product/ajax",
-        data: {
-            id_sku: idSku,
-        },
-        beforeSend: function () {
-            $("#productPreview").empty();
-            $("#productLoad")
-                .removeClass("d-none")
-                .addClass("d-flex justify-content-center");
-        },
-        complete: function () {
-            $("#productLoad")
-                .addClass("d-none")
-                .removeClass("d-flex justify-content-center");
-        },
-        success: (result) => {
-            const data = result.data;
-            const error = result.error;
-            if (data) {
-                $("#productPreview").html(`
+    if(idSku){
+        $.ajax({
+            method: "post",
+            url: "/product/ajax",
+            data: {
+                id_sku: idSku,
+            },
+            beforeSend: function () {
+                $("#productPreview").empty();
+                $("#productLoad")
+                    .removeClass("d-none")
+                    .addClass("d-flex justify-content-center");
+            },
+            complete: function () {
+                $("#productLoad")
+                    .addClass("d-none")
+                    .removeClass("d-flex justify-content-center");
+            },
+            success: (result) => {
+                const data = result.data;
+                const error = result.error;
+                if (data) {
+                    $("#productPreview").html(`
                     <div class="card product-preview-card">
                     <div class="card-body">
                     <p class="card-text">Id: ${data.product_id}</p>
@@ -145,11 +161,15 @@ const getProduct = (idSku) => {
                     </div>
                     </div>
                 `);
-            } else if (error) {
-                console.log(error.code, error.message);
-            }
-        },
-    });
+                } else if (error) {
+                    console.log(error.code, error.message);
+                }
+            },
+        });
+    }
+    else{
+        $("#productPreview").empty();
+    }
 };
 
 const addProduct = (idSku) => {

@@ -34,14 +34,14 @@ class Order extends Model
     public function getTotalPriceAttribute()
     {
         $total = $this->sumPrice();
-        if (!empty($this->coupon)) {
+        if (isset($this->coupon)) {
             return $total * (100 - $this->coupon->discount) / 100;
         }
         return $total;
     }
 
     public function getDiscountAmountAttribute(){
-        if (!empty($this->coupon)) {
+        if (isset($this->coupon)) {
             return $this->sumPrice() * $this->coupon->discount / 100;
         }
         else return 0;
@@ -54,7 +54,7 @@ class Order extends Model
     }
 
     public function scopeOfType($query, $filter){
-        if (!empty($filter['status']) && $filter['status'] !== "all") {
+        if (isset($filter['status']) && $filter['status'] !== "all") {
             $query->where('status', $filter['status']);
         }
 

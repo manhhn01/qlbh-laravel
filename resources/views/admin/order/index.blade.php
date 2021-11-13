@@ -74,10 +74,10 @@
                                             class="material-icons md-more_horiz"></i> </a>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item"
-                                           href="{{ route('order.show', ['id'=>$order->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Xem
+                                           href="{{ route('order.show', ['id'=>$order->id, 'page'=>request()->page]) }}">Xem
                                             chi tiết</a>
                                         <a class="dropdown-item"
-                                           href="{{ route('order.edit', ['id'=>$order->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Sửa</a>
+                                           href="{{ route('order.edit', ['id'=>$order->id, 'page'=>request()->page]) }}">Sửa</a>
                                     </div>
                                 </div> <!-- dropdown // -->
                             </div>
@@ -87,7 +87,7 @@
 
                 <nav class="float-end mt-4" aria-label="Page navigation">
                     <nav class="float-end mt-4" aria-label="Page navigation">
-                        {!! $orders->links() !!}
+                        {!! $orders->withQueryString()->withQueryString()->links() !!}
                     </nav>
                 </nav>
 

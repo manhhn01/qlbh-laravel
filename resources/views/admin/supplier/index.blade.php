@@ -59,7 +59,7 @@
 
             <nav class="float-end mt-4" aria-label="Page navigation">
                 <nav class="float-end mt-4" aria-label="Page navigation">
-                    {!! $suppliers->links() !!}
+                    {!! $suppliers->withQueryString()->links() !!}
                 </nav>
             </nav>
 

@@ -25,7 +25,7 @@
                         </td>
                         <td>
                             <input class="form-control" type="number" min="1"
-                                   max="{{$product['max_qty'] ?? $product->quantity}}" name="products[{{$product['product_id'] ?? $product->id}}][quantity]"
+                                   max="{{$product['max_qty'] ?? ($product->quantity + $product->pivot->quantity)}}" name="products[{{$product['product_id'] ?? $product->id}}][quantity]"
                                    value="{{$product->pivot->quantity ?? $product['quantity']}}">
                         </td>
                         <td>

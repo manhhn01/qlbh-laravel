@@ -62,7 +62,7 @@
                         <x-order-products :products="$order->products"/>
                         <div class="mb-4">
                             <label for="coupon_name" class="form-label">Mã giảm giá</label>
-                            <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input"
+                            <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input no-check"
                                    id="coupon_name" data-valid="true" value="{{ $order->coupon_id ?? "" }}">
                             <div class="coupon-card-container mt-2"></div>
                             <div id="couponLoad" class="d-none">
@@ -96,8 +96,7 @@
                             <div class="col-md-4 mb-4">
                                 <label class="form-label">Trạng thái đơn hàng</label>
                                 <select class="form-select" name="status">
-                                    <option value="0" {{$order->status === 0 ? 'selected' : ''}}>Đang chuẩn bị
-                                    </option>
+                                    <option value="0" {{$order->status === 0 ? 'selected' : ''}}>Đang chuẩn bị</option>
                                     <option value="1" {{$order->status === 1 ? 'selected' : ''}}>Đang giao</option>
                                     <option value="2" {{$order->status === 2 ? 'selected' : ''}}>Đã giao</option>
                                     <option value="3" {{$order->status === 3 ? 'selected' : ''}}>Đã hủy</option>
@@ -107,7 +106,7 @@
                         <x-order-products :products="$order->products"/>
                         <div class="mb-4">
                             <label for="coupon_name" class="form-label">Mã giảm giá</label>
-                            <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input"
+                            <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input no-check"
                                    id="coupon_name" data-valid="true" value="{{ $order->coupon_id ?? "" }}">
                             <div class="coupon-card-container mt-2"></div>
                             <div id="couponLoad" class="d-none">

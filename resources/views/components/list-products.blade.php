@@ -57,5 +57,5 @@
 @endforeach
 
 <nav class="float-end mt-4" aria-label="Page navigation">
-    {!! $products->links() !!}
+    {!! $products->withQueryString()->links() !!}
 </nav>

@@ -144,9 +144,10 @@ class CouponController extends Controller
     function ajax(Request $request)
     {
         $id_name = $request->id_name;
+        $check = json_decode($request->check);
         try {
             $coupon = $this->couponRepo->findByIdOrName($id_name);
-            if (empty($coupon) || !$coupon->isUsable) {
+            if (empty($coupon) || (!$coupon->isUsable && $check)) {
                 throw new ModelNotFoundException;
             } else
                 return response()->json([

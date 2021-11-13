@@ -5,7 +5,7 @@ namespace App\View\Components;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 
-class ListProduct extends Component
+class ListProducts extends Component
 {
     /**
      * List products to show
@@ -30,6 +30,6 @@ class ListProduct extends Component
      */
     public function render()
     {
-        return view('components.list-product');
+        return view('components.list-products');
     }
 }

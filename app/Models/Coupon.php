@@ -23,6 +23,8 @@ class Coupon extends Model
     ];
 
     public function getIsUsableAttribute(){
-        return strtotime($this->expire_at) >= strtotime(date("Y-m-d"));
+        $checkExpired = strtotime($this->expire_at) >= strtotime(date("Y-m-d"));
+        $checkRemain = $this->remain > 0;
+        return $checkExpired && $checkRemain;
     }
 }

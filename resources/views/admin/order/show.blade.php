@@ -3,7 +3,7 @@
     <div class="content-header">
         <h2 class="content-title">Chi tiết đơn hàng</h2>
         <div>
-            <a href="{{ route('order.edit',  ['id'=>$id]) }}" type="submit" class="btn btn-primary">Sửa</a>
+            <a href="{{ route('order.edit',  ['id'=>$id, 'page'=>request()->page ]) }}" type="submit" class="btn btn-primary">Sửa</a>
         </div>
     </div>
     <div class="card">

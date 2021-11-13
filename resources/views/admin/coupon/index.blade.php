@@ -68,7 +68,7 @@
 
             <nav class="float-end mt-4" aria-label="Page navigation">
                 <nav class="float-end mt-4" aria-label="Page navigation">
-                    {!! $coupons->links() !!}
+                    {!! $coupons->withQueryString()->links() !!}
                 </nav>
             </nav>
 

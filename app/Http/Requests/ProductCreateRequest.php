@@ -34,7 +34,8 @@ class ProductCreateRequest extends FormRequest
             'price' => ['required'],
             'status' => ['required'],
             'category' => ['required'],
-            'new_category' => []
+            'new_category' => [],
+            'quantity' => ['required', 'max:30000']
         ];
     }
 
@@ -47,6 +48,8 @@ class ProductCreateRequest extends FormRequest
             'images.required' => 'Hình ảnh không được để trống',
             'category.required' => 'Danh mục không được để trống',
             'price.required' => 'Giá sản phẩm không được để trống',
+            'quantity.require' => 'Số lượng không được để trống',
+            'quantity.max' => 'Sô lượng sản phẩm tối đa 30000'
         ];
     }
 }

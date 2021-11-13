@@ -22,7 +22,6 @@
                 </div>
             </div> <!-- card end// -->
         </div> <!-- card end// -->
-        </aside> <!-- col end// -->
     </div> <!-- row end// -->
 
     <div class="card mb-4">
@@ -52,7 +51,7 @@
         </header> <!-- card-header end// -->
 
         <div class="card-body">
-            <x-list-product :products="$products"/>
+            <x-list-products :products="$products"/>
         </div> <!-- card-body end// -->
     </div>
 

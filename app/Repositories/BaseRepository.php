@@ -48,7 +48,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     function page($amount, $filter = null)
     {
-        if (!empty($filter)) {
+        if (isset($filter)) {
             return $this->model->ofType($filter)->paginate($amount);
         } else {
             return $this->model->latest()->paginate($amount);

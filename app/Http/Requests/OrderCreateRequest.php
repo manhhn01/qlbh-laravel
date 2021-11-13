@@ -54,14 +54,14 @@ class OrderCreateRequest extends FormRequest
     public function prepareForValidation()
     {
         $attributes = $this->all();
-        if(empty($attributes["coupon_id"])){
+        if(!isset($attributes["coupon_id"])){
             $this->merge(["coupon_id" => null]);
         }
         if(!empty($attributes["products"])){
             $updated_products = collect($attributes["products"])
                 ->map(function ($item) {
                     $product = Product::find($item["product_id"]);
-                    if (!empty($product)) {
+                    if (isset($product)) {
                         $item["name"] = $product->name;
                         $item["sku"] = $product->sku;
                         $item["max_qty"] = $product->quantity; // lay so luong moi tren db

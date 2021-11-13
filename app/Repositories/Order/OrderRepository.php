@@ -8,9 +8,7 @@ use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\BaseRepository;
-use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Log;
 
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 {
@@ -27,7 +25,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     function create($attributes)
     {
         $order_prods = $attributes["products"];
-        if (!empty($attributes["coupon_id"])) {
+        if (isset($attributes["coupon_id"])) {
             try {
                 $coupon = Coupon::findOrFail($attributes["coupon_id"]);
             } catch (ModelNotFoundException $e) {
@@ -64,7 +62,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         //     $order->products()->attach( $order_prod["product_id"], ['quantity' => $order_prod["quantity"], 'price' => $order_prod["price"]]);
         // }
 
-        if (!empty($order->coupon))
+        if (isset($order->coupon))
             $order->coupon->decrement('remain');
         foreach ($order->products as $product) {
             $product->decrement('quantity', $product->pivot->quantity);
@@ -80,9 +78,9 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         }
 
         $order_prods = $attributes["products"];
-        if (!empty($attributes["coupon_id"])) {
+        if (isset($attributes["coupon_id"])) {
             try {
-                $coupon = Coupon::findOrFail($attributes["coupon_id"]);
+                Coupon::findOrFail($attributes["coupon_id"]);
             } catch (ModelNotFoundException $e) {
                 throw new ModelNotFoundException("Không tìm thấy mã giảm giá");
             }
@@ -93,13 +91,14 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             try {
                 $product = Product::findOrFail($new_product["product_id"]); //trong kho
                 $old_product = $order->products->where("id", $new_product["product_id"])->first(); //trong don hang
-                if(!empty($old_product)){
-                    //todo
+                if(!empty($old_product)){ //san pham trong don hang cu bi thay doi so luong
+                    if ($product->quantity + $old_product->pivot->quantity  - $new_product["quantity"] < 0)
+                        throw new InvalidQuantityException("Số lượng sản phẩm lớn hơn số lượng có");
                 }
-                if ($product->quantity + $old_product->pivot->quantity  - $new_product["quantity"] < 0)
+                else if ($new_product["quantity"] > $product->quantity) //san pham duoc them moi vao don hang
                     throw new InvalidQuantityException("Số lượng sản phẩm lớn hơn số lượng có");
 
-                $sync_products[$new_product["product_id"]] = [
+                $sync_products[$new_product["product_id"]] = [ //luu san pham moi vao de sync
                     'quantity' => $new_product["quantity"],
                     'price' => $product->price
                 ];
@@ -112,8 +111,8 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         foreach ($order->products as $product) {
             $product->increment('quantity', $product->pivot->quantity);
         }
-        if (!empty($order->coupon))
-            $order->coupon->increment('remain');
+        if (isset($order->coupon))
+        $order->coupon->increment('remain');
 
         $order = parent::update($id, $attributes);
         // thay cho attach
@@ -123,7 +122,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
         foreach ($order->products as $product) {
             $product->decrement('quantity', $product->pivot->quantity);
         }
-        if (!empty($order->coupon))
+        if (isset($order->coupon))
             $order->coupon->decrement('remain');
     }
 

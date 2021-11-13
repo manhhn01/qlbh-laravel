@@ -35,7 +35,7 @@ class Product extends Model
             $query->where('name', 'LIKE', '%' . $filter['name'] . '%');
         }
 
-        if (!empty($filter['status']) && $filter['status'] !== "all") {
+        if (isset($filter['status']) && $filter['status'] !== "all") {
             $query->where('status', $filter['status']);
         }
 

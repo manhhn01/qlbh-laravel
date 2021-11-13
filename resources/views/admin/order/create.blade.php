@@ -69,7 +69,7 @@
                         <x-order-products :products="old('products')"/>
                         <div class="mb-4">
                             <label for="coupon_name" class="form-label">Mã giảm giá</label>
-                            <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input"
+                            <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input check"
                                 id="coupon_name" data-valid="true">
                             <div class="coupon-card-container mt-2"></div>
                             <div id="couponLoad" class="d-none">
@@ -117,7 +117,7 @@
                         <x-order-products :products="old('products')"/>
                         <div class="mb-4">
                             <label for="coupon_name" class="form-label">Mã giảm giá</label>
-                            <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input"
+                            <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input check"
                                 id="coupon_name" data-valid="true">
                             <div class="coupon-card-container mt-2"></div>
                             <div id="couponLoad" class="d-none">

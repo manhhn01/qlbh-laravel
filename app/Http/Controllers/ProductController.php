@@ -99,9 +99,6 @@ class ProductController extends Controller
      */
     public function show(int $id)
     {
-        $categories = $this->categoryRepo->getAll();
-        $suppliers = $this->supplierRepo->getAll();
-
         try {
             $product = $this->productRepo->find($id);
         } catch (ModelNotFoundException $e) {
