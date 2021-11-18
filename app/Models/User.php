@@ -29,6 +29,10 @@ class User extends Authenticatable
         'role',
     ];
 
+    protected $casts = [
+        'role'=> 'integer',
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -37,15 +41,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
     ];
 
     /**
