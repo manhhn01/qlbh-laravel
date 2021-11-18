@@ -30,8 +30,10 @@ $rules = [
     'braces' => true,
     'cast_spaces' => true,
     'class_attributes_separation' => [
-        'elements' => ['method' => 'one'],
-        'trait_import' => 'one'
+        'elements' => [
+            'method' => 'one',
+            'trait_import' => 'one'
+        ]
     ],
     'class_definition' => true,
     'concat_space' => [
