@@ -13,7 +13,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
         return Category::class;
     }
 
-    function getProductsPage($amount, $category_id, $filter = null)
+    public function getProductsPage($amount, $category_id, $filter = null)
     {
         return Product::where('category_id', $category_id)->ofType($filter)->paginate($amount);
     }

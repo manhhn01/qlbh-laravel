@@ -10,6 +10,8 @@ use App\Repositories\Order\OrderRepository;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\ReceivedNote\ReceivedNoteRepository;
+use App\Repositories\ReceivedNote\ReceivedNoteRepositoryInterface;
 use App\Repositories\Supplier\SupplierRepository;
 use App\Repositories\Supplier\SupplierRepositoryInterface;
 use Illuminate\Pagination\Paginator;
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SupplierRepositoryInterface::class, SupplierRepository::class);
         $this->app->singleton(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->singleton(CouponRepositoryInterface::class, CouponRepository::class);
+        $this->app->singleton(ReceivedNoteRepositoryInterface::class, ReceivedNoteRepository::class);
     }
 
     /**

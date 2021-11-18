@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Product;
 
+use App\Exceptions\TableConstraintException;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
@@ -14,12 +15,12 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return Product::class;
     }
 
-    function create($attributes)
+    public function create($attributes)
     {
         if ($attributes['supplier'] == 'add') {
             $supplier = Supplier::create([
                 'name' => $attributes['new_supplier'],
-                'description' => 'Danh mục ' . $attributes['new_supplier']
+                'description' => 'Nhà cung cấp ' . $attributes['new_supplier'],
             ]);
             $attributes['supplier'] = $supplier->id;
         }
@@ -27,11 +28,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         if ($attributes['category'] == 'add') {
             $category = Category::create([
                 'name' => $attributes['new_category'],
-                'description' => 'Danh mục ' . $attributes['new_category']
+                'description' => 'Danh mục ' . $attributes['new_category'],
             ]);
             $attributes['category'] = $category->id;
         }
-
 
         $product = parent::create([
             'name' => $attributes['name'],
@@ -56,7 +56,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         if ($attributes['supplier'] == 'add') {
             $supplier = Supplier::create([
                 'name' => $attributes['new_supplier'],
-                'description' => 'Danh mục ' . $attributes['new_supplier']
+                'description' => 'Danh mục ' . $attributes['new_supplier'],
             ]);
             $attributes['supplier'] = $supplier->id;
         }
@@ -64,7 +64,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         if ($attributes['category'] == 'add') {
             $category = Category::create([
                 'name' => $attributes['new_category'],
-                'description' => 'Danh mục ' . $attributes['new_category']
+                'description' => 'Danh mục ' . $attributes['new_category'],
             ]);
             $attributes['category'] = $category->id;
         }
@@ -88,6 +88,18 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
     }
 
+    public function delete($id)
+    {
+        $product = $this->find($id);
+        if ($product->orders()->exists()) {
+            throw new TableConstraintException('Sản phẩm đã có trong đơn hàng, không thể xóa');
+        }
+        if ($product->receivedNotes()->exists()) {
+            throw new TableConstraintException('Sản phẩm đã có trong phiếu nhập, không thể xóa');
+        }
+        parent::delete($id);
+    }
+
     public function getImages($id)
     {
         return $this->find($id)->images;
@@ -95,6 +107,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function findByIdOrSku($id_sku)
     {
-        return $this->model->where('id' ,'=' , $id_sku)->orWhere('sku', '=', $id_sku)->first();
+        return $this->model->where('id', '=', $id_sku)->orWhere('sku', '=', $id_sku)->first();
     }
 }

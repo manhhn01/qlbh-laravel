@@ -91,20 +91,23 @@
                     </div>
                 </li>
 
-                <li class="menu-item has-submenu">
+                <li class="menu-item has-submenu {{request()->is('receive-note/*') ? "active" : ""}}">
                     <a class="menu-link" href="#">
-                        <i class="icon material-icons md-shopping_bag"></i>
-                        <span class="text">new menu</span>
+                        <i class="icon material-icons md-note"></i>
+                        <span class="text">Phiếu nhập</span>
                     </a>
                     <div class="submenu">
-                        <a href="#">Product list view</a>
-                        <a href="page-new menu-table.html">Log</a>
-                        <a href="page-new menu-grid.html">Product grid</a>
-                        <a href="page-new menu-grid-2.html">Product grid 2</a>
-                        <a href="page-categories.html">Categories</a>
+                        <a href="{{ route('received-note.list') }}">Danh sách phiếu nhập</a>
+                        <a href="{{ route('received-note.create') }}">Thêm phiếu nhập</a>
                     </div>
                 </li>
 
+                <li class="menu-item {{request()->is('setting/*') ? "active" : ""}}">
+                    <a class="menu-link" href="{{ route('coupon.list') }}">
+                        <i class="icon material-icons md-settings"></i>
+                        <span class="text">Cài đặt</span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </aside>

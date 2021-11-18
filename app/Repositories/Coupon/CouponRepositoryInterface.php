@@ -7,9 +7,9 @@ use App\Repositories\RepositoryInterface;
 interface CouponRepositoryInterface extends RepositoryInterface
 {
     /**
-     * find coupon by id or name
-     * @param $id
+     * find coupon by id or name.
+     * @param $id_name
      * @return mixed
      */
-    function findByIdOrName($id);
+    public function findByIdOrName($id_name);
 }

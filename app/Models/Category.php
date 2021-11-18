@@ -24,6 +24,7 @@ class Category extends Model
         'quantity',
         'status',
     ];
+
     public function scopeOfType($query, $filter)
     {
         if (!empty($filter['name'])) {

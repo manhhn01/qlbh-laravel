@@ -14,6 +14,6 @@ class CouponRepository extends BaseRepository implements CouponRepositoryInterfa
 
     public function findByIdOrName($id_name)
     {
-        return $this->model->where('id' ,'=' , $id_name)->orWhere('name', '=', $id_name)->first();
+        return $this->model->where('id', '=', $id_name)->orWhere('name', '=', $id_name)->first();
     }
 }

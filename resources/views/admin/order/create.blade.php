@@ -9,12 +9,6 @@
         </div>
     </div>
 
-{{--     <pre>--}}
-{{--        @php--}}
-{{--            // print_r(old('products'));--}}
-{{--            print_r(session()->all());--}}
-{{--        @endphp--}}
-{{--    </pre>--}}
 
     <div class="row">
         <div class="col">
@@ -22,7 +16,7 @@
                 <div class="card-body">
                     <div class="mb-4">
                         <label class="form-label">Địa điểm mua hàng</label>
-                        <select class="form-select" id="buy_place" name="buy_place">
+                        <select class="form-select" id="buyPlace" name="buy_place">
                             <option value="" disabled selected>Chọn địa điểm</option>
                             <option value="0" {{old('buy_place') === "0" ? 'selected' : ''}}>Online
                             </option>
@@ -34,8 +28,8 @@
                     <div class="order-info-container"></div>
                     <template id="onTemplate">
                         <div class="mb-4">
-                            <label for="customer_email" class="form-label">Email khách hàng</label>
-                            <input type="text" name="customer_email" id="customer_email" class="form-control"
+                            <label for="customerEmail" class="form-label">Email khách hàng</label>
+                            <input type="text" name="customer_email" id="customerEmail" class="form-control"
                                 placeholder="Nhập ở đây" value="{{old('customer_email')}}">
                         </div>
                         <div class="row">
@@ -62,15 +56,15 @@
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label for="deliver_to" class="form-label">Địa chỉ giao hàng</label>
+                            <label for="deliverTo" class="form-label">Địa chỉ giao hàng</label>
                             <input type="text" placeholder="Nhập ở đây..." class="form-control" name="deliver_to"
-                                id="deliver_to" value="{{ old('deliver_to') }}">
+                                id="deliverTo" value="{{ old('deliver_to') }}">
                         </div>
-                        <x-order-products :products="old('products')"/>
+                        <x-list-products type="add" :products="old('products')"/>
                         <div class="mb-4">
-                            <label for="coupon_name" class="form-label">Mã giảm giá</label>
+                            <label for="couponName" class="form-label">Mã giảm giá</label>
                             <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input check"
-                                id="coupon_name" data-valid="true">
+                                id="couponName">
                             <div class="coupon-card-container mt-2"></div>
                             <div id="couponLoad" class="d-none">
                                 <div class="d-flexjustify-content-center">
@@ -114,11 +108,11 @@
                                 </select>
                             </div>
                         </div>
-                        <x-order-products :products="old('products')"/>
+                        <x-list-products type="add" :products="old('products')"/>
                         <div class="mb-4">
-                            <label for="coupon_name" class="form-label">Mã giảm giá</label>
+                            <label for="couponName" class="form-label">Mã giảm giá</label>
                             <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input check"
-                                id="coupon_name" data-valid="true">
+                                id="couponName">
                             <div class="coupon-card-container mt-2"></div>
                             <div id="couponLoad" class="d-none">
                                 <div class="d-flexjustify-content-center">

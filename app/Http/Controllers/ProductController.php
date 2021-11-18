@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductCreateRequest;
+use App\Exceptions\TableConstraintException;
+use App\Http\Requests\Product\ProductCreateRequest;
+use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Supplier\SupplierRepositoryInterface;
@@ -22,7 +24,7 @@ class ProductController extends Controller
     protected $supplierRepo;
 
     public function __construct(
-        ProductRepositoryInterface  $product,
+        ProductRepositoryInterface $product,
         CategoryRepositoryInterface $category,
         SupplierRepositoryInterface $supplier
     ) {
@@ -38,14 +40,15 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->hasAny(["search", "status"])) {
-            $filter["name"] = $request->search;
-            $filter["status"] = $request->status;
+        if ($request->hasAny(['search', 'status'])) {
+            $filter['name'] = $request->search;
+            $filter['status'] = $request->status;
         }
         $products = $this->productRepo->page(2, $filter ?? null);
+
         return view(
             'admin.product.index',
-            ["products" => $products]
+            ['products' => $products]
         );
     }
 
@@ -63,7 +66,7 @@ class ProductController extends Controller
             'admin.product.create',
             [
                 'categories' => $categories,
-                'suppliers' => $suppliers
+                'suppliers' => $suppliers,
             ]
         );
     }
@@ -88,6 +91,7 @@ class ProductController extends Controller
 
         // dd($attributes);
         $this->productRepo->create($attributes);
+
         return back()->with('info', 'Tạo thành công');
     }
 
@@ -132,7 +136,7 @@ class ProductController extends Controller
             'id' => $id,
             'product' => $product,
             'categories' => $categories,
-            'suppliers' => $suppliers
+            'suppliers' => $suppliers,
         ]);
     }
 
@@ -143,7 +147,7 @@ class ProductController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function update(ProductCreateRequest $request, int $id)
+    public function update(ProductUpdateRequest $request, int $id)
     {
         $attributes = $request->only(['name', 'description', 'supplier', 'new_supplier', 'price', 'status', 'sku', 'category', 'new_category', 'quantity']);
 
@@ -186,57 +190,59 @@ class ProductController extends Controller
             $this->productRepo->delete($id);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy sản phẩm']);
+        } catch (TableConstraintException $e) {
+            return back()->withErrors(['message' => $e->getMessage()]);
         }
 
         return back()->with('info', 'Xóa sản phẩm thành công');
     }
 
     /**
-     * Xử lý ajax lấy sản phẩm
+     * Xử lý ajax lấy sản phẩm.
      *
      * @param Request $request
      * @return JsonResponse
      */
-
-    function ajax(Request $request)
+    public function ajax(Request $request)
     {
         $id_sku = $request->id_sku;
         try {
             $product = $this->productRepo->findByIdOrSku($id_sku);
             if (empty($product)) {
-                throw new ModelNotFoundException;
-            } else
+                throw new ModelNotFoundException();
+            } else {
                 return response()->json([
-                    "data" => [
-                        "product_name" => $product->name,
-                        "product_id" => $product->id,
-                        "sku" => $product->sku,
-                        "price" => $product->price,
-                        "quantity" => $product->quantity,
-                        "status" => $product->status,
-                        "image_path" => $product->images->first(),
-                    ]
+                    'data' => [
+                        'product_name' => $product->name,
+                        'product_id' => $product->id,
+                        'sku' => $product->sku,
+                        'price' => $product->price,
+                        'quantity' => $product->quantity,
+                        'status' => $product->status,
+                        'image_path' => $product->images->first(),
+                    ],
                 ]);
+            }
         } catch (QueryException $e) {
             return response()->json([
-                "error" => [
-                    "code" => $e->getCode(),
-                    "message" => "Lỗi truy vấn cơ sở dữ liệu",
-                ]
+                'error' => [
+                    'code' => $e->getCode(),
+                    'message' => 'Lỗi truy vấn cơ sở dữ liệu',
+                ],
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                "error" => [
-                    "code" => 404,
-                    "message" => "Không tìm thấy sản phẩm",
-                ]
+                'error' => [
+                    'code' => 404,
+                    'message' => 'Không tìm thấy sản phẩm',
+                ],
             ]);
         } catch (Exception $e) {
             return response()->json([
-                "error" => [
-                    "code" => $e->getCode(),
-                    "message" => "Lỗi hệ thống",
-                ]
+                'error' => [
+                    'code' => $e->getCode(),
+                    'message' => 'Lỗi hệ thống',
+                ],
             ]);
         }
     }

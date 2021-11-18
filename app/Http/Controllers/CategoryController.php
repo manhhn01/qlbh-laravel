@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryCreateRequest;
-use App\Models\Category;
-use App\Models\Product;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
@@ -29,10 +27,11 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has(["search"])) {
-            $filter["name"] = $request->search;
+        if ($request->has(['search'])) {
+            $filter['name'] = $request->search;
         }
         $categories = $this->categoryRepo->page(2, $filter ?? null);
+
         return view(
             'admin.category.index',
             ['categories' => $categories]
@@ -74,8 +73,8 @@ class CategoryController extends Controller
     public function show(int $id, Request $request)
     {
         //filter products
-        $filter["name"] = $request->search;
-        $filter["status"] = $request->status;
+        $filter['name'] = $request->search;
+        $filter['status'] = $request->status;
 
         try {
             $category = $this->categoryRepo->find($id);
@@ -83,10 +82,11 @@ class CategoryController extends Controller
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy danh mục']);
         }
+
         return view('admin.category.show', [
             'id' => $id,
             'category' => $category,
-            'products' => $products
+            'products' => $products,
         ]);
     }
 
@@ -103,6 +103,7 @@ class CategoryController extends Controller
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy danh mục']);
         }
+
         return view('admin.category.edit', [
             'id' => $id,
             'category' => $category,
@@ -120,13 +121,12 @@ class CategoryController extends Controller
     {
         $attributes = $request->only(['name', 'description']);
 
-        try{
-
-        $this->categoryRepo->update($id, $attributes);
-
-        } catch (ModelNotFoundException $e){
+        try {
+            $this->categoryRepo->update($id, $attributes);
+        } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy danh mục']);
         }
+
         return redirect(route('category.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
     }
 
@@ -143,6 +143,7 @@ class CategoryController extends Controller
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy danh mục để xóa']);
         }
+
         return back()->with('info', 'Xóa danh mục thành công');
     }
 }

@@ -12,41 +12,41 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
-     * get model class
+     * get model class.
      * @return mixed
      */
-    public abstract function getModel();
+    abstract public function getModel();
 
-
-    function getAll()
+    public function getAll()
     {
         return $this->model->orderBy('name')->get();
     }
 
-    function find($id)
+    public function find($id)
     {
         return $this->model->find($id);
     }
 
-    function create($attributes)
+    public function create($attributes)
     {
         return $this->model->create($attributes);
     }
 
-    function update($id, $attributes)
+    public function update($id, $attributes)
     {
         $result = $this->model->findOrFail($id);
         $result->update($attributes);
+
         return $result;
     }
 
-    function delete($id)
+    public function delete($id)
     {
         $result = $this->model->findOrFail($id);
         $result->delete();
     }
 
-    function page($amount, $filter = null)
+    public function page($amount, $filter = null)
     {
         if (isset($filter)) {
             return $this->model->ofType($filter)->paginate($amount);

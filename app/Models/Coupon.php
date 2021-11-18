@@ -9,7 +9,6 @@ class Coupon extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'name',
         'discount',
@@ -19,12 +18,14 @@ class Coupon extends Model
     ];
 
     protected $appends = [
-        'is_usable'
+        'is_usable',
     ];
 
-    public function getIsUsableAttribute(){
-        $checkExpired = strtotime($this->expire_at) >= strtotime(date("Y-m-d"));
+    public function getIsUsableAttribute()
+    {
+        $checkExpired = strtotime($this->expire_at) >= strtotime(date('Y-m-d'));
         $checkRemain = $this->remain > 0;
+
         return $checkExpired && $checkRemain;
     }
 }

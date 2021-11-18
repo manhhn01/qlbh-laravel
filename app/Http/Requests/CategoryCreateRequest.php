@@ -13,8 +13,10 @@ class CategoryCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        if (auth()->user()->role === 0)
+        if (auth()->user()->role === 0) {
             return true;
+        }
+
         return false;
     }
 
@@ -27,7 +29,7 @@ class CategoryCreateRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'description' => ['required']
+            'description' => ['required'],
         ];
     }
 

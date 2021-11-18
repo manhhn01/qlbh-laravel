@@ -14,8 +14,8 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="mb-4">
-                        <label class="form-label">Địa điểm mua hàng</label>
-                        <select class="form-select" id="buy_place" name="buy_place">
+                        <label class="form-label" for="buyPlace">Địa điểm mua hàng</label>
+                        <select class="form-select" id="buyPlace" name="buy_place">
                             <option value="" disabled selected>Chọn địa điểm</option>
                             <option value="0" {{ $order->buy_place === 0 ? 'selected' : ''}}>Online
                             </option>
@@ -27,8 +27,8 @@
                     <div class="order-info-container"></div>
                     <template id="onTemplate">
                         <div class="mb-4">
-                            <label for="customer_email" class="form-label">Email khách hàng</label>
-                            <input type="text" name="customer_email" id="customer_email" class="form-control"
+                            <label for="customerEmail" class="form-label">Email khách hàng</label>
+                            <input type="text" name="customer_email" id="customerEmail" class="form-control"
                                    placeholder="Nhập ở đây" value="{{$order->customer_email}}">
                         </div>
                         <div class="row">
@@ -55,15 +55,15 @@
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label for="deliver_to" class="form-label">Địa chỉ giao hàng</label>
+                            <label for="deliverTo" class="form-label">Địa chỉ giao hàng</label>
                             <input type="text" placeholder="Nhập ở đây..." class="form-control" name="deliver_to"
-                                   id="deliver_to" value="{{ $order->deliver_to }}">
+                                   id="deliverTo" value="{{ $order->deliver_to }}">
                         </div>
-                        <x-order-products :products="$order->products"/>
+                        <x-list-products type="edit" :products="$order->products"/>
                         <div class="mb-4">
-                            <label for="coupon_name" class="form-label">Mã giảm giá</label>
+                            <label for="couponName" class="form-label">Mã giảm giá</label>
                             <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input no-check"
-                                   id="coupon_name" data-valid="true" value="{{ $order->coupon_id ?? "" }}">
+                                   id="couponName" value="{{ $order->coupon_id ?? "" }}">
                             <div class="coupon-card-container mt-2"></div>
                             <div id="couponLoad" class="d-none">
                                 <div class="d-flexjustify-content-center">
@@ -103,11 +103,11 @@
                                 </select>
                             </div>
                         </div>
-                        <x-order-products :products="$order->products"/>
+                        <x-list-products type="edit" :products="$order->products"/>
                         <div class="mb-4">
-                            <label for="coupon_name" class="form-label">Mã giảm giá</label>
+                            <label for="couponName" class="form-label">Mã giảm giá</label>
                             <input type="text" placeholder="Nhập ở đây..." class="form-control coupon-input no-check"
-                                   id="coupon_name" data-valid="true" value="{{ $order->coupon_id ?? "" }}">
+                                   id="couponName" value="{{ $order->coupon_id ?? "" }}">
                             <div class="coupon-card-container mt-2"></div>
                             <div id="couponLoad" class="d-none">
                                 <div class="d-flexjustify-content-center">

@@ -14,7 +14,6 @@ class Order extends Model
      *
      * @var string[]
      */
-
     protected $fillable = [
         'customer_email',
         'employee_id',
@@ -23,12 +22,16 @@ class Order extends Model
         'status',
         'coupon_id',
         'deliver_to',
-        'note'
+        'note',
+    ];
+
+    protected $casts = [
+        'status'=> 'integer',
     ];
 
     protected $appends = [
         'total_price',
-        'discount_amount'
+        'discount_amount',
     ];
 
     public function getTotalPriceAttribute()
@@ -37,24 +40,29 @@ class Order extends Model
         if (isset($this->coupon)) {
             return $total * (100 - $this->coupon->discount) / 100;
         }
+
         return $total;
     }
 
-    public function getDiscountAmountAttribute(){
+    public function getDiscountAmountAttribute()
+    {
         if (isset($this->coupon)) {
             return $this->sumPrice() * $this->coupon->discount / 100;
+        } else {
+            return 0;
         }
-        else return 0;
     }
 
-    public function sumPrice(){
-        return $this->products->sum(function($item){
+    public function sumPrice()
+    {
+        return $this->products->sum(function ($item) {
             return $item->pivot->price * $item->pivot->quantity;
         });
     }
 
-    public function scopeOfType($query, $filter){
-        if (isset($filter['status']) && $filter['status'] !== "all") {
+    public function scopeOfType($query, $filter)
+    {
+        if (isset($filter['status']) && $filter['status'] !== 'all') {
             $query->where('status', $filter['status']);
         }
 

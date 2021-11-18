@@ -1,7 +1,7 @@
 @extends('layouts.admin.app')
 @section('content-main')
     <div class="content-header">
-        <h2 class="content-title">Chi tiết đơn hàng</h2>
+        <h2 class="content-title">Chi tiết đơn hàng #{{$id}}</h2>
         <div>
             <a href="{{ route('order.edit',  ['id'=>$id, 'page'=>request()->page ]) }}" type="submit" class="btn btn-primary">Sửa</a>
         </div>
@@ -34,8 +34,7 @@
                     <small class="text-muted">Mã đơn hàng: #{{ $order->id }}</small>
                 </div>
                 <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                    {{-- TODO In hoa don                    --}}
-                    <a class="btn btn-secondary ms-2" href="#"><i class="icon material-icons md-print"></i></a>
+                    <button class="btn btn-secondary ms-2" id="printBtn"><i class="icon material-icons md-print"></i></button>
                 </div>
             </div>
         </header>
@@ -100,7 +99,7 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="table-responsive">
-                        <table class="table table-hover" id="orderProducts">
+                        <table class="table table-hover" id="productsTable">
                             <thead>
                             <tr>
                                 <th scope="col" style="width: 30%">Sản phẩm</th>
@@ -186,5 +185,5 @@
 
 
 @push('js')
-    <script src="{{ asset('js/product/script.js') }}"></script>
+    <script src="{{ asset('js/order/script.js') }}"></script>
 @endpush

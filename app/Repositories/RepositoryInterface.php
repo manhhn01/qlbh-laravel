@@ -7,48 +7,48 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 interface RepositoryInterface
 {
     /**
-     * Get all order by created_at
+     * Get all order by created_at.
      * @return mixed
      */
-    function getAll();
+    public function getAll();
 
     /**
-     * find by id
+     * find by id.
      * @param $id
      * @return mixed
      * @throws ModelNotFoundException
      */
-    function find($id);
+    public function find($id);
 
     /**
-     * create
+     * create.
      * @param $attributes
      * @return mixed
      */
-    function create($attributes);
+    public function create($attributes);
 
     /**
-     * update with id
+     * update with id.
      * @param $id
      * @param $attributes
      * @return mixed
      * @throws ModelNotFoundException
      */
-    function update($id, $attributes);
+    public function update($id, $attributes);
 
     /**
-     * delete by id
+     * delete by id.
      * @param $id
      * @return mixed
      * @throws ModelNotFoundException
      */
-    function delete($id);
+    public function delete($id);
 
     /**
-     * Return paginate with filter
+     * Return paginate with filter.
      * @param $amount
      * @param null $filter
      * @return mixed
      */
-    function page($amount, $filter);
+    public function page($amount, $filter);
 }

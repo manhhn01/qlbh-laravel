@@ -1,7 +1,7 @@
 <div class="row mb-4">
     <div class="mb-3">Danh sách sản phẩm</div>
     <div class="col-lg-8">
-        <table class="table table-hover" id="orderProducts">
+        <table class="table table-hover" id="productsTable">
             <thead>
             <tr>
                 <th scope="col" style="width: 30%">Sản phẩm</th>
@@ -15,24 +15,35 @@
             {{-- Danh sách sản phẩm đc trả về nếu như post form gặp lỗi --}}
             @isset($products)
                 @foreach($products as $product)
-                    <tr data-id={{$product['product_id'] ?? $product->id }} data-price={{ $product->pivot->price ?? $product['price']}}>
-                        <input type="hidden" name="products[{{$product['product_id'] ?? $product->id }}][product_id]" value="{{$product['product_id'] ?? $product->id}}">
+                    <tr data-id={{$product['product_id']}} data-price={{$product['price']}}>
+                        <input type="hidden" name="products[{{$product['product_id']}}][product_id]" value="{{$product['product_id']}}">
                         <th scope="row">
                             {{ $product['name'] }}
                         </th>
                         <td>
                             {{ $product['sku'] }}
                         </td>
+                        @if($type!=="note-add")
                         <td>
                             <input class="form-control" type="number" min="1"
-                                   max="{{$product['max_qty'] ?? ($product->quantity + $product->pivot->quantity)}}" name="products[{{$product['product_id'] ?? $product->id}}][quantity]"
-                                   value="{{$product->pivot->quantity ?? $product['quantity']}}">
+                                   max="{{$product['max_qty'] }}" name="products[{{$product['product_id']}}][quantity]"
+                                   value="{{ $product['quantity']}}">
                         </td>
                         <td>
                             {{ number_format($product['price'], 0, ",", ".")}} đ
                         </td>
+                        @else
+                            <td>
+                                <input class="form-control" type="number" min="1"
+                                       max="30000" name="products[{{$product['product_id']}}][quantity]"
+                                       value="{{ $product['quantity']}}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="products[{{ $product['product_id'] }}][price]" value="{{$product['price']}}" maxlength="15">
+                            </td>
+                        @endif
                         <td>
-                            <button type="button" class="btn btn-danger delete-order-product-btn" onclick="removeProduct({{$product['product_id'] ?? $product->id}})">Xóa</button>
+                            <button type="button" class="btn btn-danger delete-order-product-btn" onclick="removeProduct({{$product['product_id'] }})">Xóa</button>
                         </td>
                     </tr>
                 @endforeach
@@ -41,10 +52,12 @@
             <tr>
                 <td colspan="5" class="text-end fs-5">
                     <article class="float-end">
-                        <dl class="dlist">
-                            <dt>Giảm giá:</dt>
-                            <dd id="discountAmount">0 đ</dd>
-                        </dl>
+                        @if($type!=="note-add")
+                            <dl class="dlist">
+                                <dt>Giảm giá:</dt>
+                                <dd id="discountAmount">0 đ</dd>
+                            </dl>
+                        @endif
                         <dl class="dlist">
                             <dt>Tổng tiền:</dt>
                             <dd><b class="h5 text-danger" id="totalPrice">0 đ</b></dd>
@@ -69,7 +82,10 @@
         <div id="productLoad" class="d-none">
             <div class="d-flex justify-content-center">
                 <div class="lds-ring">
-                    <div></div><div></div><div></div><div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
             </div>
         </div>

@@ -18,10 +18,10 @@ class AdminChecker
     public function handle(Request $request, Closure $next)
     {
         $role = Auth::user()->role;
-        if($role !== 0) // not admin
-        {
+        if ($role !== 0) { // not admin
             return redirect()->route('dashboard');
         }
+
         return $next($request);
     }
 }

@@ -10,7 +10,6 @@ use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -33,10 +32,11 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has(["status"])) {
-            $filter["status"] = $request->status;
+        if ($request->has(['status'])) {
+            $filter['status'] = $request->status;
         }
         $orders = $this->orderRepo->page(2, $filter ?? null);
+
         return view(
             'admin.order.index',
             ['orders' => $orders]
@@ -61,8 +61,7 @@ class OrderController extends Controller
      */
     public function store(OrderCreateRequest $request)
     {
-        $attributes = $request->only(["buy_place", "customer_email", "payment_method", "status", "deliver_to", "products", "coupon_id", "note"]);
-        $attributes["employee_id"] = auth()->user()->id;
+        $attributes = $request->only(['employee_id', 'buy_place', 'customer_email', 'payment_method', 'status', 'deliver_to', 'products', 'coupon_id', 'note']);
 
         try {
             $this->orderRepo->create($attributes);
@@ -88,9 +87,10 @@ class OrderController extends Controller
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy đơn hàng']);
         }
+
         return view('admin.order.show', [
             'id' => $id,
-            'order' => $order
+            'order' => $order,
         ]);
     }
 
@@ -107,9 +107,10 @@ class OrderController extends Controller
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy đơn hàng']);
         }
+
         return view('admin.order.edit', [
             'id' => $id,
-            'order' => $order
+            'order' => $order,
         ]);
     }
 
@@ -122,13 +123,14 @@ class OrderController extends Controller
      */
     public function update(OrderCreateRequest $request, int $id)
     {
-        $attributes = $request->only(["buy_place", "customer_email", "payment_method", "status", "deliver_to", "products", "coupon_id", "note"]);
+        $attributes = $request->only(['buy_place', 'customer_email', 'payment_method', 'status', 'deliver_to', 'products', 'coupon_id', 'note']);
 
         try {
             $this->orderRepo->update($id, $attributes);
         } catch (ModelNotFoundException $e) {
-            return back()->withErrors(['message' => 'Không tìm thấy đơn hàng']);
+            return back()->withErrors(['message' => $e->getMessage()]);
         }
+
         return redirect(route('order.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
     }
 

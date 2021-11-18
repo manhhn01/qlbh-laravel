@@ -6,37 +6,38 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateReceivedNotesTable extends Migration
 {
-  /**
-   * Run the migrations.
-   *
-   * @return void
-   */
-  public function up()
-  {
-    Schema::create('received_notes', function (Blueprint $table) {
-      $table->charset = 'utf8mb4';
-      $table->collation = 'utf8mb4_unicode_ci';
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('received_notes', function (Blueprint $table) {
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_unicode_ci';
 
-      $table->id();
+            $table->id();
 
-      $table->unsignedBigInteger('manager_id');
-      $table->unsignedBigInteger('supplier_id');
-      $table->string('deliver_name', 50);
+            $table->unsignedBigInteger('manager_id');
+            $table->string('deliver_name', 50);
+            $table->date('receive_at');
+            $table->boolean('status'); //1: da nhan hang 0: da huy
+            $table->string('note')->nullable();
 
-      $table->timestamps();
+            $table->timestamps();
 
-      $table->foreign('manager_id')->references('id')->on('users');
-      $table->foreign('supplier_id')->references('id')->on('suppliers');
-    });
-  }
+            $table->foreign('manager_id')->references('id')->on('users');
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   *
-   * @return void
-   */
-  public function down()
-  {
-    Schema::dropIfExists('received_notes');
-  }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('received_notes');
+    }
 }

@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var string[]
-   */
-  protected $fillable = [
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
     'product_id',
     'image_path',
   ];

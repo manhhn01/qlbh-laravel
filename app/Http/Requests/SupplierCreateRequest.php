@@ -13,8 +13,10 @@ class SupplierCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        if (auth()->user()->role === 0)
+        if (auth()->user()->role === 0) {
             return true;
+        }
+
         return false;
     }
 
@@ -27,12 +29,12 @@ class SupplierCreateRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'description' => ['required']
+            'description' => ['required'],
         ];
     }
 
     /**
-     * response messages
+     * response messages.
      * @return string[]
      */
     public function messages()

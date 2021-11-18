@@ -55,10 +55,6 @@
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ route('coupon.show', ['id'=>$coupon->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Xem chi tiết</a>
                                 <a class="dropdown-item" href="{{ route('coupon.edit', ['id'=>$coupon->id, 'page'=>request()->page, 'search'=>request()->search]) }}">Sửa</a>
-                                <form class="delete-coupon" data-id="{{ $coupon->id }}" data-name={{ $coupon->name }} action="{{ route('coupon.destroy', ['id'=>$coupon->id]) }}" method="POST">
-                                    @csrf
-                                    <button class="dropdown-item text-danger" style="outline:none">Xóa</button>
-                                </form>
                             </div>
                         </div> <!-- dropdown // -->
                     </div>

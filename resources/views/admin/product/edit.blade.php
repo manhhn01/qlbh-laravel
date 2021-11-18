@@ -18,7 +18,7 @@
                         <input type="text" placeholder="Nhập ở đây..." class="form-control" name="name" id="name" value="{{ $product->name }}">
                     </div>
                     <div class="mb-4">
-                        <label for="product_supplier" class="form-label">Nhà cung cấp</label>
+                        <label for="productSupplier" class="form-label">Nhà cung cấp</label>
                         <select name="supplier" class="form-select" id="supplierSelect">
                             <option selected disabled>Chọn nhà cung cấp</option>
                             <option value="add">--Thêm mới--</option>
@@ -29,8 +29,8 @@
                     </div>
 
                     <div id="supplierNew" style="display:none">
-                        <label for="new_supplier" class="form-label">Nhà cung cấp mới</label>
-                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="new_supplier" id="new_supplier">
+                        <label for="newSupplier" class="form-label">Nhà cung cấp mới</label>
+                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="new_supplier" id="newSupplier">
                     </div>
                 </div>
             </div> <!-- card end// -->
@@ -88,8 +88,8 @@
                     </div>
 
                     <div id="categoryNew" style="display:none">
-                        <label for="new_category" class="form-label">Danh mục mới</label>
-                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="new_category" id="new_category">
+                        <label for="newCategory" class="form-label">Danh mục mới</label>
+                        <input type="text" placeholder="Nhập ở đây..." class="form-control" name="new_category" id="newCategory">
                     </div>
                 </div>
             </div>

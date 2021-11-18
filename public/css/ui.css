@@ -1067,3 +1067,10 @@ ul.row-sm {
       transform: rotate(360deg);
     }
   }
+
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 25mm 45mm 25mm 25mm;
+    }
+}

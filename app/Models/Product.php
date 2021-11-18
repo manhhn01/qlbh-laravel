@@ -25,9 +25,8 @@ class Product extends Model
         'sku',
         'price',
         'quantity',
-        'status'
+        'status',
     ];
-
 
     public function scopeOfType($query, $filter)
     {
@@ -35,7 +34,7 @@ class Product extends Model
             $query->where('name', 'LIKE', '%' . $filter['name'] . '%');
         }
 
-        if (isset($filter['status']) && $filter['status'] !== "all") {
+        if (isset($filter['status']) && $filter['status'] !== 'all') {
             $query->where('status', $filter['status']);
         }
 
@@ -62,4 +61,8 @@ class Product extends Model
         return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
+    public function receivedNotes()
+    {
+        return $this->belongsToMany(ReceivedNote::class, 'received_note_product', 'product_id', 'received_note_id')->withPivot('quantity', 'price');
+    }
 }

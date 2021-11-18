@@ -36,7 +36,7 @@
             </header> <!-- card-header end// -->
 
             <div class="card-body">
-                <x-list-products :products="$products"/>
+                <x-list-products type="index" :products="$products"/>
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
 

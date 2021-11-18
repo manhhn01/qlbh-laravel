@@ -30,10 +30,11 @@ class CouponController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has(["search"])) {
-            $filter["name"] = $request->search;
+        if ($request->has(['search'])) {
+            $filter['name'] = $request->search;
         }
         $coupons = $this->couponRepo->page(2, $filter ?? null);
+
         return view(
             'admin.coupon.index',
             ['coupons' => $coupons]
@@ -79,9 +80,10 @@ class CouponController extends Controller
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy mã giảm giá']);
         }
+
         return view('admin.coupon.show', [
             'id' => $id,
-            'coupon' => $coupon
+            'coupon' => $coupon,
         ]);
     }
 
@@ -98,9 +100,10 @@ class CouponController extends Controller
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy mã giảm giá']);
         }
+
         return view('admin.coupon.edit', [
             'id' => $id,
-            'coupon' => $coupon
+            'coupon' => $coupon,
         ]);
     }
 
@@ -117,10 +120,10 @@ class CouponController extends Controller
 
         try {
             $this->couponRepo->update($id, $attributes);
-
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy mã giảm giá']);
         }
+
         return redirect(route('coupon.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
     }
 
@@ -135,51 +138,51 @@ class CouponController extends Controller
     }
 
     /**
-     * Xử lý ajax lấy mã giảm
+     * Xử lý ajax lấy mã giảm.
      *
      * @param Request $request
      * @return JsonResponse
      */
-
-    function ajax(Request $request)
+    public function ajax(Request $request)
     {
         $id_name = $request->id_name;
         $check = json_decode($request->check);
         try {
             $coupon = $this->couponRepo->findByIdOrName($id_name);
             if (empty($coupon) || (!$coupon->isUsable && $check)) {
-                throw new ModelNotFoundException;
-            } else
+                throw new ModelNotFoundException();
+            } else {
                 return response()->json([
-                    "data" => [
-                        "coupon_id" => $coupon->id,
-                        "coupon_name" => $coupon->name,
-                        "discount" => $coupon->discount,
-                        "remain" => $coupon->remain,
-                        "description" => $coupon->description,
-                        "expire_at" => $coupon->expire_at,
-                    ]
+                    'data' => [
+                        'coupon_id' => $coupon->id,
+                        'coupon_name' => $coupon->name,
+                        'discount' => $coupon->discount,
+                        'remain' => $coupon->remain,
+                        'description' => $coupon->description,
+                        'expire_at' => $coupon->expire_at,
+                    ],
                 ]);
+            }
         } catch (QueryException $e) {
             return response()->json([
-                "error" => [
-                    "code" => $e->getCode(),
-                    "message" => "Lỗi truy vấn cơ sở dữ liệu",
-                ]
+                'error' => [
+                    'code' => $e->getCode(),
+                    'message' => 'Lỗi truy vấn cơ sở dữ liệu',
+                ],
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                "error" => [
-                    "code" => 404,
-                    "message" => "Không tìm thấy mã giảm giá hoặc mã đã hết hạn",
-                ]
+                'error' => [
+                    'code' => 404,
+                    'message' => 'Không tìm thấy mã giảm giá hoặc mã đã hết hạn',
+                ],
             ]);
         } catch (Exception $e) {
             return response()->json([
-                "error" => [
-                    "code" => $e->getCode(),
-                    "message" => "Lỗi hệ thống",
-                ]
+                'error' => [
+                    'code' => $e->getCode(),
+                    'message' => 'Lỗi hệ thống',
+                ],
             ]);
         }
     }

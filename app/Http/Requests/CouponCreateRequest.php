@@ -13,8 +13,10 @@ class CouponCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        if (auth()->user()->role === 0)
+        if (auth()->user()->role === 0) {
             return true;
+        }
+
         return false;
     }
 
@@ -30,7 +32,7 @@ class CouponCreateRequest extends FormRequest
             'discount' => ['required'],
             'remain' => ['required'],
             'expire_at' => ['required'],
-            'description' => ['required']
+            'description' => ['required'],
         ];
     }
 }

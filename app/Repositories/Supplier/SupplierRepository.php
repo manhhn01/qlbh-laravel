@@ -13,12 +13,17 @@ class SupplierRepository extends BaseRepository implements SupplierRepositoryInt
         return Supplier::class;
     }
 
-    function getProductsPage($amount, $supplier_id, $filter = null)
+    public function getProductsPage($amount, $supplier_id, $filter = null)
     {
-        if(isset($filter))
+        if (isset($filter)) {
             return Product::where('supplier_id', $supplier_id)->ofType($filter)->paginate($amount);
-        else{
+        } else {
             return Product::orderByDesc('created_at')->paginate($amount);
         }
+    }
+
+    public function findByIdOrName($id_name)
+    {
+        return $this->model->where('id', '=', $id_name)->orWhere('name', '=', $id_name)->first();
     }
 }

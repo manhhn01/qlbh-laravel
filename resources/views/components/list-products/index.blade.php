@@ -50,10 +50,10 @@
                             <button class="dropdown-item text-danger" style="outline:none">Xóa</button>
                         </form>
                     </div>
-                </div> <!-- dropdown // -->
+                </div>
             </div>
-        </div> <!-- row .// -->
-    </article> <!-- itemlist  .// -->
+        </div>
+    </article>
 @endforeach
 
 <nav class="float-end mt-4" aria-label="Page navigation">

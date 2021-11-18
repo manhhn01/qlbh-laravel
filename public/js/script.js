@@ -14,7 +14,7 @@ $('.menu-item.has-submenu .menu-link').on('click', function (e) {
     $(this).next('.submenu').slideToggle(200);
 });
 
-// mobile offnavas triggerer for generic use
+//===== mobile offnavas triggerer for generic use
 $("[data-trigger]").on("click", function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -31,7 +31,7 @@ $(".screen-overlay, .btn-close").click(function (e) {
     $("body").removeClass("offcanvas-active");
 });
 
-// minimize sidebar on desktop
+//===== minimize sidebar on desktop
 
 $('.btn-aside-minimize').on('click', function () {
     if (window.innerWidth < 768) {
@@ -50,12 +50,30 @@ $('.btn-aside-minimize').on('click', function () {
     }
 });
 
-//load sidebar status from localStorage
-// $(() => {
-//     const status = localStorage.getItem("aside-minimize");
-//     if (window.innerWidth >= 768) {
-//         if (status === "1") {
-//             $('body').addClass('aside-mini');
-//         }
-//     }
-// })
+//==== auto submit on status filter
+//disable blank search input
+$(".form-filter").on("submit", function (e) {
+    $(this)
+        .find(":input")
+        .filter(function () {
+            return !this.value;
+        })
+        .attr("disabled", "disabled");
+    return true;
+});
+//submit on change
+$(".status-select").on("change", function () {
+    $(".form-filter").submit();
+});
+
+//===== debounce input ajax
+const debounce = function (callback, wait) {
+    let timeout;
+    return function (...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+            callback.apply(context, args);
+        }, wait);
+    };
+};

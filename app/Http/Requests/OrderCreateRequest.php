@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Product;
-use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\ReceivedNote\ReceivedNoteRepositoryInterface;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -13,7 +13,7 @@ class OrderCreateRequest extends FormRequest
 {
     protected $orderRepository;
 
-    public function __construct(OrderRepositoryInterface $orderRepository, $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
+    public function __construct(ReceivedNoteRepositoryInterface $orderRepository, $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
         $this->orderRepository = $orderRepository;
         parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
@@ -41,8 +41,10 @@ class OrderCreateRequest extends FormRequest
             'status' => ['required'],
             'payment_method' => ['required'],
             'products' => ['required', 'min:1'],
+            'products.*.quantity' => ['required', 'integer', 'max:30000'],
+            'products.*.product_id' => ['required', 'distinct'],
             'customer_email' => ['email', 'required_if:buy_place, "0"'],
-            'deliver_to' => ['required_if:buy_place,"0"']
+            'deliver_to' => ['required_if:buy_place,"0"'],
         ];
     }
 
@@ -54,18 +56,19 @@ class OrderCreateRequest extends FormRequest
     public function prepareForValidation()
     {
         $attributes = $this->all();
-        if(!isset($attributes["coupon_id"])){
-            $this->merge(["coupon_id" => null]);
+        if (!isset($attributes['coupon_id'])) {
+            $this->merge(['coupon_id' => null]);
         }
-        if(!empty($attributes["products"])){
-            $updated_products = collect($attributes["products"])
+        if (!empty($attributes['products'])) {
+            $updated_products = collect($attributes['products'])
                 ->map(function ($item) {
-                    $product = Product::find($item["product_id"]);
+                    $product = Product::find($item['product_id']);
                     if (isset($product)) {
-                        $item["name"] = $product->name;
-                        $item["sku"] = $product->sku;
-                        $item["max_qty"] = $product->quantity; // lay so luong moi tren db
-                        $item["price"] = $product->price;
+                        $item['name'] = $product->name;
+                        $item['sku'] = $product->sku;
+                        $item['max_qty'] = $product->quantity; // lay so luong moi tren db
+                        $item['price'] = $product->price;
+
                         return $item;
                     } else {
                         return [];
@@ -73,7 +76,7 @@ class OrderCreateRequest extends FormRequest
                 })->reject(function ($item) { //https://laravel.com/docs/8.x/collections#method-reject xoa co dieu kien
                     return empty($item);
                 })->toArray();
-            $this->merge(["products" => $updated_products]);
+            $this->merge(['products' => $updated_products, 'employee_id' => auth()->user()->id]);
         }
     }
 

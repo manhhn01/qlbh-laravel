@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SupplierCreateRequest;
 use App\Repositories\Supplier\SupplierRepositoryInterface;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -27,10 +29,11 @@ class SupplierController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has(["search"])) {
-            $filter["name"] = $request->search;
+        if ($request->has(['search'])) {
+            $filter['name'] = $request->search;
         }
-        $suppliers= $this->supplierRepo->page(2, $filter ?? null);
+        $suppliers = $this->supplierRepo->page(2, $filter ?? null);
+
         return view(
             'admin.supplier.index',
             ['suppliers' => $suppliers]
@@ -72,9 +75,9 @@ class SupplierController extends Controller
     public function show(int $id, Request $request)
     {
         //filter products
-        if ($request->hasAny(["search", "status"])) {
-            $filter["name"] = $request->search;
-            $filter["status"] = $request->status;
+        if ($request->hasAny(['search', 'status'])) {
+            $filter['name'] = $request->search;
+            $filter['status'] = $request->status;
         }
 
         try {
@@ -83,10 +86,11 @@ class SupplierController extends Controller
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy nhà cung cấp']);
         }
+
         return view('admin.supplier.show', [
             'id' => $id,
             'supplier' => $supplier,
-            'products' => $products
+            'products' => $products,
         ]);
     }
 
@@ -103,6 +107,7 @@ class SupplierController extends Controller
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy nhà cung cấp']);
         }
+
         return view('admin.supplier.edit', [
             'id' => $id,
             'supplier' => $supplier,
@@ -120,11 +125,12 @@ class SupplierController extends Controller
     {
         $attributes = $request->only(['name', 'description']);
 
-        try{
+        try {
             $this->supplierRepo->update($id, $attributes);
-        } catch (ModelNotFoundException $e){
+        } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy nhà cung cấp']);
         }
+
         return redirect(route('supplier.list', ['page' => request()->page]))->with('info', 'Cập nhật thành công');
     }
 
@@ -141,6 +147,47 @@ class SupplierController extends Controller
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy nhà cung cấp để xóa']);
         }
+
         return back()->with('info', 'Xóa nhà cung cấp thành công');
+    }
+
+    public function ajax(Request $request)
+    {
+        $id_name = $request->id_name;
+        try {
+            $supplier = $this->supplierRepo->findByIdOrName($id_name);
+            if (empty($supplier)) {
+                throw new ModelNotFoundException();
+            } else {
+                return response()->json([
+                    'data' => [
+                        'supplier_id' => $supplier->id,
+                        'supplier_name' => $supplier->name,
+                        'description' => $supplier->description,
+                    ],
+                ]);
+            }
+        } catch (QueryException $e) {
+            return response()->json([
+                'error' => [
+                    'code' => $e->getCode(),
+                    'message' => 'Lỗi truy vấn cơ sở dữ liệu',
+                ],
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => [
+                    'code' => 404,
+                    'message' => 'Không tìm thấy nhà cung cấp',
+                ],
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => [
+                    'code' => $e->getCode(),
+                    'message' => 'Lỗi hệ thống',
+                ],
+            ]);
+        }
     }
 }
