@@ -378,7 +378,7 @@ body.aside-mini .menu-aside .menu-item.has-submenu .menu-link:after {
 }
 
 .menu-aside .menu-item.active .submenu {
-    display: block;
+    display: none;
 }
 
 .menu-aside .menu-item.has-submenu>.menu-link:after {
