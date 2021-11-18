@@ -32,7 +32,7 @@ class ProductUpdateRequest extends FormRequest
             'description' => ['required'],
             'supplier' => ['required'],
             'new_supplier' => ['required_without:supplier'],
-            'images' => ['image'],
+            'images.*' => ['image', 'mimes:jpg,jpeg,png'],
             'price' => ['required', 'integer', 'max:100000000'],
             'status' => ['required'],
             'category' => ['required'],
