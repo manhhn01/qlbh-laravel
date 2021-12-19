@@ -121,7 +121,7 @@ class ReceivedNoteController extends Controller
         $attributes = $request->only(['manager_id', 'deliver_name', 'status', 'receive_at', 'products', 'note']);
 
         try {
-            $this->receivedNoteRepo->update($id, $attributes);
+            $this->receivedNoteRepoe->update($id, $attributes);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => $e->getMessage()]);
         }
