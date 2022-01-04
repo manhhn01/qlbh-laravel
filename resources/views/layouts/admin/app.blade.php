@@ -12,6 +12,7 @@
     <link href="{{asset('css/responsive.css?v=1.1')}}" rel="stylesheet" />
     <!-- iconfont -->
     <link rel="stylesheet" href="{{asset('fonts/material-icon/css/round.css')}}" />
+    @stack('css')
 </head>
 
 <body>
@@ -161,7 +162,7 @@
     <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 
     <!-- Custom JS -->
-    <script src="{{asset('js/script.js?v=1.0')}}" type="text/javascript"></script>
+    <script src="{{asset('js/script.js')}}" type="text/javascript"></script>
     @stack('js')
 </body>
 

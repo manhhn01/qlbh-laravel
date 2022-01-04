@@ -41,19 +41,33 @@
 
 
 <div class="row">
-    <div class="col-xl-8 col-lg-12">
+    <div class="col-12">
         <div class="card mb-4">
             <article class="card-body">
-                <div class="chartjs-size-monitor">
-                    <div class="chartjs-size-monitor-expand">
-                        <div class=""></div>
+                <h5 class="card-title ">Biểu đồ thống kê</h5>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-md-6 d-flex">
+                        <input id="datepicker1" type="text" class="form-control" placeholder="Từ ngày">
+                        <input id="datepicker2" type="text" class="form-control ms-3" placeholder="Đến ngày">
+                        <select id="datepicker3" class="ms-3 form-select form-select-sm" aria-label=".form-select-lg example">
+                            <option value="0" disabled>-- Chọn --</option>
+                            <option value="1" selected>7 ngày qua</option>
+                            <option value="2">Tháng này</option>
+                            <option value="3">Tháng trước</option>
+                            <option value="3">2 Tháng trước</option>
+                        </select>
+                        <button type="button" class="btn btn-primary ms-3 px-4">Lọc</button>
                     </div>
-                    <div class=" chartjs-size-monitor-shrink">
-                        <div class=""></div>
+
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                            <canvas height="400" id="chartOrder" style="display: block; height: 258px; width: 646px;" width="895" class="chartjs-render-monitor"></canvas>
+                    </div>
+                    <div class="col-6">
+                            <canvas height="400" id="chartRevenue" style="display: block; height: 258px; width: 646px;" width="895" class="chartjs-render-monitor"></canvas>
                     </div>
                 </div>
-                <h5 class=" card-title">Biểu đồ thống kê</h5>
-                <canvas height="357" id="myChart" style="display: block; height: 258px; width: 646px;" width="895" class="chartjs-render-monitor"></canvas>
             </article> <!-- card-body end// -->
         </div> <!-- card end// -->
     </div> <!-- col end// -->
@@ -94,44 +108,14 @@
         </div> <!-- table-responsive end// -->
     </div> <!-- card-body end// -->
 </div> <!-- card end// -->
-<!-- ChartJS files-->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-
-<script>
-    var ctx = document.getElementById("myChart").getContext("2d");
-    var chart = new Chart(ctx, {
-        type: "line",
-
-        data: {
-            labels: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
-            ],
-            datasets: [{
-                    label: "Sales",
-                    backgroundColor: "rgb(44, 120, 220)",
-                    borderColor: "rgb(44, 120, 220)",
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                },
-                {
-                    label: "Visitors",
-                    backgroundColor: "rgb(180, 200, 230)",
-                    borderColor: "rgb(180, 200, 230)",
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                },
-            ],
-        },
-        options: {},
-    });
-</script>
 @endsection()
+
+@push('js')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="{{ asset('js/date-picker.min.js') }}"></script>
+    <script src="{{ asset('js/dashboard/script.js') }}"></script>
+@endpush
+
+@push('css')
+    <link rel="stylesheet" href="{{ asset('css/date-picker-boostrap.css') }}">
+@endpush

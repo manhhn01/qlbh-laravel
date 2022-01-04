@@ -2,19 +2,18 @@
 
 namespace Database\Seeders;
 
+use App\Models\Statistic;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class StatisticSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        $this->call([
-            StatisticSeeder::class,
-        ]);
+        Statistic::factory(10)->create();
     }
 }
