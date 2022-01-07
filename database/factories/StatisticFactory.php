@@ -15,15 +15,6 @@ class StatisticFactory extends Factory
      */
     protected $model = Statistic::class;
 
-
-    private static $created_at;
-
-    function __construct()
-    {
-        parent::__construct();
-        self::$created_at = new Carbon('first day of December 2021');
-    }
-
     /**
      * Define the model's default state.
      *
@@ -35,10 +26,9 @@ class StatisticFactory extends Factory
         $ran_products = [100, 200, 300, 400, 600];
         $ran_proceeds = [1000000, 2000000, 3000000, 4000000, 5000000];
         return [
-            'order_total' => array_rand($ran_orders),
-            'product_total' => array_rand($ran_products),
-            'proceeds' => array_rand($ran_proceeds),
-            'created_at' => self::$created_at->addDay(),
+            'order_total' => $this->faker->randomElement($ran_orders),
+            'product_total' => $this->faker->randomElement($ran_products),
+            'proceeds' => $this->faker->randomElement($ran_proceeds),
         ];
     }
 }

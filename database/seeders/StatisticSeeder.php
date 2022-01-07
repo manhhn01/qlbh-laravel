@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Statistic;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 
 class StatisticSeeder extends Seeder
 {
@@ -14,6 +15,15 @@ class StatisticSeeder extends Seeder
      */
     public function run()
     {
-        Statistic::factory(10)->create();
+        $last_record = Statistic::latest()->first();
+        $time = $last_record ? new Carbon($last_record->created_at): Carbon::now();
+
+        for($i=0; $i<100; $i++)
+        {
+            Statistic::factory()->create([
+                'created_at' => $time->addDay(),
+            ]);
+        }
     }
 }
+

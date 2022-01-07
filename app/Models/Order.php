@@ -44,6 +44,13 @@ class Order extends Model
         return $total;
     }
 
+    public function getTotalProductAttribute()
+    {
+        return $this->products->sum(function ($item) {
+            return $item->pivot->quantity;
+        });
+    }
+
     public function getDiscountAmountAttribute()
     {
         if (isset($this->coupon)) {

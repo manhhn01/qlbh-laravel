@@ -1,27 +1,13 @@
 var ctxOrder = document.getElementById("chartOrder").getContext("2d");
+
 var chart1 = new Chart(ctxOrder, {
     type: "line",
 
     data: {
-        labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-        ],
         datasets: [{
             label: "Đơn hàng",
             borderColor: "rgba(255, 205, 86, 0.8)",
             backgroundColor: "rgba(255, 205, 86, 0.2)",
-            data: [0, 1, 0, 3, 0, 5, 0, 18, 0, 1, 0, 0],
         }],
     },
     options: {},
@@ -32,12 +18,11 @@ var chart2 = new Chart(ctxRevenue, {
     type: "line",
 
     data: {
-        labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
         datasets: [{
-            label: "Lợi nhuận",
+            label: "Doanh thu",
             backgroundColor: "rgba(75, 192, 192, 0.2)",
             borderColor: "rgba(75, 192, 192, 0.8)",
-            data: [5, 1, 5, 3, 7, 5, 0, 10, 0, 1, 0, 9],
+            data: [],
         }],
     },
     options: {},
@@ -60,3 +45,41 @@ $('#datepicker3').on('change', function () {
     $('#datepicker1').val("");
     $('#datepicker2').val("");
 });
+
+$('#filterBtn').on('click', function () {
+    const from = $('#datepicker1').val();
+    const to = $('#datepicker2').val();
+    const option = $('#datepicker3').val();
+
+    console.log({ from, to, option: option || 'range' });
+    if(!(from.length && to.length) && !option){
+        alert('Bạn chưa chọn ngày');
+        return;
+    }
+    // console.log(from, to, option);
+    // console.log({from, to});
+    $.ajax({
+        method: "post",
+        url: "/report",
+        data: {
+            from,
+            to,
+            option: option || 'range'
+        },
+        success: (result) => {
+            const data = result.data;
+            const error = result.error;
+            if (data) {
+                console.log(JSON.stringify(data));
+                chart1.data.labels = data.map(o => o.created_at);
+                chart1.data.datasets[0].data = data.map(o => o.order_total);
+                chart1.update();
+                chart2.data.labels = data.map(o => o.created_at);
+                chart2.data.datasets[0].data = data.map(o => o.proceeds);
+                chart2.update();
+            } else if (error) {
+                console.log(error.code, error.message);
+            }
+        },
+    });
+}).trigger('click');

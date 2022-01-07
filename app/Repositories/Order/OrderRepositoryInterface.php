@@ -24,4 +24,10 @@ interface OrderRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function update($id, $attributes);
+
+    /**
+     * get latest order
+     */
+    public function latest($limit);
+    public function updateStatistic($order);
 }

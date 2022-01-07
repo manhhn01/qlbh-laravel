@@ -7,7 +7,9 @@ use App\Exceptions\InvalidQuantityException;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Statistic;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface
@@ -61,10 +63,12 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             $order->coupon->decrement('remain');
         }
 
-        if ($order->status !== 3) { //trang thai huy
+        //status = 3: trang thai huy
+        if ($order->status !== 3) {
             foreach ($order->products as $product) {
                 $product->decrement('quantity', $product->pivot->quantity);
             }
+            $this->updateStatistic($order);
         }
     }
 
@@ -133,6 +137,33 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 
         if (isset($order->coupon)) {
             $order->coupon->decrement('remain');
+        }
+    }
+
+    public function latest($limit)
+    {
+        return $this->model->latest()->limit($limit)->get();
+    }
+
+    public function updateStatistic($order)
+    {
+        $statistic = Statistic::whereDate('created_at', $order->created_at)->first();
+
+        if(empty($statistic)) {
+            dd('hi1' , Carbon::now());
+
+            Statistic::create([
+                "order_total" => 1,
+                "product_total" => $order->productTotal,
+                "proceeds" => $order->totalPrice
+            ]);
+        } else {
+            dd('hi2' , Carbon::now());
+            $statistic->update([
+                "order_total" => $statistic->orderTotal + 1,
+                "product_total" => $statistic->product_total + $order->productTotal,
+                "proceeds" => $statistic->proceeds + $order->totalPrice
+            ]);
         }
     }
 }

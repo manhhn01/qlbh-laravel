@@ -7,40 +7,6 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-4">
-        <div class="card card-body mb-4">
-            <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
-                <div class="text">
-                    <h6 class="mb-1">Tổng lợi nhuận</h6> <span>$0</span>
-                </div>
-            </article>
-        </div> <!-- card  end// -->
-    </div> <!-- col end// -->
-    <div class="col-lg-4">
-        <div class="card card-body mb-4">
-            <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
-                <div class="text">
-                    <h6 class="mb-1">Tổng đơn hàng</h6> <span>0</span>
-                </div>
-            </article>
-        </div> <!-- card end// -->
-    </div> <!-- col end// -->
-    <div class="col-lg-4">
-        <div class="card card-body mb-4">
-            <article class="icontext">
-                <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-shopping_basket"></i></span>
-                <div class="text">
-                    <h6 class="mb-1">Tổng sản phẩm</h6> <span>0</span>
-                </div>
-            </article>
-        </div> <!--  end// -->
-    </div> <!-- col end// -->
-</div> <!-- row end// -->
-
-
-<div class="row">
     <div class="col-12">
         <div class="card mb-4">
             <article class="card-body">
@@ -51,12 +17,12 @@
                         <input id="datepicker2" type="text" class="form-control ms-3" placeholder="Đến ngày">
                         <select id="datepicker3" class="ms-3 form-select form-select-sm" aria-label=".form-select-lg example">
                             <option value="0" disabled>-- Chọn --</option>
-                            <option value="1" selected>7 ngày qua</option>
-                            <option value="2">Tháng này</option>
-                            <option value="3">Tháng trước</option>
-                            <option value="3">2 Tháng trước</option>
+                            <option value="last_week" selected>Tuần trước</option>
+                            <option value="this_month">Tháng này</option>
+                            <option value="last_month">Tháng trước</option>
+                            <option value="two_month">2 Tháng trước</option>
                         </select>
-                        <button type="button" class="btn btn-primary ms-3 px-4">Lọc</button>
+                        <button type="button" class="btn btn-primary ms-3 px-4" id="filterBtn">Lọc</button>
                     </div>
 
                 </div>
@@ -79,32 +45,66 @@
     <div class="card-body">
         <h5 class="card-title">Đơn hàng gần đây</h5>
         <div class="table-responsive">
-            <table class="table table-hover">
-                <tbody>
-                    <tr>
-                        <td>2323</td>
-                        <td><b>ABC</b></td>
-                        <td>test@example.com</td>
-                        <td>0đ</td>
-                        <td><span class="badge rounded-pill alert-warning">Đang giao</span></td>
-                        <td>07.010.2021</td>
-                        <td class="text-end">
-                            <a href="#" class="btn btn-light">Chi tiết</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2323</td>
-                        <td><b>CDE</b></td>
-                        <td>test@example.com</td>
-                        <td>0đ</td>
-                        <td><span class="badge rounded-pill alert-success">Đã giao</span></td>
-                        <td>07.010.2021</td>
-                        <td class="text-end">
-                            <a href="#" class="btn btn-light">Chi tiết</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="card-body">
+                @if ($orders->isEmpty())
+                    <div>Không có đơn hàng nào</div>
+                @endif
+                @foreach ($orders as $order)
+                    <article class="itemlist">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 col-8  flex-grow-1 col-name">
+                                <a class="itemside"
+                                   href="{{ route('order.show', ['id'=>$order->id]) }}">
+                                    <div class="left">
+                                        <span class="order-id">#{{ $order->id }}</span>
+                                    </div>
+                                    <div class="info">
+                                        <h6 class="mb-0">{{ $order->customer_email }}</h6>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-2 col-4 col-price">
+                                <span>{{ number_format($order->totalPrice, 0, ",", ".") }} đ</span>
+                            </div>
+                            <div class="col-md-2 col-4 col-status">
+                                @switch($order->status)
+                                    @case(0)
+                                    <span
+                                        class="badge rounded-pill alert-secondary">Đang chuẩn bị</span>
+                                    @break
+                                    @case(1)
+                                    <span
+                                        class="badge rounded-pill alert-primary">Đang giao</span>
+                                    @break
+                                    @case(2)
+                                    <span
+                                        class="badge rounded-pill alert-success">Đã giao</span>
+                                    @break
+                                    @default
+                                    <span
+                                        class="badge rounded-pill alert-danger">Đã hủy</span>
+                                @endswitch
+                            </div>
+                            <div class="col-md-3 col-4 col-date">
+                                <span>{{ $order->created_at }}</span>
+                            </div>
+                            <div class="col-md-1 col-4 col-action">
+                                <div class="dropdown float-end">
+                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
+                                            class="material-icons md-more_horiz"></i> </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item"
+                                           href="{{ route('order.show', ['id'=>$order->id, 'page'=>request()->page]) }}">Xem
+                                            chi tiết</a>
+                                        <a class="dropdown-item"
+                                           href="{{ route('order.edit', ['id'=>$order->id, 'page'=>request()->page]) }}">Sửa</a>
+                                    </div>
+                                </div> <!-- dropdown // -->
+                            </div>
+                        </div> <!-- row .// -->
+                    </article> <!-- itemlist  .// -->
+                @endforeach
+            </div>
         </div> <!-- table-responsive end// -->
     </div> <!-- card-body end// -->
 </div> <!-- card end// -->
