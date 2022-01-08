@@ -149,19 +149,16 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
     {
         $statistic = Statistic::whereDate('created_at', $order->created_at)->first();
 
-        if(empty($statistic)) {
-            dd('hi1' , Carbon::now());
-
+        if (empty($statistic)) {
             Statistic::create([
                 "order_total" => 1,
-                "product_total" => $order->productTotal,
+                "product_total" => $order->totalProduct,
                 "proceeds" => $order->totalPrice
             ]);
         } else {
-            dd('hi2' , Carbon::now());
             $statistic->update([
-                "order_total" => $statistic->orderTotal + 1,
-                "product_total" => $statistic->product_total + $order->productTotal,
+                "order_total" => $statistic->order_total + 1,
+                "product_total" => $statistic->product_total + $order->totalProduct,
                 "proceeds" => $statistic->proceeds + $order->totalPrice
             ]);
         }
