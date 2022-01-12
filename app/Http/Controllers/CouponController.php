@@ -18,7 +18,7 @@ class CouponController extends Controller
 
     public function __construct(CouponRepositoryInterface $couponRepo)
     {
-        $this->middleware(['auth', 'admin']);
+        $this->middleware(['auth']);
 
         $this->couponRepo = $couponRepo;
     }

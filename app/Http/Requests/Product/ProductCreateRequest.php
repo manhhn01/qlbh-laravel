@@ -32,7 +32,7 @@ class ProductCreateRequest extends FormRequest
             'description' => ['required'],
             'supplier' => ['required'],
             'new_supplier' => ['required_without:supplier'],
-            'images' => ['image'],
+            'image.*' => ['mimes:jpeg,jpg,png,gif','max:10000'],
             'price' => ['required', 'integer', 'max:100000000'],
             'status' => ['required'],
             'category' => ['required'],

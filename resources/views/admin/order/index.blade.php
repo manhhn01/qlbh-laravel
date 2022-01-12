@@ -76,8 +76,10 @@
                                         <a class="dropdown-item"
                                            href="{{ route('order.show', ['id'=>$order->id, 'page'=>request()->page]) }}">Xem
                                             chi tiết</a>
+                                        @if(auth()->user()->role == 0)
                                         <a class="dropdown-item"
                                            href="{{ route('order.edit', ['id'=>$order->id, 'page'=>request()->page]) }}">Sửa</a>
+                                        @endif
                                     </div>
                                 </div> <!-- dropdown // -->
                             </div>

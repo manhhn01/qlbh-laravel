@@ -259,8 +259,6 @@ const updatePrice = () => {
     $("#totalPrice").text(sum.toLocaleString("vi-VN") + " đ");
 };
 
-
-
 const printOrder = ()=>{
     window.print();
 }

@@ -3,7 +3,9 @@
     <div class="content-header">
         <h2 class="content-title">Chi tiết đơn hàng #{{$id}}</h2>
         <div>
+            @if(auth()->user()->role == 0)
             <a href="{{ route('order.edit',  ['id'=>$id, 'page'=>request()->page ]) }}" type="submit" class="btn btn-primary">Sửa</a>
+            @endif
         </div>
     </div>
     <div class="card">

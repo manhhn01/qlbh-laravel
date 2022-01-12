@@ -27,6 +27,7 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::post('/report', [DashboardController::class, 'report']);
 Route::get('/report', [DashboardController::class, 'report']);
+Route::get('/report/download', [DashboardController::class, 'reportDownload']);
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -36,7 +37,7 @@ Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
 Route::post('/register', [RegisterController::class, 'store']);
 
-Route::name('product.')->prefix('product')->group(function () {
+Route::middleware('admin')->name('product.')->prefix('product')->group(function () {
     Route::get('index', [ProductController::class, 'index'])->name('list');
     Route::get('id/{id}', [ProductController::class, 'show'])->name('show');
     Route::get('create', [ProductController::class, 'create'])->name('create');
@@ -44,8 +45,8 @@ Route::name('product.')->prefix('product')->group(function () {
     Route::get('edit/{id}', [ProductController::class, 'edit'])->name('edit');
     Route::post('update/{id}', [ProductController::class, 'update'])->name('update');
     Route::post('delete/{id}', [ProductController::class, 'destroy'])->name('destroy');
-    Route::post('ajax', [ProductController::class, 'ajax'])->name('ajax');
 });
+Route::post('product/ajax', [ProductController::class, 'ajax'])->name('product.ajax');
 
 Route::name('category.')->prefix('category')->group(function () {
     Route::get('index', [CategoryController::class, 'index'])->name('list');
@@ -78,7 +79,7 @@ Route::name('order.')->prefix('order')->group(function () {
     Route::post('delete/{id}', [OrderController::class, 'destroy'])->name('destroy');
 });
 
-Route::name('coupon.')->prefix('coupon')->group(function () {
+Route::middleware('admin')->name('coupon.')->prefix('coupon')->group(function () {
     Route::get('index', [CouponController::class, 'index'])->name('list');
     Route::get('id/{id}', [CouponController::class, 'show'])->name('show');
     Route::get('create', [CouponController::class, 'create'])->name('create');
@@ -86,8 +87,8 @@ Route::name('coupon.')->prefix('coupon')->group(function () {
     Route::get('edit/{id}', [CouponController::class, 'edit'])->name('edit');
     Route::post('update/{id}', [CouponController::class, 'update'])->name('update');
     //Route::post('delete/{id}', [CouponController::class, 'destroy'])->name('destroy');
-    Route::post('ajax', [CouponController::class, 'ajax'])->name('ajax');
 });
+Route::post('coupon/ajax', [CouponController::class, 'ajax'])->name('coupon.ajax');
 
 Route::name('received-note.')->prefix('receive-note')->group(function () {
     Route::get('index', [ReceivedNoteController::class, 'index'])->name('list');

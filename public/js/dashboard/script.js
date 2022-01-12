@@ -51,8 +51,12 @@ $('#filterBtn').on('click', function () {
     const to = $('#datepicker2').val();
     const option = $('#datepicker3').val();
 
-    console.log({ from, to, option: option || 'range' });
-    if(!(from.length && to.length) && !option){
+    console.log({
+        from,
+        to,
+        option: option || 'range'
+    });
+    if (!(from.length && to.length) && !option) {
         alert('Bạn chưa chọn ngày');
         return;
     }
@@ -83,3 +87,21 @@ $('#filterBtn').on('click', function () {
         },
     });
 }).trigger('click');
+
+$('#downloadReport').on('click', function () {
+    const from = $('#datepicker1').val();
+    const to = $('#datepicker2').val();
+    const option = $('#datepicker3').val();
+    const data = {
+        from,
+        to,
+        option: option || 'range'
+    }
+
+    if (!(from.length && to.length) && !option) {
+        alert('Bạn chưa chọn ngày');
+        return;
+    }
+    const url = new URLSearchParams(data);
+    window.location.href = '/report/download?' + url.toString();
+})

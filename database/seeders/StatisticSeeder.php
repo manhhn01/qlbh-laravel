@@ -16,7 +16,7 @@ class StatisticSeeder extends Seeder
     public function run()
     {
         $last_record = Statistic::latest()->first();
-        $time = $last_record ? new Carbon($last_record->created_at): Carbon::now();
+        $time = $last_record ? new Carbon($last_record->created_at): Carbon::now()->subMonth(2);
 
         for($i=0; $i<100; $i++)
         {

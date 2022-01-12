@@ -102,6 +102,10 @@ class OrderController extends Controller
      */
     public function edit(int $id)
     {
+        if(auth()->user()->role != 0){
+            abort(403);
+        }
+
         try {
             $order = $this->orderRepo->find($id);
         } catch (ModelNotFoundException $e) {

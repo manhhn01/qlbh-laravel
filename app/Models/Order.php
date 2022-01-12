@@ -81,7 +81,7 @@ class Order extends Model
         return $this->belongsTo(User::class, 'customer_email', 'email');
     }
 
-    public function employee()
+    public function user()
     {
         return $this->belongsTo(User::class, 'employee_id');
     }

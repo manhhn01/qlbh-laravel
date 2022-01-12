@@ -22,7 +22,10 @@ class ReceivedNoteFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'deliver_name' => $this->faker->lastName(),
+            'receive_at' => $this->faker->dateTimeThisDecade(),
+            'status'=>$this->faker->numberBetween(0, 1),
+            'note'=>$this->faker->sentence()
         ];
     }
 }

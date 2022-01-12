@@ -28,7 +28,7 @@ class ProductController extends Controller
         CategoryRepositoryInterface $category,
         SupplierRepositoryInterface $supplier
     ) {
-        $this->middleware(['auth', 'admin']);
+        $this->middleware(['auth']);
         $this->productRepo = $product;
         $this->categoryRepo = $category;
         $this->supplierRepo = $supplier;

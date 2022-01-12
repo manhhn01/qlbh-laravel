@@ -19,7 +19,7 @@ class AdminChecker
     {
         $role = Auth::user()->role;
         if ($role !== 0) { // not admin
-            return redirect()->route('dashboard');
+            abort(403);
         }
 
         return $next($request);
