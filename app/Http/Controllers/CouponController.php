@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\TableConstraintException;
 use App\Http\Requests\CouponCreateRequest;
 use App\Repositories\Coupon\CouponRepositoryInterface;
 use Exception;
@@ -134,7 +135,15 @@ class CouponController extends Controller
      */
     public function destroy($id)
     {
-//
+        try {
+            $this->couponRepo->delete($id);
+        } catch (ModelNotFoundException $e) {
+            return back()->withErrors(['message' => 'Không tìm thấy mã giảm giá']);
+        } catch (TableConstraintException $e) {
+            return back()->withErrors(['message' => $e->getMessage()]);
+        }
+
+        return back()->with('info', 'Xóa mã giảm giá thành công');
     }
 
     /**

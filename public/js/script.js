@@ -42,11 +42,6 @@ $('.btn-aside-minimize').on('click', function () {
     } else {
         // minimize sideber on desktop
         $('body').toggleClass('aside-mini');
-        if ($('body').hasClass('aside-mini')) {
-            localStorage.setItem("aside-minimize", "1");
-        } else {
-            localStorage.setItem("aside-minimize", "0");
-        }
     }
 });
 
