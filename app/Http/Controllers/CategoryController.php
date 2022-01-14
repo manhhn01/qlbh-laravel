@@ -30,7 +30,7 @@ class CategoryController extends Controller
         if ($request->has(['search'])) {
             $filter['name'] = $request->search;
         }
-        $categories = $this->categoryRepo->page(2, $filter ?? null);
+        $categories = $this->categoryRepo->page(5, $filter ?? null);
 
         return view(
             'admin.category.index',
@@ -78,7 +78,7 @@ class CategoryController extends Controller
 
         try {
             $category = $this->categoryRepo->find($id);
-            $products = $this->categoryRepo->getProductsPage(2, $id, $filter);
+            $products = $this->categoryRepo->getProductspage(5, $id, $filter);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy danh mục']);
         }

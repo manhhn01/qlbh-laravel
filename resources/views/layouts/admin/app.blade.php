@@ -109,7 +109,13 @@
                             <a href="{{ route('received-note.create') }}">Thêm phiếu nhập</a>
                         </div>
                     </li>
-                @endif
+                    <li class="menu-item {{ request()->routeIs('user.list') ? 'active' : '' }}">
+                        <a class="menu-link" href="{{ route('user.list') }}">
+                            <i class=" icon material-icons md-account_circle"></i>
+                            <span class="text">Quản lý nhân viên</span>
+                        </a>
+                    </li>
+                    @endif
             </ul>
         </nav>
     </aside>

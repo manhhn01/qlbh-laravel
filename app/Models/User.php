@@ -67,4 +67,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class, 'employee_id');
     }
+
+    public function scopeOfType($query, $filter)
+    {
+        if (!empty($filter['email'])) {
+            $query->where('email', 'LIKE', '%' . $filter['email'] . '%');
+        }
+
+        return $query;
+    }
 }

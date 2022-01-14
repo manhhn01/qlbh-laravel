@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Str;
 
 class SupplierFactory extends Factory
 {
@@ -23,7 +24,7 @@ class SupplierFactory extends Factory
     {
         return [
             'name'=>$this->faker->sentence(2),
-            'description'=>$this->faker->sentence(3)
+            'description'=> Str::upper($this->faker->sentence(3))
         ];
     }
 }

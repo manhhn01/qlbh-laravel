@@ -33,7 +33,7 @@ class CouponController extends Controller
         if ($request->has(['search'])) {
             $filter['name'] = $request->search;
         }
-        $coupons = $this->couponRepo->page(2, $filter ?? null);
+        $coupons = $this->couponRepo->page(5, $filter ?? null);
 
         return view(
             'admin.coupon.index',
