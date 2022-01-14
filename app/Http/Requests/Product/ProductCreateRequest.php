@@ -29,15 +29,15 @@ class ProductCreateRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'description' => ['required'],
+            'description' => ['required', 'max:240'],
             'supplier' => ['required'],
             'new_supplier' => ['required_without:supplier'],
-            'images.*' => ['image', 'mimes:jpg,jpeg,png'],
-            'price' => ['required', 'integer', 'max:100000000'],
+            'image.*' => ['mimes:jpeg,jpg,png,gif','max:10000'],
+            'price' => ['required', 'integer','min:0', 'max:100000000'],
             'status' => ['required'],
             'category' => ['required'],
             'new_category' => ['required_without:category'],
-            'quantity' => ['required', 'integer', 'max:30000'],
+            'quantity' => ['required', 'integer', 'min:0', 'max:30000'],
             'sku' => ['unique:App\Models\Product,sku'],
         ];
     }
@@ -51,8 +51,11 @@ class ProductCreateRequest extends FormRequest
             'images.required' => 'Hình ảnh không được để trống',
             'category.required' => 'Danh mục không được để trống',
             'price.required' => 'Giá sản phẩm không được để trống',
+            'price.min' => 'Giá sản phẩm không được âm',
+            'price.max' => 'Giá sản phẩm không được quá 100000000',
             'quantity.require' => 'Số lượng không được để trống',
             'quantity.max' => 'Sô lượng sản phẩm tối đa 30000',
+            'quantity.min' => 'Sô lượng sản phẩm không được âm',
         ];
     }
 }

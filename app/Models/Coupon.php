@@ -29,8 +29,7 @@ class Coupon extends Model
         return $checkExpired && $checkRemain;
     }
 
-    public function orders()
-    {
-        return $this->belongsTo(Order::class, 'id', 'coupon_id');
+    public function orders(){
+        return $this->hasMany(Order::class);
     }
 }

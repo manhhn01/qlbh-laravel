@@ -7,7 +7,9 @@ use App\Exceptions\InvalidQuantityException;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Statistic;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class OrderRepository extends BaseRepository implements OrderRepositoryInterface
@@ -37,7 +39,7 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
                 $product = Product::findOrFail($order_prod['product_id']);
 
                 if ($order_prod['quantity'] > $product->quantity) {
-                    throw new InvalidQuantityException('Số lượng sản phẩm lớn hơn số lượng có');
+                    throw new InvalidQuantityException('Số lượng sản phẩm lớn hơn số lượng có hoặc đã hết hàng');
                 }
 
                 $attach_products[$order_prod['product_id']] = [
@@ -61,10 +63,12 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
             $order->coupon->decrement('remain');
         }
 
-        if ($order->status !== 3) { //trang thai huy
+        //status = 3: trang thai huy
+        if ($order->status !== 3) {
             foreach ($order->products as $product) {
                 $product->decrement('quantity', $product->pivot->quantity);
             }
+            $this->updateStatistic($order);
         }
     }
 
@@ -92,12 +96,12 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
                 $old_product = $order->products->firstWhere('id', $new_product['product_id']); //trong don hang
                 if (!empty($old_product)) { //sản phẩm được cập nhật số lư
                     if ($product->quantity + $old_product->pivot->quantity - $new_product['quantity'] < 0) {
-                        throw new InvalidQuantityException('Số lượng sản phẩm lớn hơn số lượng có');
+                        throw new InvalidQuantityException('Sản phẩm đã hết hàng');
                     }
                     $product_price = $old_product->pivot->price;
                 } else {
                     if ($new_product['quantity'] > $product->quantity) { //san pham duoc them moi vao don hang
-                        throw new InvalidQuantityException('Số lượng sản phẩm lớn hơn số lượng có');
+                        throw new InvalidQuantityException('Số lượng sản phẩm lớn hơn số lượng có hoặc đã hết hàng');
                     }
                     $product_price = $product->price;
                 }
@@ -133,6 +137,30 @@ class OrderRepository extends BaseRepository implements OrderRepositoryInterface
 
         if (isset($order->coupon)) {
             $order->coupon->decrement('remain');
+        }
+    }
+
+    public function latest($limit)
+    {
+        return $this->model->latest()->limit($limit)->get();
+    }
+
+    public function updateStatistic($order)
+    {
+        $statistic = Statistic::whereDate('created_at', $order->created_at)->first();
+
+        if (empty($statistic)) {
+            Statistic::create([
+                "order_total" => 1,
+                "product_total" => $order->totalProduct,
+                "proceeds" => $order->totalPrice
+            ]);
+        } else {
+            $statistic->update([
+                "order_total" => $statistic->order_total + 1,
+                "product_total" => $statistic->product_total + $order->totalProduct,
+                "proceeds" => $statistic->proceeds + $order->totalPrice
+            ]);
         }
     }
 }

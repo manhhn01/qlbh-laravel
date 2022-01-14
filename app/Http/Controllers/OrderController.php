@@ -35,7 +35,7 @@ class OrderController extends Controller
         if ($request->has(['status'])) {
             $filter['status'] = $request->status;
         }
-        $orders = $this->orderRepo->page(2, $filter ?? null);
+        $orders = $this->orderRepo->page(5, $filter ?? null);
 
         return view(
             'admin.order.index',
@@ -102,6 +102,10 @@ class OrderController extends Controller
      */
     public function edit(int $id)
     {
+        if(auth()->user()->role != 0){
+            abort(403);
+        }
+
         try {
             $order = $this->orderRepo->find($id);
         } catch (ModelNotFoundException $e) {
@@ -142,5 +146,33 @@ class OrderController extends Controller
     public function destroy(int $id)
     {
         //
+    }
+
+    public function done(){
+        $id = request()->id;
+        try {
+            $order = $this->orderRepo->find($id);
+            $order->update([
+                'status' => 2
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return back()->withErrors(['message' => 'Không tìm thấy đơn hàng']);
+        }
+
+        return back();
+    }
+
+    public function cancel(){
+        $id = request()->id;
+        try {
+            $order = $this->orderRepo->find($id);
+            $order->update([
+                'status' => 3
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return back()->withErrors(['message' => 'Không tìm thấy đơn hàng']);
+        }
+
+        return back();
     }
 }

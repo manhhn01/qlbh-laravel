@@ -31,7 +31,7 @@ class ReceivedNoteController extends Controller
         if ($request->has(['status'])) {
             $filter['status'] = $request->status;
         }
-        $received_note = $this->receivedNoteRepo->page(2, $filter ?? null);
+        $received_note = $this->receivedNoteRepo->page(5, $filter ?? null);
 
         return view(
             'admin.received-note.index',
@@ -121,7 +121,7 @@ class ReceivedNoteController extends Controller
         $attributes = $request->only(['manager_id', 'deliver_name', 'status', 'receive_at', 'products', 'note']);
 
         try {
-            $this->receivedNoteRepoe->update($id, $attributes);
+            $this->receivedNoteRepo->update($id, $attributes);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => $e->getMessage()]);
         }

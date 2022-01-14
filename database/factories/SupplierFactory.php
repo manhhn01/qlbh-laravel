@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Str;
 
 class SupplierFactory extends Factory
 {
@@ -22,7 +23,8 @@ class SupplierFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name'=>$this->faker->sentence(2),
+            'description'=> Str::upper($this->faker->sentence(3))
         ];
     }
 }

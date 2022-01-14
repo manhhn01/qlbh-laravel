@@ -32,7 +32,7 @@ class SupplierController extends Controller
         if ($request->has(['search'])) {
             $filter['name'] = $request->search;
         }
-        $suppliers = $this->supplierRepo->page(2, $filter ?? null);
+        $suppliers = $this->supplierRepo->page(5, $filter ?? null);
 
         return view(
             'admin.supplier.index',
@@ -82,7 +82,7 @@ class SupplierController extends Controller
 
         try {
             $supplier = $this->supplierRepo->find($id);
-            $products = $this->supplierRepo->getProductsPage(2, $id, $filter ?? null);
+            $products = $this->supplierRepo->getProductspage(5, $id, $filter ?? null);
         } catch (ModelNotFoundException $e) {
             return back()->withErrors(['message' => 'Không tìm thấy nhà cung cấp']);
         }

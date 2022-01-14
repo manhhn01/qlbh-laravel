@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('first_name', 50);
             $table->string('last_name', 50);
             $table->string('password', 70);
-            $table->char('phone_number', 15)->unique();
+            $table->char('phone_number', 15)->nullable();
             $table->string('address')->nullable();
             $table->string('avatar_image')->nullable();
             $table->smallInteger('role'); // 0: manager, 1: employee, 2: customer

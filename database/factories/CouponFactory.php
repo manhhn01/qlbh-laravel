@@ -22,7 +22,11 @@ class CouponFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name'=>$this->faker->ean8(),
+            'description'=> 'Mã giảm giá áp dụng trên mọi đơn hàng',
+            'discount'=>$this->faker->numberBetween(1, 99),
+            'remain'=>$this->faker->numberBetween(1, 99),
+            'expire_at'=>$this->faker->dateTimeThisYear('31-12-2022')
         ];
     }
 }

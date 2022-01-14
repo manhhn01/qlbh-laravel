@@ -74,10 +74,22 @@
                                             class="material-icons md-more_horiz"></i> </a>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item"
-                                           href="{{ route('order.show', ['id'=>$order->id, 'page'=>request()->page]) }}">Xem
-                                            chi tiết</a>
+                                           href="{{ route('order.show', ['id'=>$order->id, 'page'=>request()->page]) }}">Xem chi tiết</a>
+                                        @if(auth()->user()->role == 0)
                                         <a class="dropdown-item"
                                            href="{{ route('order.edit', ['id'=>$order->id, 'page'=>request()->page]) }}">Sửa</a>
+                                        @else
+                                        <form action="{{ route('order.cancel')}}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $order->id}}">
+                                            <button class="dropdown-item">Huỷ đơn</button>
+                                        </form>
+                                        <form action="{{ route('order.done') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $order->id}}">
+                                            <button class="dropdown-item">Giao đơn</button>
+                                        </form>
+                                        @endif
                                     </div>
                                 </div> <!-- dropdown // -->
                             </div>

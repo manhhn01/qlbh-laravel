@@ -28,7 +28,7 @@ class ProductController extends Controller
         CategoryRepositoryInterface $category,
         SupplierRepositoryInterface $supplier
     ) {
-        $this->middleware(['auth', 'admin']);
+        $this->middleware(['auth']);
         $this->productRepo = $product;
         $this->categoryRepo = $category;
         $this->supplierRepo = $supplier;
@@ -44,7 +44,7 @@ class ProductController extends Controller
             $filter['name'] = $request->search;
             $filter['status'] = $request->status;
         }
-        $products = $this->productRepo->page(2, $filter ?? null);
+        $products = $this->productRepo->page(5, $filter ?? null);
 
         return view(
             'admin.product.index',

@@ -6,6 +6,8 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Coupon\CouponRepository;
 use App\Repositories\Coupon\CouponRepositoryInterface;
+use App\Repositories\Dashboard\DashboardRepository;
+use App\Repositories\Dashboard\DashboardRepositoryInterface;
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
@@ -14,6 +16,8 @@ use App\Repositories\ReceivedNote\ReceivedNoteRepository;
 use App\Repositories\ReceivedNote\ReceivedNoteRepositoryInterface;
 use App\Repositories\Supplier\SupplierRepository;
 use App\Repositories\Supplier\SupplierRepositoryInterface;
+use App\Repositories\User\UserRepository;
+use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->singleton(CouponRepositoryInterface::class, CouponRepository::class);
         $this->app->singleton(ReceivedNoteRepositoryInterface::class, ReceivedNoteRepository::class);
+        $this->app->singleton(DashboardRepositoryInterface::class, DashboardRepository::class);
+        $this->app->singleton(UserRepositoryInterface::class, UserRepository::class);
     }
 
     /**

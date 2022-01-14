@@ -21,11 +21,11 @@ class CreateOrdersTable extends Migration
             $table->string('customer_email')->nullable(); //null: khách hàng mua tại của hàng không cần đk tk như mua online
             $table->unsignedBigInteger('employee_id');
             $table->tinyInteger('buy_place'); //0: online, 1: offline
-      $table->tinyInteger('status'); //0: đang chuẩn bị, 1: đang giao, 2: đã giao, 3: đã hủy
-      $table->tinyInteger('payment_method'); //0 Chuyển khoản, 1 thanh toán khi nhận hàng, 2 thanh toán tại của hàng.
-      $table->unsignedBigInteger('coupon_id')->nullable(); //mã giảm
-      $table->string('deliver_to')->nullable(); //địa chỉ nhận hàng
-      $table->string('note')->nullable();
+            $table->tinyInteger('status'); //0: đang chuẩn bị, 1: đang giao, 2: đã giao, 3: đã hủy
+            $table->tinyInteger('payment_method'); //0 Chuyển khoản, 1 thanh toán khi nhận hàng, 2 thanh toán tại của hàng.
+            $table->unsignedBigInteger('coupon_id')->nullable(); //mã giảm
+            $table->string('deliver_to')->nullable(); //địa chỉ nhận hàng
+            $table->string('note')->nullable();
 
             $table->timestamps();
 

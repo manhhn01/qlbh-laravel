@@ -48,7 +48,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $is_usable
- * @property-read \App\Models\Order $orders
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Order[] $orders
+ * @property-read int|null $orders_count
  * @method static \Database\Factories\CouponFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Coupon newQuery()
@@ -104,11 +105,12 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Coupon|null $coupon
  * @property-read \App\Models\User|null $customer
- * @property-read \App\Models\User $employee
  * @property-read mixed $discount_amount
  * @property-read mixed $total_price
+ * @property-read mixed $total_product
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
  * @property-read int|null $products_count
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\OrderFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
@@ -207,6 +209,30 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Statistic
+ *
+ * @property int $id
+ * @property int $order_total
+ * @property int $product_total
+ * @property int $proceeds
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\StatisticFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic whereOrderTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic whereProceeds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic whereProductTotal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Statistic whereUpdatedAt($value)
+ */
+	class Statistic extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Supplier
  *
  * @property int $id
@@ -258,6 +284,7 @@ namespace App\Models{
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User ofType($filter)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatarImage($value)

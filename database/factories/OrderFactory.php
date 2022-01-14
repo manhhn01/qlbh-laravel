@@ -22,7 +22,12 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'customer_email'=>$this->faker->safeEmail(),
+            'buy_place'=>0,
+            'status'=>$this->faker->numberBetween(0, 3),
+            'payment_method'=>$this->faker->numberBetween(0, 2),
+            'deliver_to'=>$this->faker->address(),
+            'note'=>$this->faker->sentence(5)
         ];
     }
 }
